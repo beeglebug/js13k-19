@@ -1,0 +1,25 @@
+{
+  "name": "js13k-19",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:beeglebug/js13k-19.git",
+  "author": "Stuart Lee <updownleftright@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "gulp build && echo $(stat -f%z archive.zip) / 13312"
+  },
+  "dependencies": {
+    "gulp": "^3.9.1",
+    "gulp-clean": "^0.4.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-html-replace": "^1.6.2",
+    "gulp-html-src": "^1.0.0",
+    "gulp-imagemin": "^4.1.0",
+    "gulp-remove-code": "^3.0.3",
+    "gulp-uglify-es": "^1.0.4",
+    "gulp-zip": "^4.2.0"
+  },
+  "devDependencies": {
+    "cssnano": "^4.1.10"
+  }
+}
