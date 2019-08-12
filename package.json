@@ -11,11 +11,12 @@
   "dependencies": {
     "gulp": "^3.9.1",
     "gulp-clean": "^0.4.0",
+    "gulp-clean-css": "^4.2.0",
     "gulp-concat": "^2.6.1",
     "gulp-html-replace": "^1.6.2",
     "gulp-html-src": "^1.0.0",
     "gulp-imagemin": "^4.1.0",
-    "gulp-remove-code": "^3.0.3",
+    "gulp-terser": "^1.2.0",
     "gulp-uglify-es": "^1.0.4",
     "gulp-zip": "^4.2.0"
   },

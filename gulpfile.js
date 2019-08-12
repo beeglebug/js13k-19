@@ -1,12 +1,12 @@
 const gulp = require('gulp')
 const concat = require('gulp-concat')
 const clean = require('gulp-clean')
-const uglify = require('gulp-uglify-es').default
+const terser = require('gulp-terser')
 const htmlreplace = require('gulp-html-replace')
 const htmlSrc = require('gulp-html-src')
-const removeCode = require('gulp-remove-code')
 const zip = require('gulp-zip')
 const imagemin = require('gulp-imagemin')
+const cleanCSS = require('gulp-clean-css')
 
 let outDir = 'dist'
 
@@ -15,28 +15,32 @@ gulp.task('clean', () => gulp
   .pipe(clean())
 )
 
-gulp.task('copy', ['clean'], () => gulp
-  .src(['src/style.css'])
-  .pipe(gulp.dest(outDir))
-)
+// gulp.task('copy', ['clean'], () => gulp
+//   .src(['src/style.css'])
+//   .pipe(gulp.dest(outDir))
+// )
 
 gulp.task('compile', ['clean'], () => gulp
   .src('src/index.html')
   .pipe(htmlSrc())
   .pipe(concat('app.js'))
-  .pipe(removeCode({ production: true }))
-  .pipe(uglify({ toplevel: true }))
+  .pipe(terser())
   .pipe(gulp.dest(outDir))
 )
 
 gulp.task('html', ['clean'], () => gulp
   .src('src/index.html')
-  .pipe(removeCode({ production: true }))
-  .pipe(htmlreplace({ js: 'app.js' }))
+  .pipe(htmlreplace({
+    js: 'app.js',
+    css: {
+      src: gulp.src('src/style.css').pipe(cleanCSS()),
+      tpl: '<style>%s</style>'
+    }
+  }))
   .pipe(gulp.dest(outDir))
 )
 
-gulp.task('zip', ['copy', 'compile', 'html', 'crush'], () =>
+gulp.task('zip', ['compile', 'html', 'crush'], () =>
   gulp.src('dist/*')
     .pipe(zip('archive.zip'))
     .pipe(gulp.dest(''))
@@ -50,6 +54,6 @@ gulp.task('crush', () =>
     .pipe(gulp.dest(outDir))
 )
 
-gulp.task('build', ['clean', 'copy', 'compile', 'html', 'crush', 'zip'])
+gulp.task('build', ['clean', 'compile', 'html', 'crush', 'zip'])
 
 gulp.task('default', ['build'])
