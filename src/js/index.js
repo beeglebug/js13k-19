@@ -58,12 +58,17 @@ ctx.imageSmoothingEnabled = false
 
 bindKeyboard(document)
 
-// const textures = new Image()
-// textures.src = 'textures.png'
+const imgTextures = new Image()
+imgTextures.src = 'textures.png'
+
+const imgSprites = new Image()
+imgSprites.src = 'sprites.png'
 
 requestAnimationFrame(loop)
 
-const sprites = []
+const sprites = [
+  { x: 18, y: 12 }
+]
 
 function render () {
 
@@ -92,9 +97,94 @@ function render () {
   // iterate over every column of screen pixels
   for (let x = 0; x < width; x += sliceWidth) {
 
-    const [distance, side, wallX] = raycast(x)
+    // RAYCASTING ======================================================================================================
+
+    let rayLength
+    let side
+
+    // calculate ray position and direction
+
+    // -1 is left edge, 1 is right edge
+    let nx = 2 * x / width - 1
+
+    let rayX = position.x
+    let rayY = position.y
+
+    let rayDirX = playerDirectionX + cameraX * nx
+    let rayDirY = playerDirectionY + cameraY * nx
+
+    // which map cell are we in
+    let mapX = Math.floor(rayX)
+    let mapY = Math.floor(rayY)
+
+    let deltaX = Math.abs(1 / rayDirX)
+    let deltaY = Math.abs(1 / rayDirY)
+
+    // calculate increments for DDA
+    let stepX
+    let stepY
+
+    let distanceX
+    let distanceY
+
+    if (rayDirX < 0) {
+      stepX = -1
+      distanceX = (rayX - mapX) * deltaX
+    } else {
+      stepX = 1
+      distanceX = (mapX + 1 - rayX) * deltaX
+    }
+
+    if (rayDirY < 0) {
+      stepY = -1
+      distanceY = (rayY - mapY) * deltaY
+    } else {
+      stepY = 1
+      distanceY = (mapY + 1 - rayY) * deltaY
+    }
+
+    // DDA
+    while (true) {
+      if (distanceX < distanceY) {
+        distanceX += deltaX
+        mapX += stepX
+        side = 0
+      } else {
+        distanceY += deltaY
+        mapY += stepY
+        side = 1
+      }
+      // Check if ray has hit a wall
+      if (getMap(mapX, mapY) > 0) break
+    }
+
+    // Calculate distance projected on camera direction (Euclidean distance will give fisheye effect!)
+    if (side === 0) {
+      rayLength = (mapX - rayX + (1 - stepX) / 2) / rayDirX
+    } else {
+      rayLength = (mapY - rayY + (1 - stepY) / 2) / rayDirY
+    }
+
+    // where exactly the wall was hit
+    let wallX
+    if (side === 0) {
+      wallX = rayY + rayLength * rayDirY
+    } else {
+      wallX = rayX + rayLength * rayDirX
+    }
+    // we only need to know the 0-1 range
+    wallX -= Math.floor(wallX)
+
+    // // flip if the wall is opposite
+    if (side === 0 && rayDirX > 0) wallX = 1 - wallX
+    if (side === 1 && rayDirY < 0) wallX = 1 - wallX
+
+    // TODO rename to avoid waste
+    const distance = rayLength
 
     zBuffer.push(distance)
+
+    // DRAW WALLS ======================================================================================================
 
     // Calculate height of line to draw on screen
     let sliceHeight = Math.abs(Math.floor(height / distance))
@@ -106,15 +196,15 @@ function render () {
     const textureSize = 16
     const textureX = wallX * (textureSize - 1)
 
-    // ctx.drawImage(textures, textureX, 0, 1, textureSize, x, drawStart, sliceWidth, sliceHeight)
+    ctx.drawImage(imgTextures, textureX, 0, 1, textureSize, x, drawStart, sliceWidth, sliceHeight)
 
     // base light level (black)
     const light = 0
 
     // give x and y sides different brightness
     // draw the pixels of the stripe as a vertical line
-    ctx.fillStyle = side === 1 ? '#b4b4b4' : '#706e73'
-    ctx.fillRect(x, drawStart, sliceWidth, sliceHeight)
+    // ctx.fillStyle = side === 1 ? '#b4b4b4' : '#706e73'
+    // ctx.fillRect(x, drawStart, sliceWidth, sliceHeight)
 
     // lighting
     const range = 16
@@ -128,7 +218,7 @@ function render () {
     // ctx.fillRect(x, drawStart, sliceWidth, sliceHeight)
   }
 
-  // SPRITES
+  // SPRITES ===========================================================================================================
 
   // sort from far to close
   sprites.sort((a, b) => {
@@ -143,140 +233,60 @@ function render () {
     const spriteX = sprite.x - position.x
     const spriteY = sprite.y - position.y
 
-    const invDet = 1.0 / (cameraX * rayDirY - rayDirX * cameraY)
+    const invDet = 1.0 / (cameraX * playerDirectionY - playerDirectionX * cameraY)
 
-    const transformX = invDet * (rayDirY * spriteX - rayDirX * spriteY)
+    const transformX = invDet * (playerDirectionY * spriteX - playerDirectionX * spriteY)
     const transformY = invDet * (-cameraY * spriteX + cameraX * spriteY)
 
-    const spriteScreenX = Math.round((w / 2) * (1 + transformX / transformY))
+    const spriteScreenX = Math.round((width / 2) * (1 + transformX / transformY))
 
-    // //calculate height of the sprite on screen
-    // const spriteHeight = Math.abs(Math.round(h / (transformY)))
-    // //calculate lowest and highest pixel to fill in current stripe
-    // const drawStartY = -spriteHeight / 2 + h / 2;
-    // if(drawStartY < 0) drawStartY = 0;
-    // const drawEndY = spriteHeight / 2 + h / 2;
-    // if(drawEndY >= h) drawEndY = h - 1;
-    //
-    // //calculate width of the sprite
-    // const spriteWidth = abs( int (h / (transformY)));
-    // const drawStartX = -spriteWidth / 2 + spriteScreenX;
-    // if(drawStartX < 0) drawStartX = 0;
-    // const drawEndX = spriteWidth / 2 + spriteScreenX;
-    // if(drawEndX >= w) drawEndX = w - 1;
-    //
-    // //loop through every vertical stripe of the sprite on screen
-    // for(int stripe = drawStartX; stripe < drawEndX; stripe++)
-    // {
-    //   const texX = int(256 * (stripe - (-spriteWidth / 2 + spriteScreenX)) * texWidth / spriteWidth) / 256;
-    //   //the conditions in the if are:
-    //   //1) it's in front of camera plane so you don't see things behind you
-    //   //2) it's on the screen (left)
-    //   //3) it's on the screen (right)
-    //   //4) ZBuffer, with perpendicular distance
-    //   if(transformY > 0 && stripe > 0 && stripe < w && transformY < ZBuffer[stripe])
-    //     for(int y = drawStartY; y < drawEndY; y++) //for every pixel of the current stripe
-    //   {
-    //     const d = (y) * 256 - h * 128 + spriteHeight * 128; //256 and 128 factors to avoid floats
-    //     const texY = ((d * texHeight) / spriteHeight) / 256;
-    //     Uint32 color = texture[sprite[spriteOrder[i]].texture][texWidth * texY + texX]; //get current color from the texture
-    //     if((color & 0x00FFFFFF) != 0) buffer[y][stripe] = color; //paint pixel if it isn't black, black is the invisible color
-    //   }
-    // }
+    // calculate height of the sprite on screen
+    const spriteHeight = Math.abs(Math.round(height / transformY))
+
+    // calculate lowest and highest pixel to fill in current stripe
+    let drawStartY = -spriteHeight / 2 + height / 2
+    if (drawStartY < 0) drawStartY = 0
+
+    let drawEndY = spriteHeight / 2 + height / 2
+    if (drawEndY >= height) drawEndY = height - 1
+
+    // calculate width of the sprite
+    const spriteWidth = Math.abs(height / transformY)
+
+    let drawStartX = Math.round(-spriteWidth / 2 + spriteScreenX)
+    if (drawStartX < 0) drawStartX = 0
+
+    let drawEndX = spriteWidth / 2 + spriteScreenX
+    if (drawEndX >= width) drawEndX = width - 1
+
+    // loop through every vertical stripe of the sprite on screen
+    for(let stripe = drawStartX; stripe < drawEndX; stripe++)
+    {
+      const textureSize = 16
+
+      // TODO handle other sprites on sprite sheet
+      const textureX = (256 * (stripe - (-spriteWidth / 2 + spriteScreenX)) * textureSize / spriteWidth) / 256
+      const textureY = 0
+
+      if (
+        transformY > 0 && // in front of the camera
+        stripe > 0 && stripe < width && // somewhere on screen
+        transformY < zBuffer[stripe]
+      ) {
+        // TODO lighting based on distance
+        ctx.drawImage(imgSprites, textureX, textureY, 1, 16, stripe, drawStartY, 1, drawEndY - drawStartY)
+      }
+    }
   })
 
   ctx.fillStyle = '#FFF'
   ctx.font = '12px Courier'
   ctx.textBaseline = 'top'
-  ctx.fillText(`${position.x.toFixed(2)},${position.y.toFixed(2)}`, 5, 5)
-  ctx.fillText(`${playerDirectionX.toFixed(2)},${playerDirectionY.toFixed(2)}`, 5, 20)
-  ctx.fillText(parseInt(fps), 5, 35)
+  ctx.fillText(`pos: ${position.x.toFixed(2)},${position.y.toFixed(2)}`, 5, 5)
+  ctx.fillText(`dir: ${playerDirectionX.toFixed(2)},${playerDirectionY.toFixed(2)}`, 5, 20)
+  ctx.fillText(`fps: ${parseInt(fps)}`, 5, 35)
 }
 
-function raycast (x) {
-
-  let rayLength
-  let side
-
-  // calculate ray position and direction
-
-  // -1 is left edge, 1 is right edge
-  let nx = 2 * x / width - 1
-
-  let rayX = position.x
-  let rayY = position.y
-
-  let rayDirX = playerDirectionX + cameraX * nx
-  let rayDirY = playerDirectionY + cameraY * nx
-
-  // which map cell are we in
-  let mapX = Math.floor(rayX)
-  let mapY = Math.floor(rayY)
-
-  let deltaX = Math.abs(1 / rayDirX)
-  let deltaY = Math.abs(1 / rayDirY)
-
-  // calculate increments for DDA
-  let stepX
-  let stepY
-
-  let distanceX
-  let distanceY
-
-  if (rayDirX < 0) {
-    stepX = -1
-    distanceX = (rayX - mapX) * deltaX
-  } else {
-    stepX = 1
-    distanceX = (mapX + 1 - rayX) * deltaX
-  }
-
-  if (rayDirY < 0) {
-    stepY = -1
-    distanceY = (rayY - mapY) * deltaY
-  } else {
-    stepY = 1
-    distanceY = (mapY + 1 - rayY) * deltaY
-  }
-
-  // DDA
-  while (true) {
-    if (distanceX < distanceY) {
-      distanceX += deltaX
-      mapX += stepX
-      side = 0
-    } else {
-      distanceY += deltaY
-      mapY += stepY
-      side = 1
-    }
-    // Check if ray has hit a wall
-    if (getMap(mapX, mapY) > 0) break
-  }
-
-  // Calculate distance projected on camera direction (Euclidean distance will give fisheye effect!)
-  if (side === 0) {
-    rayLength = (mapX - rayX + (1 - stepX) / 2) / rayDirX
-  } else {
-    rayLength = (mapY - rayY + (1 - stepY) / 2) / rayDirY
-  }
-
-  // where exactly the wall was hit
-  let wallX
-  if (side === 0) {
-    wallX = rayY + rayLength * rayDirY
-  } else {
-    wallX = rayX + rayLength * rayDirX
-  }
-  // we only need to know the 0-1 range
-  wallX -= Math.floor(wallX)
-
-  // // flip if the wall is opposite
-  if (side === 0 && rayDirX > 0) wallX = 1 - wallX
-  if (side === 1 && rayDirY < 0) wallX = 1 - wallX
-
-  return [rayLength, side, wallX]
-}
 
 function getMap (x, y) {
   const ix = Math.round(x)
@@ -284,11 +294,11 @@ function getMap (x, y) {
   return map[ix] && map[ix][iy]
 }
 
-// TODO mouse rotate
+// TODO mouse rotation
 function input (delta) {
-  // speed modifiers
-  const moveSpeed = delta * 5 // the constant value is in squares/second
-  const rotSpeed = delta * 5 // the constant value is in radians/second
+
+  const moveSpeed = delta * 3 // tiles per second
+  const turnSpeed = delta * 3 // radians per second
 
   // move forward if no wall in front of you
   if (keyDown(KEY_W)) {
@@ -310,22 +320,22 @@ function input (delta) {
   if (keyDown(KEY_D)) {
     // both camera direction and camera plane must be rotated
     let oldDirX = playerDirectionX
-    playerDirectionX = playerDirectionX * Math.cos(-rotSpeed) - playerDirectionY * Math.sin(-rotSpeed)
-    playerDirectionY = oldDirX * Math.sin(-rotSpeed) + playerDirectionY * Math.cos(-rotSpeed)
+    playerDirectionX = playerDirectionX * Math.cos(-turnSpeed) - playerDirectionY * Math.sin(-turnSpeed)
+    playerDirectionY = oldDirX * Math.sin(-turnSpeed) + playerDirectionY * Math.cos(-turnSpeed)
     let oldPlaneX = cameraX
-    cameraX = cameraX * Math.cos(-rotSpeed) - cameraY * Math.sin(-rotSpeed)
-    cameraY = oldPlaneX * Math.sin(-rotSpeed) + cameraY * Math.cos(-rotSpeed)
+    cameraX = cameraX * Math.cos(-turnSpeed) - cameraY * Math.sin(-turnSpeed)
+    cameraY = oldPlaneX * Math.sin(-turnSpeed) + cameraY * Math.cos(-turnSpeed)
   }
 
   // rotate to the left
   if (keyDown(KEY_A)) {
     // both camera direction and camera plane must be rotated
     let oldDirX = playerDirectionX
-    playerDirectionX = playerDirectionX * Math.cos(rotSpeed) - playerDirectionY * Math.sin(rotSpeed)
-    playerDirectionY = oldDirX * Math.sin(rotSpeed) + playerDirectionY * Math.cos(rotSpeed)
+    playerDirectionX = playerDirectionX * Math.cos(turnSpeed) - playerDirectionY * Math.sin(turnSpeed)
+    playerDirectionY = oldDirX * Math.sin(turnSpeed) + playerDirectionY * Math.cos(turnSpeed)
     let oldPlaneX = cameraX
-    cameraX = cameraX * Math.cos(rotSpeed) - cameraY * Math.sin(rotSpeed)
-    cameraY = oldPlaneX * Math.sin(rotSpeed) + cameraY * Math.cos(rotSpeed)
+    cameraX = cameraX * Math.cos(turnSpeed) - cameraY * Math.sin(turnSpeed)
+    cameraY = oldPlaneX * Math.sin(turnSpeed) + cameraY * Math.cos(turnSpeed)
   }
 }
 
