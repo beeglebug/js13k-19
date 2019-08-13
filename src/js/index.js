@@ -34,18 +34,22 @@ const position = {
 let playerDirectionX = -1
 let playerDirectionY = 0
 
+const fov = 66
+
 // camera plane
 let cameraX = 0
-let cameraY = 0.66 // 66 degree FOV
+let cameraY = (fov / 100) * 1.33
 
 let time = 0 // time of current frame
 let oldTime = 0 // time of previous frame
 
 const width = 640
-const height = 480
+const height = 360
 
 const canvas = document.getElementById('output')
 const ctx = canvas.getContext('2d')
+
+let fps = 0
 
 canvas.width = width
 canvas.height = height
@@ -186,6 +190,7 @@ function render () {
   ctx.textBaseline = 'top'
   ctx.fillText(`${position.x.toFixed(2)},${position.y.toFixed(2)}`, 5, 5)
   ctx.fillText(`${playerDirectionX.toFixed(2)},${playerDirectionY.toFixed(2)}`, 5, 20)
+  ctx.fillText(parseInt(fps), 5, 35)
 }
 
 function raycast (x) {
@@ -330,8 +335,8 @@ function loop () {
 
   // timing for input and FPS counter
   oldTime = time
-  time = Date.now()
+  time = performance.now()
   let delta = (time - oldTime) / 1000.0 // delta is the time this frame has taken, in seconds
-
+  fps = 1/delta
   input(delta)
 }
