@@ -6,7 +6,8 @@
   "author": "Stuart Lee <updownleftright@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "build": "gulp build && echo $(stat -f%z archive.zip) / 13312"
+    "build": "gulp build && echo $(stat -f%z archive.zip) / 13312",
+    "watch": "gulp watch"
   },
   "dependencies": {
     "gulp": "^4.0.2",
