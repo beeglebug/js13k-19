@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "build": "gulp build && echo $(stat -f%z archive.zip) / 13312",
-    "watch": "gulp watch"
+    "watch": "live-server --open=src --watch=src"
   },
   "dependencies": {
     "gulp": "^4.0.2",
