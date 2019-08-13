@@ -16,8 +16,5 @@
     "gulp-html-replace": "^1.6.2",
     "gulp-terser": "^1.2.0",
     "gulp-zip": "^4.2.0"
-  },
-  "devDependencies": {
-    "cssnano": "^4.1.10"
   }
 }
