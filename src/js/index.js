@@ -245,19 +245,16 @@ function render () {
 
     // calculate lowest and highest pixel to fill in current stripe
     let drawStartY = -spriteHeight / 2 + height / 2
-    if (drawStartY < 0) drawStartY = 0
-
     let drawEndY = spriteHeight / 2 + height / 2
-    if (drawEndY >= height) drawEndY = height - 1
 
     // calculate width of the sprite
     const spriteWidth = Math.abs(height / transformY)
 
-    let drawStartX = Math.round(-spriteWidth / 2 + spriteScreenX)
+    let drawStartX = Math.floor(-spriteWidth / 2 + spriteScreenX)
     if (drawStartX < 0) drawStartX = 0
 
     let drawEndX = spriteWidth / 2 + spriteScreenX
-    if (drawEndX >= width) drawEndX = width - 1
+    if (drawEndX >= width) drawEndX = width
 
     // loop through every vertical stripe of the sprite on screen
     for(let stripe = drawStartX; stripe < drawEndX; stripe++)
@@ -270,7 +267,7 @@ function render () {
 
       if (
         transformY > 0 && // in front of the camera
-        stripe > 0 && stripe < width && // somewhere on screen
+        stripe >= 0 && stripe < width && // somewhere on screen
         transformY < zBuffer[stripe]
       ) {
         // TODO lighting based on distance
