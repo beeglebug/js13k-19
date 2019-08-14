@@ -67,7 +67,8 @@ imgSprites.src = 'sprites.png'
 requestAnimationFrame(loop)
 
 const sprites = [
-  { x: 18, y: 12 }
+  { x: 18, y: 12, z: 0, index: 0 },
+  { x: 18, y: 14, z: 0, index: 1 },
 ]
 
 function render () {
@@ -224,7 +225,7 @@ function render () {
   sprites.sort((a, b) => {
     const aDist = ((position.x - a.x) * (position.x - a.x) + (position.y - a.y) * (position.y - a.y))
     const bDist = ((position.x - b.x) * (position.x - b.x) + (position.y - b.y) * (position.y - b.y))
-    return aDist - bDist
+    return bDist - aDist
   })
 
   sprites.forEach(sprite => {
@@ -257,12 +258,10 @@ function render () {
     if (drawEndX >= width) drawEndX = width
 
     // loop through every vertical stripe of the sprite on screen
-    for(let stripe = drawStartX; stripe < drawEndX; stripe++)
-    {
+    for (let stripe = drawStartX; stripe < drawEndX; stripe++) {
       const textureSize = 16
 
-      // TODO handle other sprites on sprite sheet
-      const textureX = (256 * (stripe - (-spriteWidth / 2 + spriteScreenX)) * textureSize / spriteWidth) / 256
+      const textureX = ((stripe - (-spriteWidth / 2 + spriteScreenX)) * textureSize / spriteWidth) + (sprite.index * textureSize)
       const textureY = 0
 
       if (
@@ -297,20 +296,16 @@ function input (delta) {
   const moveSpeed = delta * 3 // tiles per second
   const turnSpeed = delta * 3 // radians per second
 
-  // move forward if no wall in front of you
+  // TODO proper collision
+
   if (keyDown(KEY_W)) {
-    if(getMap(position.x + playerDirectionX * moveSpeed,position.y) === 0) {
-      position.x += playerDirectionX * moveSpeed
-    }
-    if(getMap(position.x,position.y + playerDirectionY * moveSpeed) === 0) {
-      position.y += playerDirectionY * moveSpeed
-    }
+    position.x += playerDirectionX * moveSpeed
+    position.y += playerDirectionY * moveSpeed
   }
 
-  // move backwards if no wall behind you
   if (keyDown(KEY_S)) {
-    if(getMap(position.x - playerDirectionX * moveSpeed,position.y) === 0) position.x -= playerDirectionX * moveSpeed
-    if(getMap(position.x,position.y - playerDirectionY * moveSpeed) === 0) position.y -= playerDirectionY * moveSpeed
+    position.x -= playerDirectionX * moveSpeed
+    position.y -= playerDirectionY * moveSpeed
   }
 
   // rotate to the right
@@ -319,6 +314,8 @@ function input (delta) {
     let oldDirX = playerDirectionX
     playerDirectionX = playerDirectionX * Math.cos(-turnSpeed) - playerDirectionY * Math.sin(-turnSpeed)
     playerDirectionY = oldDirX * Math.sin(-turnSpeed) + playerDirectionY * Math.cos(-turnSpeed)
+
+    // TODO calculate this every frame in render, not input (based on playerDirection)
     let oldPlaneX = cameraX
     cameraX = cameraX * Math.cos(-turnSpeed) - cameraY * Math.sin(-turnSpeed)
     cameraY = oldPlaneX * Math.sin(-turnSpeed) + cameraY * Math.cos(-turnSpeed)

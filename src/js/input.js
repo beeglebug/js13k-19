@@ -1,3 +1,5 @@
+const KEY_Q = 81
+const KEY_E = 69
 const KEY_W = 87
 const KEY_A = 65
 const KEY_S = 83
