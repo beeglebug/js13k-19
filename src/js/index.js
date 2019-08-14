@@ -12,9 +12,9 @@ const map = [
   [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
   [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
   [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,2,2,2,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,1],
   [1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
   [1,4,0,4,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
   [1,4,0,0,0,0,5,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
@@ -68,7 +68,7 @@ requestAnimationFrame(loop)
 
 const sprites = [
   { x: 18, y: 12, z: 0, index: 0 },
-  { x: 18, y: 14, z: 0, index: 1 },
+  { x: 13, y: 15, z: 0, index: 0 },
 ]
 
 function render () {
@@ -76,19 +76,18 @@ function render () {
   let gradient
 
   // floor
-  // gradient = ctx.createLinearGradient(0, height / 2, 0, height);
-  // gradient.addColorStop(0, '#16171a');
-  // gradient.addColorStop(1, '#4a5559');
-  // ctx.fillStyle = gradient
-  ctx.fillStyle = '#2d2f34'
+  gradient = ctx.createLinearGradient(0, height / 2, 0, height);
+  gradient.addColorStop(0, '#413d43');
+  gradient.addColorStop(0.2, '#373433');
+  gradient.addColorStop(1, '#373433');
+  ctx.fillStyle = gradient
   ctx.fillRect(0, height / 2, width, height / 2);
 
   // ceiling
-  // gradient = ctx.createLinearGradient(0, 0, 0, height / 2);
-  // gradient.addColorStop(1, '#16171a');
-  // gradient.addColorStop(0, '#2d313b');
-  // ctx.fillStyle = gradient
-  ctx.fillStyle = '#27292d'
+  gradient = ctx.createLinearGradient(0, 0, 0, height / 2);
+  gradient.addColorStop(0, '#7c9dbd');
+  gradient.addColorStop(1, '#a3b1bd');
+  ctx.fillStyle = gradient
   ctx.fillRect(0, 0, width, height / 2);
 
   const sliceWidth = 1
@@ -249,7 +248,7 @@ function render () {
     const spriteX = sprite.x - position.x
     const spriteY = sprite.y - position.y
 
-    const invDet = 1.0 / (cameraX * playerDirectionY - playerDirectionX * cameraY)
+    const invDet = 1 / (cameraX * playerDirectionY - playerDirectionX * cameraY)
 
     const transformX = invDet * (playerDirectionY * spriteX - playerDirectionX * spriteY)
     const transformY = invDet * (-cameraY * spriteX + cameraX * spriteY)
@@ -278,11 +277,12 @@ function render () {
 
       const textureX = ((stripe - (-spriteWidth / 2 + spriteScreenX)) * textureSize / spriteWidth) + (sprite.index * textureSize)
       const textureY = 0
+      const buffer = zBuffer[stripe]
 
       if (
         transformY > 0 && // in front of the camera
         stripe >= 0 && stripe < width && // somewhere on screen
-        transformY < zBuffer[stripe]
+        (buffer === null || buffer > transformY)
       ) {
         // TODO lighting based on distance
         ctx.drawImage(imgSprites, textureX, textureY, 1, 16, stripe, drawStartY, 1, drawEndY - drawStartY)
