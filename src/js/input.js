@@ -5,13 +5,17 @@ const KEY_A = 65
 const KEY_S = 83
 const KEY_D = 68
 
+const mousePosition = { x: 0, y: 0 }
+const mouseMove = { x: 0, y: 0 }
 const downKeys = {}
 
-function onKeydown (e) {
+let mouseTimeout
+
+function handleKeydown (e) {
   downKeys[e.which] = true
 }
 
-function onKeyup (e) {
+function handleKeyup (e) {
   downKeys[e.which] = false
 }
 
@@ -20,6 +24,22 @@ function keyDown (key) {
 }
 
 function bindKeyboard (target) {
-  target.addEventListener('keydown', onKeydown)
-  target.addEventListener('keyup', onKeyup)
+  target.addEventListener('keydown', handleKeydown)
+  target.addEventListener('keyup', handleKeyup)
+  target.addEventListener('mousemove', handleMouseMove)
+}
+
+const handleMouseMove = event => {
+  clearTimeout(mouseTimeout)
+  const { movementX, movementY, clientX, clientY } = event
+  mousePosition.x = clientX
+  mousePosition.y = clientY
+  mouseMove.x = movementX || 0
+  mouseMove.y = movementY || 0
+  mouseTimeout = setTimeout(clearMouseMove, 50)
+}
+
+const clearMouseMove = () => {
+  mouseMove.x = 0
+  mouseMove.y = 0
 }

@@ -31,14 +31,19 @@ const position = {
   y: 12
 }
 
-let playerDirectionX = -1
-let playerDirectionY = 0
+const playerDirection = {
+  x: -1,
+  y: 0
+}
 
 const fov = 66
 
 // camera plane
-let cameraX = 0
-let cameraY = (fov / 100) * 1.33
+const camera = {
+  x: 0,
+  y: (fov / 100) * 1.33
+}
+
 
 let time = 0 // time of current frame
 let oldTime = 0 // time of previous frame
@@ -55,6 +60,21 @@ canvas.width = width
 canvas.height = height
 
 ctx.imageSmoothingEnabled = false
+
+let inputEnabled = false
+
+const handlePointerLockChange = () => {
+  if (document.pointerLockElement === canvas) {
+    inputEnabled = true
+    canvas.classList.add('active')
+  } else {
+    inputEnabled = false
+    canvas.classList.remove('active')
+  }
+}
+
+canvas.addEventListener('click', () => canvas.requestPointerLock())
+document.addEventListener('pointerlockchange', handlePointerLockChange)
 
 bindKeyboard(document)
 
@@ -111,8 +131,8 @@ function render () {
     let rayX = position.x
     let rayY = position.y
 
-    let rayDirX = playerDirectionX + cameraX * nx
-    let rayDirY = playerDirectionY + cameraY * nx
+    let rayDirX = playerDirection.x + camera.x * nx
+    let rayDirY = playerDirection.y + camera.y * nx
 
     // which map cell are we in
     let mapX = Math.floor(rayX)
@@ -247,10 +267,10 @@ function render () {
     const spriteX = sprite.x - position.x
     const spriteY = sprite.y - position.y
 
-    const invDet = 1 / (cameraX * playerDirectionY - playerDirectionX * cameraY)
+    const invDet = 1 / (camera.x * playerDirection.y - playerDirection.x * camera.y)
 
-    const transformX = invDet * (playerDirectionY * spriteX - playerDirectionX * spriteY)
-    const transformY = invDet * (-cameraY * spriteX + cameraX * spriteY)
+    const transformX = invDet * (playerDirection.y * spriteX - playerDirection.x * spriteY)
+    const transformY = invDet * (-camera.y * spriteX + camera.x * spriteY)
 
     const spriteScreenX = Math.round((width / 2) * (1 + transformX / transformY))
 
@@ -293,8 +313,9 @@ function render () {
   ctx.font = '12px Courier'
   ctx.textBaseline = 'top'
   ctx.fillText(`pos: ${position.x.toFixed(2)},${position.y.toFixed(2)}`, 5, 5)
-  ctx.fillText(`dir: ${playerDirectionX.toFixed(2)},${playerDirectionY.toFixed(2)}`, 5, 20)
-  ctx.fillText(`fps: ${parseInt(fps)}`, 5, 35)
+  ctx.fillText(`dir: ${playerDirection.x.toFixed(2)},${playerDirection.y.toFixed(2)}`, 5, 20)
+  ctx.fillText(`mouse: ${mouseMove.x.toFixed(2)},${mouseMove.y.toFixed(2)}`, 5, 35)
+  ctx.fillText(`fps: ${parseInt(fps)}`, 5, 50)
 }
 
 
@@ -307,43 +328,41 @@ function getMap (x, y) {
 // TODO mouse rotation
 function input (delta) {
 
+  if (!inputEnabled) return
+
   const moveSpeed = delta * 3 // tiles per second
-  const turnSpeed = delta * 3 // radians per second
+  const dirPerp = perp(playerDirection)
 
   // TODO proper collision
 
   if (keyDown(KEY_W)) {
-    position.x += playerDirectionX * moveSpeed
-    position.y += playerDirectionY * moveSpeed
+    position.x += playerDirection.x * moveSpeed
+    position.y += playerDirection.y * moveSpeed
   }
 
   if (keyDown(KEY_S)) {
-    position.x -= playerDirectionX * moveSpeed
-    position.y -= playerDirectionY * moveSpeed
+    position.x -= playerDirection.x * moveSpeed
+    position.y -= playerDirection.y * moveSpeed
   }
 
-  // rotate to the right
+  const mouseSensitivity = 0.5
+  const rotation = mouseMove.x * delta * mouseSensitivity
+
+  if (mouseMove.x !== 0) {
+    rotate(playerDirection, -rotation)
+    rotate(camera, -rotation)
+  }
+
+  // strafe to the right
   if (keyDown(KEY_D)) {
-    // both camera direction and camera plane must be rotated
-    let oldDirX = playerDirectionX
-    playerDirectionX = playerDirectionX * Math.cos(-turnSpeed) - playerDirectionY * Math.sin(-turnSpeed)
-    playerDirectionY = oldDirX * Math.sin(-turnSpeed) + playerDirectionY * Math.cos(-turnSpeed)
-
-    // TODO calculate this every frame in render, not input (based on playerDirection)
-    let oldPlaneX = cameraX
-    cameraX = cameraX * Math.cos(-turnSpeed) - cameraY * Math.sin(-turnSpeed)
-    cameraY = oldPlaneX * Math.sin(-turnSpeed) + cameraY * Math.cos(-turnSpeed)
+    position.x += dirPerp.x * moveSpeed
+    position.y += dirPerp.y * moveSpeed
   }
 
-  // rotate to the left
+  // strafe to the left
   if (keyDown(KEY_A)) {
-    // both camera direction and camera plane must be rotated
-    let oldDirX = playerDirectionX
-    playerDirectionX = playerDirectionX * Math.cos(turnSpeed) - playerDirectionY * Math.sin(turnSpeed)
-    playerDirectionY = oldDirX * Math.sin(turnSpeed) + playerDirectionY * Math.cos(turnSpeed)
-    let oldPlaneX = cameraX
-    cameraX = cameraX * Math.cos(turnSpeed) - cameraY * Math.sin(turnSpeed)
-    cameraY = oldPlaneX * Math.sin(turnSpeed) + cameraY * Math.cos(turnSpeed)
+    position.x -= dirPerp.x * moveSpeed
+    position.y -= dirPerp.y * moveSpeed
   }
 }
 
