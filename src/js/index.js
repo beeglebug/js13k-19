@@ -1,39 +1,39 @@
 const map = [
-  [0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-  [0,0,0,0,0,0,2,2,2,2,2,0,0,0,0,3,0,3,0,3,0,0,0,1],
-  [0,0,0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,1],
-  [0,0,0,0,0,0,2,0,0,0,2,0,0,0,0,3,0,0,0,3,0,0,0,1],
-  [0,0,0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,1],
-  [0,0,0,0,0,0,2,2,0,2,2,0,0,0,0,3,0,3,0,3,0,0,0,1],
-  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-  [1,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,1],
-  [1,0,0,0,0,0,0,0,0,0,0,0,2,2,2,0,0,0,0,0,0,0,0,1],
-  [1,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,1],
-  [1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-  [1,4,0,4,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-  [1,4,0,0,0,0,5,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-  [1,4,0,4,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-  [1,4,0,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-  [1,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-  [1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+  [0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+  [0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 0, 0, 0, 0, 3, 0, 3, 0, 3, 0, 0, 0, 1],
+  [0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+  [0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0, 1],
+  [0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+  [0, 0, 0, 0, 0, 0, 2, 2, 0, 2, 2, 0, 0, 0, 0, 3, 0, 3, 0, 3, 0, 0, 0, 1],
+  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+  [1, 4, 4, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+  [1, 4, 0, 4, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+  [1, 4, 0, 0, 0, 0, 5, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+  [1, 4, 0, 4, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+  [1, 4, 0, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+  [1, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+  [1, 4, 4, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 ]
 
 // start position
 const position = {
   x: 22,
-  y: 12
+  y: 12,
 }
 
 const playerDirection = {
   x: -1,
-  y: 0
+  y: 0,
 }
 
 const fov = 66
@@ -41,9 +41,8 @@ const fov = 66
 // camera plane
 const camera = {
   x: 0,
-  y: (fov / 100) * 1.33
+  y: (fov / 100) * 1.33,
 }
-
 
 let time = 0 // time of current frame
 let oldTime = 0 // time of previous frame
@@ -86,29 +85,25 @@ imgSprites.src = 'sprites.png'
 
 requestAnimationFrame(loop)
 
-const sprites = [
-  { x: 18, y: 12, z: 0, index: 0 },
-  { x: 13, y: 15, z: 0, index: 0 },
-]
+const sprites = [{ x: 18, y: 12, z: 0, index: 0 }, { x: 13, y: 15, z: 0, index: 0 }]
 
-function render () {
-
+function render() {
   let gradient
 
   // floor
-  gradient = ctx.createLinearGradient(0, height / 2, 0, height);
-  gradient.addColorStop(0, '#413d43');
-  gradient.addColorStop(0.2, '#373433');
-  gradient.addColorStop(1, '#373433');
+  gradient = ctx.createLinearGradient(0, height / 2, 0, height)
+  gradient.addColorStop(0, '#413d43')
+  gradient.addColorStop(0.2, '#373433')
+  gradient.addColorStop(1, '#373433')
   ctx.fillStyle = gradient
-  ctx.fillRect(0, height / 2, width, height / 2);
+  ctx.fillRect(0, height / 2, width, height / 2)
 
   // ceiling
-  gradient = ctx.createLinearGradient(0, 0, 0, height / 2);
-  gradient.addColorStop(0, '#7c9dbd');
-  gradient.addColorStop(1, '#a3b1bd');
+  gradient = ctx.createLinearGradient(0, 0, 0, height / 2)
+  gradient.addColorStop(0, '#7c9dbd')
+  gradient.addColorStop(1, '#a3b1bd')
   ctx.fillStyle = gradient
-  ctx.fillRect(0, 0, width, height / 2);
+  ctx.fillRect(0, 0, width, height / 2)
 
   const sliceWidth = 1
 
@@ -116,7 +111,6 @@ function render () {
 
   // iterate over every column of screen pixels
   for (let x = 0; x < width; x += sliceWidth) {
-
     // RAYCASTING ======================================================================================================
 
     let rayLength
@@ -126,7 +120,7 @@ function render () {
     // calculate ray position and direction
 
     // -1 is left edge, 1 is right edge
-    let nx = 2 * x / width - 1
+    let nx = (2 * x) / width - 1
 
     let rayX = position.x
     let rayY = position.y
@@ -175,12 +169,7 @@ function render () {
         mapY += stepY
         side = 1
       }
-      if (
-        mapX < 0 ||
-        mapX >= map[0].length ||
-        mapY < 0 ||
-        mapY >= map.length
-      ) break
+      if (mapX < 0 || mapX >= map[0].length || mapY < 0 || mapY >= map.length) break
       // Check if ray has hit a wall
       if (getMap(mapX, mapY) > 0) {
         collision = true
@@ -262,7 +251,6 @@ function render () {
   })
 
   sprites.forEach(sprite => {
-
     // translate sprite position to relative to camera
     const spriteX = sprite.x - position.x
     const spriteY = sprite.y - position.y
@@ -294,13 +282,15 @@ function render () {
     for (let stripe = drawStartX; stripe < drawEndX; stripe++) {
       const textureSize = 16
 
-      const textureX = ((stripe - (-spriteWidth / 2 + spriteScreenX)) * textureSize / spriteWidth) + (sprite.index * textureSize)
+      const textureX =
+        ((stripe - (-spriteWidth / 2 + spriteScreenX)) * textureSize) / spriteWidth + sprite.index * textureSize
       const textureY = 0
       const buffer = zBuffer[stripe]
 
       if (
         transformY > 0 && // in front of the camera
-        stripe >= 0 && stripe < width && // somewhere on screen
+        stripe >= 0 &&
+        stripe < width && // somewhere on screen
         (buffer === null || buffer > transformY)
       ) {
         // TODO lighting based on distance
@@ -318,16 +308,14 @@ function render () {
   ctx.fillText(`fps: ${parseInt(fps)}`, 5, 50)
 }
 
-
-function getMap (x, y) {
+function getMap(x, y) {
   const ix = Math.round(x)
   const iy = Math.round(y)
   return map[ix] && map[ix][iy]
 }
 
 // TODO mouse rotation
-function input (delta) {
-
+function input(delta) {
   if (!inputEnabled) return
 
   const moveSpeed = delta * 3 // tiles per second
@@ -366,14 +354,26 @@ function input (delta) {
   }
 }
 
-function loop () {
+function loop() {
   requestAnimationFrame(loop)
-  render()
-
   // timing for input and FPS counter
   oldTime = time
   time = performance.now()
   let delta = (time - oldTime) / 1000.0 // delta is the time this frame has taken, in seconds
-  fps = 1/delta
+  fps = 1 / delta
   input(delta)
+
+  // TEST heading towards player
+  // sprites.forEach(sprite => {
+  //   let dx = position.x - sprite.x
+  //   let dy = position.y - sprite.y
+  //   const m = Math.sqrt((dx * dx) + (dy * dy))
+  //   dx /= m
+  //   dy /= m
+  //   const speed = 0.01
+  //   sprite.x += dx * speed
+  //   sprite.y += dy * speed
+  // })
+
+  render()
 }
