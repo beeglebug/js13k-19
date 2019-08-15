@@ -213,24 +213,21 @@ function render () {
 
     ctx.drawImage(imgTextures, textureX, 0, 1, textureSize, x, drawStart, sliceWidth, sliceHeight)
 
-    // base light level (black)
-    const light = 0
+    // LIGHTING ========================================================================================================
 
-    // give x and y sides different brightness
-    // draw the pixels of the stripe as a vertical line
+    // give horizontal and vertical sides different brightness
     if (side === 1) {
-      ctx.fillStyle = 'rgba(0,0,0,0.3)'
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.3)'
       ctx.fillRect(x, drawStart, sliceWidth, sliceHeight)
     }
 
-    // lighting
-    const range = 16
-    const clampedDistance = Math.min(distance, range)
-
-    let tint = clampedDistance / range
-    if (side === 1) tint += 0.1
-    const eased = outQuad(tint)
-
+    // const range = 16
+    // const clampedDistance = Math.min(distance, range)
+    //
+    // let tint = clampedDistance / range
+    // if (side === 1) tint += 0.1
+    // const eased = outQuad(tint)
+    //
     // ctx.fillStyle = "rgba(22,23,26, " + eased + ")"
     // ctx.fillRect(x, drawStart, sliceWidth, sliceHeight)
   }
