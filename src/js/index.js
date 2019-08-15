@@ -236,8 +236,8 @@ function render () {
 
   // sort from far to close
   sprites.sort((a, b) => {
-    const aDist = ((position.x - a.x) * (position.x - a.x) + (position.y - a.y) * (position.y - a.y))
-    const bDist = ((position.x - b.x) * (position.x - b.x) + (position.y - b.y) * (position.y - b.y))
+    const aDist = distance(position, a)
+    const bDist = distance(position, b)
     return bDist - aDist
   })
 
