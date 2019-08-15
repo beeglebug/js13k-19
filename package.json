@@ -16,6 +16,7 @@
     "gulp-concat": "^2.6.1",
     "gulp-html-replace": "^1.6.2",
     "gulp-imagemin": "^6.0.0",
+    "gulp-remove-code": "^3.0.4",
     "gulp-terser": "^1.2.0",
     "gulp-zip": "^4.2.0",
     "prettier": "^1.18.2"

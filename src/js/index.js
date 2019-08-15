@@ -299,6 +299,7 @@ function render() {
     }
   })
 
+  //removeIf(production)
   ctx.fillStyle = '#FFF'
   ctx.font = '12px Courier'
   ctx.textBaseline = 'top'
@@ -306,6 +307,7 @@ function render() {
   ctx.fillText(`dir: ${playerDirection.x.toFixed(2)},${playerDirection.y.toFixed(2)}`, 5, 20)
   ctx.fillText(`mouse: ${mouseMove.x.toFixed(2)},${mouseMove.y.toFixed(2)}`, 5, 35)
   ctx.fillText(`fps: ${parseInt(fps)}`, 5, 50)
+  //endRemoveIf
 }
 
 function getMap(x, y) {
@@ -362,6 +364,8 @@ function loop() {
   let delta = (time - oldTime) / 1000.0 // delta is the time this frame has taken, in seconds
   fps = 1 / delta
   input(delta)
+
+  // COLLISION
 
   // TEST heading towards player
   // sprites.forEach(sprite => {
