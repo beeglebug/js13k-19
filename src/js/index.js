@@ -218,8 +218,10 @@ function render () {
 
     // give x and y sides different brightness
     // draw the pixels of the stripe as a vertical line
-    // ctx.fillStyle = side === 1 ? '#b4b4b4' : '#706e73'
-    // ctx.fillRect(x, drawStart, sliceWidth, sliceHeight)
+    if (side === 1) {
+      ctx.fillStyle = 'rgba(0,0,0,0.3)'
+      ctx.fillRect(x, drawStart, sliceWidth, sliceHeight)
+    }
 
     // lighting
     const range = 16
