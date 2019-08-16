@@ -1,15 +1,15 @@
 const map = [
-  [1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1],
+  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
   [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1],
+  [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1],
+  [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1],
+  [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1],
+  [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1],
   [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -30,6 +30,8 @@ const playerDirection = {
 }
 
 const playerRadius = 0.4
+
+const moveSpeed = 4
 
 const fov = 66
 
@@ -75,10 +77,8 @@ imgTextures.src = 'textures.png'
 const imgSprites = new Image()
 imgSprites.src = 'sprites.png'
 
-requestAnimationFrame(loop)
-
 const sprites = [
-  { x: 1.5, y: 11.5, z: 0, index: 0 },
+  { x: 7.5, y: 8.5, z: 0, index: 0 },
 ]
 
 function render () {
@@ -288,7 +288,7 @@ function render () {
     // calculate width of the sprite
     const spriteWidth = Math.abs(height / transformY)
 
-    let drawStartX = Math.floor(-spriteWidth / 2 + spriteScreenX)
+    let drawStartX = Math.round(-spriteWidth / 2 + spriteScreenX)
     if (drawStartX < 0) drawStartX = 0
 
     let drawEndX = spriteWidth / 2 + spriteScreenX
@@ -332,7 +332,11 @@ function render () {
   let size = 5
   const ox = width - (map[0].length * size) - 10
   const oy = 10
+
+  ctx.save()
   ctx.translate(ox, oy)
+  ctx.globalAlpha = 0.5
+
   for (let y = 0; y < map.length; y++) {
     for (let x = 0; x < map[0].length; x++) {
       const tile = map[y][x]
@@ -376,34 +380,25 @@ function render () {
     ctx.closePath()
   })
 
-  ctx.translate(-ox, -oy)
+  ctx.restore()
   //endRemoveIf
-}
-
-function getMap (x, y) {
-  const ix = Math.round(x)
-  const iy = Math.round(y)
-  return map[iy] && map[iy][ix]
 }
 
 function input (delta) {
   if (!inputEnabled) return
 
-  const moveSpeed = delta * 3 // tiles per second
   const dirPerp = perp(playerDirection)
   dirPerp.x *= -1
   dirPerp.y *= -1
 
-  // TODO proper collision
-
   if (keyDown(KEY_W)) {
-    position.x += playerDirection.x * moveSpeed
-    position.y += playerDirection.y * moveSpeed
+    position.x += playerDirection.x * moveSpeed * delta
+    position.y += playerDirection.y * moveSpeed * delta
   }
 
   if (keyDown(KEY_S)) {
-    position.x -= playerDirection.x * moveSpeed
-    position.y -= playerDirection.y * moveSpeed
+    position.x -= playerDirection.x * moveSpeed * delta
+    position.y -= playerDirection.y * moveSpeed * delta
   }
 
   const mouseSensitivity = 0.5
@@ -415,37 +410,70 @@ function input (delta) {
 
   // strafe to the left
   if (keyDown(KEY_A)) {
-    position.x -= dirPerp.x * moveSpeed
-    position.y -= dirPerp.y * moveSpeed
+    position.x -= dirPerp.x * moveSpeed * delta
+    position.y -= dirPerp.y * moveSpeed * delta
   }
 
   // strafe to the right
   if (keyDown(KEY_D)) {
-    position.x += dirPerp.x * moveSpeed
-    position.y += dirPerp.y * moveSpeed
+    position.x += dirPerp.x * moveSpeed * delta
+    position.y += dirPerp.y * moveSpeed * delta
   }
 }
 
+requestAnimationFrame(loop)
+
 function loop () {
-  requestAnimationFrame(loop)
   // timing for input and FPS counter
   oldTime = time
   time = performance.now()
-  let delta = (time - oldTime) / 1000.0 // delta is the time this frame has taken, in seconds
+  let delta = (time - oldTime) / 1000 // delta is the time this frame has taken, in seconds
   fps = 1 / delta
+
   input(delta)
 
   // COLLISION
   const tx = Math.floor(position.x)
-  const ty = Math.floor(position.x)
+  const ty = Math.floor(position.y)
+
+  const mapWidth = map[0].length
+  const mapHeight = map.length
 
   // level bounds
-  // if (position.x - playerRadius < 0) position.x = playerRadius
-  // if (position.x + playerRadius > map[0].length - 1) position.x = map[0].length - playerRadius
+  if (position.x - playerRadius < 0) position.x = playerRadius
+  if (position.x + playerRadius > mapWidth) position.x = mapWidth - playerRadius
 
-  // circleRectCollision(position.x, position.y, radius)
+  if (position.y - playerRadius < 0) position.y = playerRadius
+  if (position.y + playerRadius > mapHeight) position.y = mapHeight - playerRadius
 
-  // TEST heading towards player
+  const near = getSurrounding(tx, ty)
+  const solid = near.filter(([x, y]) => {
+    const tile = getMap(x, y)
+    return tile && tile !== 0
+  })
+  solid.forEach(([x, y]) => {
+    const collision = collideCircleRect(
+      // TODO combine position / direction / radius into player object
+      {
+        x: position.x,
+        y: position.y,
+        radius: playerRadius,
+      },
+      {
+        x,
+        y,
+        width: 1,
+        height: 1,
+      },
+    )
+
+    if (collision) {
+      position.x += collision.x
+      position.y += collision.y
+    }
+  })
+
+  // walk towards player
   // sprites.forEach(sprite => {
   //   let dx = position.x - sprite.x
   //   let dy = position.y - sprite.y
@@ -458,4 +486,6 @@ function loop () {
   // })
 
   render()
+
+  requestAnimationFrame(loop)
 }

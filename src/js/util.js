@@ -19,3 +19,7 @@ function perp (v1, v2) {
   out.y = -v1.x
   return out
 }
+
+function vToStr (v) {
+  return v.x + ',' + v.y
+}
