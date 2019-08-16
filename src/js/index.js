@@ -273,7 +273,7 @@ function render () {
 
     const invDet = 1 / (camera.x * playerDirection.y - playerDirection.x * camera.y)
 
-    const transformX = invDet * (playerDirection.y * spriteX - playerDirection.x * spriteY)
+    const transformX = invDet * (playerDirection.y * spriteX - playerDirection.x * spriteY) * -1
     const transformY = invDet * (-camera.y * spriteX + camera.x * spriteY)
 
     const spriteScreenX = Math.round((width / 2) * (1 + transformX / transformY))
@@ -340,6 +340,7 @@ function render () {
       ctx.fillRect(x * size, y * size, size, size)
     }
   }
+
   ctx.fillStyle = '#ff0000'
   ctx.beginPath()
   ctx.arc(position.x * size, position.y * size, playerRadius * size, 0, Math.PI * 2)
@@ -366,6 +367,14 @@ function render () {
   ctx.lineTo((position.x + debugRayDirXEnd * 2) * size, (position.y + debugRayDirYEnd * 2) * size)
   ctx.stroke()
   ctx.closePath()
+
+  sprites.forEach(sprite => {
+    ctx.fillStyle = '#007eff'
+    ctx.beginPath()
+    ctx.arc(sprite.x * size, sprite.y * size, playerRadius * size, 0, Math.PI * 2)
+    ctx.fill()
+    ctx.closePath()
+  })
 
   ctx.translate(-ox, -oy)
   //endRemoveIf
