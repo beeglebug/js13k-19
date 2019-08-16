@@ -13,9 +13,9 @@ function rotate(v, delta) {
   v.y = x * Math.sin(delta) + v.y * Math.cos(delta)
 }
 
-function perp(v) {
-  return {
-    x: v.y,
-    y: -v.x,
-  }
+function perp (v1, v2) {
+  const out = v2 || {}
+  out.x = v1.y
+  out.y = -v1.x
+  return out
 }

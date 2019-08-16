@@ -4,7 +4,7 @@ const clean = require('gulp-clean')
 const terser = require('gulp-terser')
 const htmlreplace = require('gulp-html-replace')
 const zip = require('gulp-zip')
-const removeCode = require('gulp-remove-code');
+const removeCode = require('gulp-remove-code')
 const cleanCSS = require('gulp-clean-css')
 const imagemin = require('gulp-imagemin')
 

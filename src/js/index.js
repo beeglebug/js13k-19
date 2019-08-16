@@ -1,48 +1,40 @@
 const map = [
-  [0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-  [0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 0, 0, 0, 0, 3, 0, 3, 0, 3, 0, 0, 0, 1],
-  [0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-  [0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0, 1],
-  [0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-  [0, 0, 0, 0, 0, 0, 2, 2, 0, 2, 2, 0, 0, 0, 0, 3, 0, 3, 0, 3, 0, 0, 0, 1],
-  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-  [1, 4, 4, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-  [1, 4, 0, 4, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-  [1, 4, 0, 0, 0, 0, 5, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-  [1, 4, 0, 4, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-  [1, 4, 0, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-  [1, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-  [1, 4, 4, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+  [1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1],
+  [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+  [1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1],
 ]
 
 // start position
 const position = {
-  x: 22,
-  y: 12,
+  x: 3,
+  y: 3,
 }
 
 const playerDirection = {
-  x: -1,
-  y: 0,
+  x: 0,
+  y: 1,
 }
+
+const playerRadius = 0.4
 
 const fov = 66
 
 // camera plane
-const camera = {
-  x: 0,
-  y: (fov / 100) * 1.33,
-}
+const camera = { x: 0, y: 0 }
 
 let time = 0 // time of current frame
 let oldTime = 0 // time of previous frame
@@ -85,9 +77,12 @@ imgSprites.src = 'sprites.png'
 
 requestAnimationFrame(loop)
 
-const sprites = [{ x: 18, y: 12, z: 0, index: 0 }, { x: 13, y: 15, z: 0, index: 0 }]
+const sprites = [
+  { x: 1.5, y: 11.5, z: 0, index: 0 },
+]
 
-function render() {
+function render () {
+
   let gradient
 
   // floor
@@ -109,6 +104,17 @@ function render() {
 
   const zBuffer = []
 
+  // adjust camera plane based on current player direction
+  perp(playerDirection, camera)
+
+  camera.x *= (fov / 100) * 1.33
+  camera.y *= (fov / 100) * 1.33
+
+  let debugRayDirXStart
+  let debugRayDirXEnd
+  let debugRayDirYStart
+  let debugRayDirYEnd
+
   // iterate over every column of screen pixels
   for (let x = 0; x < width; x += sliceWidth) {
     // RAYCASTING ======================================================================================================
@@ -125,8 +131,18 @@ function render() {
     let rayX = position.x
     let rayY = position.y
 
-    let rayDirX = playerDirection.x + camera.x * nx
-    let rayDirY = playerDirection.y + camera.y * nx
+    let rayDirX = playerDirection.x + camera.x * -nx
+    let rayDirY = playerDirection.y + camera.y * -nx
+
+    if (x === 0) {
+      debugRayDirXStart = rayDirX
+      debugRayDirYStart = rayDirY
+    }
+
+    if (x === width - 1) {
+      debugRayDirXEnd = rayDirX
+      debugRayDirYEnd = rayDirY
+    }
 
     // which map cell are we in
     let mapX = Math.floor(rayX)
@@ -300,6 +316,9 @@ function render() {
   })
 
   //removeIf(production)
+
+  // DEBUG TEXT
+
   ctx.fillStyle = '#FFF'
   ctx.font = '12px Courier'
   ctx.textBaseline = 'top'
@@ -307,21 +326,64 @@ function render() {
   ctx.fillText(`dir: ${playerDirection.x.toFixed(2)},${playerDirection.y.toFixed(2)}`, 5, 20)
   ctx.fillText(`mouse: ${mouseMove.x.toFixed(2)},${mouseMove.y.toFixed(2)}`, 5, 35)
   ctx.fillText(`fps: ${parseInt(fps)}`, 5, 50)
+
+  // MINIMAP
+
+  let size = 5
+  const ox = width - (map[0].length * size) - 10
+  const oy = 10
+  ctx.translate(ox, oy)
+  for (let y = 0; y < map.length; y++) {
+    for (let x = 0; x < map[0].length; x++) {
+      const tile = map[y][x]
+      ctx.fillStyle = tile === 0 ? '#d2d2d2' : '#333333'
+      ctx.fillRect(x * size, y * size, size, size)
+    }
+  }
+  ctx.fillStyle = '#ff0000'
+  ctx.beginPath()
+  ctx.arc(position.x * size, position.y * size, playerRadius * size, 0, Math.PI * 2)
+  ctx.fill()
+  ctx.closePath()
+
+  ctx.strokeStyle = '#ff0000'
+  ctx.beginPath()
+  ctx.moveTo(position.x * size, position.y * size)
+  ctx.lineTo((position.x + playerDirection.x * 2) * size, (position.y + playerDirection.y * 2) * size)
+  ctx.stroke()
+  ctx.closePath()
+
+  ctx.strokeStyle = '#e609ff'
+  ctx.beginPath()
+  ctx.moveTo(position.x * size, position.y * size)
+  ctx.lineTo((position.x + debugRayDirXStart * 2) * size, (position.y + debugRayDirYStart * 2) * size)
+  ctx.stroke()
+  ctx.closePath()
+
+  ctx.strokeStyle = '#00ff67'
+  ctx.beginPath()
+  ctx.moveTo(position.x * size, position.y * size)
+  ctx.lineTo((position.x + debugRayDirXEnd * 2) * size, (position.y + debugRayDirYEnd * 2) * size)
+  ctx.stroke()
+  ctx.closePath()
+
+  ctx.translate(-ox, -oy)
   //endRemoveIf
 }
 
-function getMap(x, y) {
+function getMap (x, y) {
   const ix = Math.round(x)
   const iy = Math.round(y)
-  return map[ix] && map[ix][iy]
+  return map[iy] && map[iy][ix]
 }
 
-// TODO mouse rotation
-function input(delta) {
+function input (delta) {
   if (!inputEnabled) return
 
   const moveSpeed = delta * 3 // tiles per second
   const dirPerp = perp(playerDirection)
+  dirPerp.x *= -1
+  dirPerp.y *= -1
 
   // TODO proper collision
 
@@ -339,14 +401,7 @@ function input(delta) {
   const rotation = mouseMove.x * delta * mouseSensitivity
 
   if (mouseMove.x !== 0) {
-    rotate(playerDirection, -rotation)
-    rotate(camera, -rotation)
-  }
-
-  // strafe to the right
-  if (keyDown(KEY_D)) {
-    position.x += dirPerp.x * moveSpeed
-    position.y += dirPerp.y * moveSpeed
+    rotate(playerDirection, rotation)
   }
 
   // strafe to the left
@@ -354,9 +409,15 @@ function input(delta) {
     position.x -= dirPerp.x * moveSpeed
     position.y -= dirPerp.y * moveSpeed
   }
+
+  // strafe to the right
+  if (keyDown(KEY_D)) {
+    position.x += dirPerp.x * moveSpeed
+    position.y += dirPerp.y * moveSpeed
+  }
 }
 
-function loop() {
+function loop () {
   requestAnimationFrame(loop)
   // timing for input and FPS counter
   oldTime = time
@@ -366,6 +427,14 @@ function loop() {
   input(delta)
 
   // COLLISION
+  const tx = Math.floor(position.x)
+  const ty = Math.floor(position.x)
+
+  // level bounds
+  // if (position.x - playerRadius < 0) position.x = playerRadius
+  // if (position.x + playerRadius > map[0].length - 1) position.x = map[0].length - playerRadius
+
+  // circleRectCollision(position.x, position.y, radius)
 
   // TEST heading towards player
   // sprites.forEach(sprite => {
