@@ -6,6 +6,7 @@ const htmlreplace = require('gulp-html-replace')
 const zip = require('gulp-zip')
 const removeCode = require('gulp-remove-code')
 const cleanCSS = require('gulp-clean-css')
+const htmlSrc = require('./gulp/html-src')
 const imagemin = require('gulp-imagemin')
 
 task('clean', () =>
@@ -14,11 +15,8 @@ task('clean', () =>
 )
 
 task('compile', () =>
-  src([
-    'src/js/util.js',
-    'src/js/input.js',
-    'src/js/index.js',
-  ])
+    src('src/index.html')
+    .pipe(htmlSrc())
     .pipe(concat('app.js'))
     .pipe(removeCode({ production: true }))
     .pipe(terser({
