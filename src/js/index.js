@@ -5,12 +5,12 @@ const map = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1],
-  [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1],
-  [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1],
-  [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1],
-  [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1],
-  [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1],
+  [0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1],
+  [0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1],
+  [0, 0, 0, 0, 0, 0, 2, 3, 2, 0, 1, 1, 1],
+  [0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -158,6 +158,9 @@ function render () {
     let distanceX
     let distanceY
 
+    // id of the tile we last touched
+    let tile
+
     if (rayDirX < 0) {
       stepX = -1
       distanceX = (rayX - mapX) * deltaX
@@ -176,6 +179,7 @@ function render () {
 
     // DDA
     while (true) {
+
       if (distanceX < distanceY) {
         distanceX += deltaX
         mapX += stepX
@@ -185,9 +189,12 @@ function render () {
         mapY += stepY
         side = 1
       }
+
       if (mapX < 0 || mapX >= map[0].length || mapY < 0 || mapY >= map.length) break
+
       // Check if ray has hit a wall
-      if (getMap(mapX, mapY) > 0) {
+      tile = getMap(mapX, mapY)
+      if (tile !== 0) {
         collision = true
         break
       }
@@ -219,22 +226,20 @@ function render () {
     if (side === 0 && rayDirX > 0) wallX = 1 - wallX
     if (side === 1 && rayDirY < 0) wallX = 1 - wallX
 
-    // TODO rename to avoid waste
-    const distance = rayLength
-
-    zBuffer.push(distance)
+    zBuffer.push(rayLength)
 
     // DRAW WALLS ======================================================================================================
 
     // Calculate height of line to draw on screen
-    let sliceHeight = Math.abs(Math.floor(height / distance))
+    let sliceHeight = Math.abs(Math.floor(height / rayLength))
 
     // calculate lowest and highest pixel to fill in current stripe
     let drawStart = Math.floor((height - sliceHeight) / 2)
 
-    // x coordinate on the texture
+    // TODO second row of sprites (or just do single row?)
     const textureSize = 16
-    const textureX = wallX * (textureSize - 1)
+    const textureIndex = tile - 1
+    const textureX = wallX * (textureSize - 1) + textureIndex * textureSize
 
     ctx.drawImage(imgTextures, textureX, 0, 1, textureSize, x, drawStart, sliceWidth, sliceHeight)
 
@@ -247,7 +252,7 @@ function render () {
     }
 
     // const range = 16
-    // const clampedDistance = Math.min(distance, range)
+    // const clampedDistance = Math.min(rayLength, range)
     //
     // let tint = clampedDistance / range
     // if (side === 1) tint += 0.1
@@ -298,8 +303,7 @@ function render () {
     for (let stripe = drawStartX; stripe < drawEndX; stripe++) {
       const textureSize = 16
 
-      const textureX =
-        ((stripe - (-spriteWidth / 2 + spriteScreenX)) * textureSize) / spriteWidth + sprite.index * textureSize
+      const textureX = ((stripe - (-spriteWidth / 2 + spriteScreenX)) * textureSize) / spriteWidth + sprite.index * textureSize
       const textureY = 0
       const buffer = zBuffer[stripe]
 
