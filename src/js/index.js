@@ -171,7 +171,9 @@ function render () {
       // thin wall
       // lets always assume horizontal for now
       if (tile === 3) {
-        thin = true
+        thin = true // maybe dont need?
+        //
+
         continue
       }
 

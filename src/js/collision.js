@@ -48,41 +48,20 @@ function collidePointCircle (point, circle) {
   return (dx * dx) + (dy * dy) < (circle.radius * circle.radius)
 }
 
-function distanceBetween (v1, v2) {
+function rayLineSegmentIntersection(rayOrigin, rayDirection, start, end) {
 
-  const dx = Math.abs(v1.x - v2.x)
-  const dy = Math.abs(v1.y - v2.y)
+  const v1 = sub(rayOrigin - start)
+  const v2 = sub(end - start)
+  const v3 = { x: -rayDirection.y, y: rayDirection.x }
 
-  return Math.sqrt((dx * dx) + (dy * dy))
-}
+  const d = dot(v2, v3)
 
-function isZero (v) {
-  return v.x === 0 && v.y === 0
-}
+  if (Math.abs(d) < 0.000001) return null
 
-function magnitude (v) {
-  return Math.sqrt((v.x * v.x) + (v.y * v.y))
-}
+  const t1 = cross(v2, v1) / d
+  const t2 = dot(v1, v3) / d
 
-function normalize (v) {
+  if (t1 >= 0 && (t2 >= 0 && t2 <= 1)) return t1
 
-  // shortcuts to avoid magnitude sqrt
-  if (isZero(v)) return v
-
-  if (v.x === 0) {
-    v.y = v.y > 0 ? 1 : -1
-    return v
-  }
-
-  if (v.y === 0) {
-    v.x = v.x > 0 ? 1 : -1
-    return v
-  }
-
-  const m = magnitude(v)
-
-  v.x /= m
-  v.y /= m
-
-  return v
+  return null
 }
