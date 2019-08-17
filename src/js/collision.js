@@ -48,14 +48,15 @@ function collidePointCircle (point, circle) {
   return (dx * dx) + (dy * dy) < (circle.radius * circle.radius)
 }
 
-function rayLineSegmentIntersection(rayOrigin, rayDirection, start, end) {
+function rayLineSegmentIntersection(ray, start, end) {
 
-  const v1 = sub(rayOrigin - start)
-  const v2 = sub(end - start)
-  const v3 = { x: -rayDirection.y, y: rayDirection.x }
+  const v1 = sub(ray, start)
+  const v2 = sub(end, start)
+  const v3 = { x: -ray.direction.y, y: ray.direction.x }
 
   const d = dot(v2, v3)
 
+  // check for parallel
   if (Math.abs(d) < 0.000001) return null
 
   const t1 = cross(v2, v1) / d

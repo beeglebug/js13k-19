@@ -5,12 +5,12 @@ const map = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1],
-  [0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1],
-  [0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1],
+  [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1],
+  [0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 1, 0, 1],
   [0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1],
-  [0, 0, 0, 0, 0, 2, 3, 2, 0, 0, 1, 1, 1],
-  [0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 1, 3, 1, 3, 0, 1, 1, 1],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -150,8 +150,6 @@ function render () {
       distanceY = (mapY + 1 - ray.y) * deltaY
     }
 
-    let thin = false
-
     // DDA
     while (true) {
 
@@ -171,16 +169,30 @@ function render () {
       // Check if ray has hit a wall
       tile = getMap(mapX, mapY)
 
-      // thin wall
-      // lets always assume horizontal for now
+      // thin walls
       if (tile === 3) {
-        thin = true // maybe dont need?
-        //
-
-        continue
-      }
-
-      if (tile !== 0) {
+        // half way down the block
+        const start = { x: mapX, y: mapY + 0.5 }
+        const end = { x: mapX + 1, y: mapY + 0.5 }
+        const intersects = rayLineSegmentIntersection(ray, start, end)
+        if (!intersects) continue
+        // the ray length is where we intersected
+        rayLength = intersects
+        side = 1
+        collision = true
+        break
+      } else if (tile === 4) {
+        // half way down the block
+        const start = { x: mapX + 0.5, y: mapY }
+        const end = { x: mapX + 0.5, y: mapY + 1 }
+        const intersects = rayLineSegmentIntersection(ray, start, end)
+        if (!intersects) continue
+        // the ray length is where we intersected
+        rayLength = intersects
+        side = 0
+        collision = true
+        break
+      } else if (tile !== 0) {
         collision = true
         break
       }
@@ -191,11 +203,13 @@ function render () {
       continue
     }
 
-    // Calculate distance projected on camera direction (Euclidean distance will give fisheye effect!)
-    if (side === 0) {
-      rayLength = (mapX - ray.x + (1 - stepX) / 2) / ray.direction.x
-    } else {
-      rayLength = (mapY - ray.y + (1 - stepY) / 2) / ray.direction.y
+    if (rayLength === undefined) {
+      // Calculate distance projected on camera direction (Euclidean distance will give fisheye effect!)
+      if (side === 0) {
+        rayLength = (mapX - ray.x + (1 - stepX) / 2) / ray.direction.x
+      } else {
+        rayLength = (mapY - ray.y + (1 - stepY) / 2) / ray.direction.y
+      }
     }
 
     // where exactly the wall was hit
@@ -422,27 +436,27 @@ function loop () {
   if (player.y - player.radius < 0) player.y = player.radius
   if (player.y + player.radius > mapHeight) player.y = mapHeight - player.radius
 
-  const near = getSurrounding(tx, ty)
-  const solid = near.filter(([x, y]) => {
-    const tile = getMap(x, y)
-    return tile && tile !== 0
-  })
-  solid.forEach(([x, y]) => {
-    const collision = collideCircleRect(
-      player,
-      {
-        x,
-        y,
-        width: 1,
-        height: 1,
-      },
-    )
+  const tiles = [[tx, ty], ...getSurrounding(tx, ty)]
 
-    if (collision) {
-      player.x += collision.x
-      player.y += collision.y
-    }
-  })
+  tiles.forEach(([x, y]) => {
+      const tile = getMap(x, y)
+      if (!tile || tile === 0) return
+
+      const collision = collideCircleRect(
+        player,
+        {
+          x: tile === 4 ? x + 0.35 : x,
+          y : tile === 3 ? y + 0.35 : y,
+          width: tile === 4 ? 0.3 : 1,
+          height: tile === 3 ? 0.3 : 1,
+        },
+      )
+
+      if (collision) {
+        player.x += collision.x
+        player.y += collision.y
+      }
+    })
 
   // walk towards player
   // sprites.forEach(sprite => {
