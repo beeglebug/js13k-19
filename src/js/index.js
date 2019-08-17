@@ -108,18 +108,21 @@ function render () {
     // -1 is left edge, 1 is right edge
     let nx = (2 * x) / width - 1
 
-    let rayX = player.x
-    let rayY = player.y
-
-    let rayDirX = player.direction.x + camera.x * -nx
-    let rayDirY = player.direction.y + camera.y * -nx
+    const ray = {
+      x: player.x,
+      y: player.y,
+      direction: {
+        x: player.direction.x + camera.x * -nx,
+        y: player.direction.y + camera.y * -nx
+      }
+    }
 
     // which map cell are we in
-    let mapX = Math.floor(rayX)
-    let mapY = Math.floor(rayY)
+    let mapX = Math.floor(ray.x)
+    let mapY = Math.floor(ray.y)
 
-    let deltaX = Math.abs(1 / rayDirX)
-    let deltaY = Math.abs(1 / rayDirY)
+    let deltaX = Math.abs(1 / ray.direction.x)
+    let deltaY = Math.abs(1 / ray.direction.y)
 
     // calculate increments for DDA
     let stepX
@@ -131,20 +134,20 @@ function render () {
     // id of the tile we last touched
     let tile
 
-    if (rayDirX < 0) {
+    if (ray.direction.x < 0) {
       stepX = -1
-      distanceX = (rayX - mapX) * deltaX
+      distanceX = (ray.x - mapX) * deltaX
     } else {
       stepX = 1
-      distanceX = (mapX + 1 - rayX) * deltaX
+      distanceX = (mapX + 1 - ray.x) * deltaX
     }
 
-    if (rayDirY < 0) {
+    if (ray.direction.y < 0) {
       stepY = -1
-      distanceY = (rayY - mapY) * deltaY
+      distanceY = (ray.y - mapY) * deltaY
     } else {
       stepY = 1
-      distanceY = (mapY + 1 - rayY) * deltaY
+      distanceY = (mapY + 1 - ray.y) * deltaY
     }
 
     let thin = false
@@ -190,24 +193,24 @@ function render () {
 
     // Calculate distance projected on camera direction (Euclidean distance will give fisheye effect!)
     if (side === 0) {
-      rayLength = (mapX - rayX + (1 - stepX) / 2) / rayDirX
+      rayLength = (mapX - ray.x + (1 - stepX) / 2) / ray.direction.x
     } else {
-      rayLength = (mapY - rayY + (1 - stepY) / 2) / rayDirY
+      rayLength = (mapY - ray.y + (1 - stepY) / 2) / ray.direction.y
     }
 
     // where exactly the wall was hit
     let wallX
     if (side === 0) {
-      wallX = rayY + rayLength * rayDirY
+      wallX = ray.y + rayLength * ray.direction.y
     } else {
-      wallX = rayX + rayLength * rayDirX
+      wallX = ray.x + rayLength * ray.direction.x
     }
     // we only need to know the 0-1 range
     wallX -= Math.floor(wallX)
 
     // // flip if the wall is opposite
-    if (side === 0 && rayDirX > 0) wallX = 1 - wallX
-    if (side === 1 && rayDirY < 0) wallX = 1 - wallX
+    if (side === 0 && ray.direction.x > 0) wallX = 1 - wallX
+    if (side === 1 && ray.direction.y < 0) wallX = 1 - wallX
 
     zBuffer.push(rayLength)
 
