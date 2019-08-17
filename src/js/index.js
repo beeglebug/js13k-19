@@ -1,16 +1,16 @@
 const map = [
   [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-  [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1],
+  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1],
-  [0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1],
-  [0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1],
-  [0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1],
-  [0, 0, 0, 0, 0, 0, 2, 3, 2, 0, 1, 1, 1],
-  [0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1],
+  [0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1],
+  [0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1],
+  [0, 0, 0, 0, 0, 2, 3, 2, 0, 0, 1, 1, 1],
+  [0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -18,18 +18,16 @@ const map = [
   [1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1],
 ]
 
-// start position
-const position = {
-  x: 3,
-  y: 3,
+// start player
+const player = {
+  x: 6.5,
+  y: 11.5,
+  radius: 0.4,
+  direction: {
+    x: 0,
+    y: -1,
+  }
 }
-
-const playerDirection = {
-  x: 0,
-  y: 1,
-}
-
-const playerRadius = 0.4
 
 const moveSpeed = 4
 
@@ -78,71 +76,43 @@ const imgSprites = new Image()
 imgSprites.src = 'sprites.png'
 
 const sprites = [
-  { x: 7.5, y: 8.5, z: 0, index: 0 },
+  { x: 9.5, y: 8.5, index: 0 },
 ]
 
 function render () {
 
-  let gradient
-
-  // floor
-  gradient = ctx.createLinearGradient(0, height / 2, 0, height)
-  gradient.addColorStop(0, '#413d43')
-  gradient.addColorStop(0.2, '#373433')
-  gradient.addColorStop(1, '#373433')
-  ctx.fillStyle = gradient
-  ctx.fillRect(0, height / 2, width, height / 2)
-
-  // ceiling
-  gradient = ctx.createLinearGradient(0, 0, 0, height / 2)
-  gradient.addColorStop(0, '#7c9dbd')
-  gradient.addColorStop(1, '#a3b1bd')
-  ctx.fillStyle = gradient
-  ctx.fillRect(0, 0, width, height / 2)
+  drawFloor()
+  drawCeiling()
 
   const sliceWidth = 1
 
   const zBuffer = []
 
   // adjust camera plane based on current player direction
-  perp(playerDirection, camera)
+  perp(player.direction, camera)
 
   camera.x *= (fov / 100) * 1.33
   camera.y *= (fov / 100) * 1.33
 
-  let debugRayDirXStart
-  let debugRayDirXEnd
-  let debugRayDirYStart
-  let debugRayDirYEnd
-
   // iterate over every column of screen pixels
   for (let x = 0; x < width; x += sliceWidth) {
+
     // RAYCASTING ======================================================================================================
 
     let rayLength
     let side
     let collision = false
 
-    // calculate ray position and direction
+    // calculate ray player and direction
 
     // -1 is left edge, 1 is right edge
     let nx = (2 * x) / width - 1
 
-    let rayX = position.x
-    let rayY = position.y
+    let rayX = player.x
+    let rayY = player.y
 
-    let rayDirX = playerDirection.x + camera.x * -nx
-    let rayDirY = playerDirection.y + camera.y * -nx
-
-    if (x === 0) {
-      debugRayDirXStart = rayDirX
-      debugRayDirYStart = rayDirY
-    }
-
-    if (x === width - 1) {
-      debugRayDirXEnd = rayDirX
-      debugRayDirYEnd = rayDirY
-    }
+    let rayDirX = player.direction.x + camera.x * -nx
+    let rayDirY = player.direction.y + camera.y * -nx
 
     // which map cell are we in
     let mapX = Math.floor(rayX)
@@ -177,6 +147,8 @@ function render () {
       distanceY = (mapY + 1 - rayY) * deltaY
     }
 
+    let thin = false
+
     // DDA
     while (true) {
 
@@ -190,10 +162,19 @@ function render () {
         side = 1
       }
 
+      // handle out of bounds to avoid infinite loop
       if (mapX < 0 || mapX >= map[0].length || mapY < 0 || mapY >= map.length) break
 
       // Check if ray has hit a wall
       tile = getMap(mapX, mapY)
+
+      // thin wall
+      // lets always assume horizontal for now
+      if (tile === 3) {
+        thin = true
+        continue
+      }
+
       if (tile !== 0) {
         collision = true
         break
@@ -266,19 +247,19 @@ function render () {
 
   // sort from far to close
   sprites.sort((a, b) => {
-    const aDist = distance(position, a)
-    const bDist = distance(position, b)
+    const aDist = distance(player, a)
+    const bDist = distance(player, b)
     return bDist - aDist
   })
 
   sprites.forEach(sprite => {
-    // translate sprite position to relative to camera
-    const spriteX = sprite.x - position.x
-    const spriteY = sprite.y - position.y
+    // translate sprite player to relative to camera
+    const spriteX = sprite.x - player.x
+    const spriteY = sprite.y - player.y
 
-    const invDet = 1 / (camera.x * playerDirection.y - playerDirection.x * camera.y)
+    const invDet = 1 / (camera.x * player.direction.y - player.direction.x * camera.y)
 
-    const transformX = invDet * (playerDirection.y * spriteX - playerDirection.x * spriteY) * -1
+    const transformX = invDet * (player.direction.y * spriteX - player.direction.x * spriteY) * -1
     const transformY = invDet * (-camera.y * spriteX + camera.x * spriteY)
 
     const spriteScreenX = Math.round((width / 2) * (1 + transformX / transformY))
@@ -326,8 +307,8 @@ function render () {
   ctx.fillStyle = '#FFF'
   ctx.font = '12px Courier'
   ctx.textBaseline = 'top'
-  ctx.fillText(`pos: ${position.x.toFixed(2)},${position.y.toFixed(2)}`, 5, 5)
-  ctx.fillText(`dir: ${playerDirection.x.toFixed(2)},${playerDirection.y.toFixed(2)}`, 5, 20)
+  ctx.fillText(`pos: ${player.x.toFixed(2)},${player.y.toFixed(2)}`, 5, 5)
+  ctx.fillText(`dir: ${player.direction.x.toFixed(2)},${player.direction.y.toFixed(2)}`, 5, 20)
   ctx.fillText(`mouse: ${mouseMove.x.toFixed(2)},${mouseMove.y.toFixed(2)}`, 5, 35)
   ctx.fillText(`fps: ${parseInt(fps)}`, 5, 50)
 
@@ -351,35 +332,21 @@ function render () {
 
   ctx.fillStyle = '#ff0000'
   ctx.beginPath()
-  ctx.arc(position.x * size, position.y * size, playerRadius * size, 0, Math.PI * 2)
+  ctx.arc(player.x * size, player.y * size, player.radius * size, 0, Math.PI * 2)
   ctx.fill()
   ctx.closePath()
 
   ctx.strokeStyle = '#ff0000'
   ctx.beginPath()
-  ctx.moveTo(position.x * size, position.y * size)
-  ctx.lineTo((position.x + playerDirection.x * 2) * size, (position.y + playerDirection.y * 2) * size)
-  ctx.stroke()
-  ctx.closePath()
-
-  ctx.strokeStyle = '#e609ff'
-  ctx.beginPath()
-  ctx.moveTo(position.x * size, position.y * size)
-  ctx.lineTo((position.x + debugRayDirXStart * 2) * size, (position.y + debugRayDirYStart * 2) * size)
-  ctx.stroke()
-  ctx.closePath()
-
-  ctx.strokeStyle = '#00ff67'
-  ctx.beginPath()
-  ctx.moveTo(position.x * size, position.y * size)
-  ctx.lineTo((position.x + debugRayDirXEnd * 2) * size, (position.y + debugRayDirYEnd * 2) * size)
+  ctx.moveTo(player.x * size, player.y * size)
+  ctx.lineTo((player.x + player.direction.x * 2) * size, (player.y + player.direction.y * 2) * size)
   ctx.stroke()
   ctx.closePath()
 
   sprites.forEach(sprite => {
     ctx.fillStyle = '#007eff'
     ctx.beginPath()
-    ctx.arc(sprite.x * size, sprite.y * size, playerRadius * size, 0, Math.PI * 2)
+    ctx.arc(sprite.x * size, sprite.y * size, player.radius * size, 0, Math.PI * 2)
     ctx.fill()
     ctx.closePath()
   })
@@ -391,37 +358,37 @@ function render () {
 function input (delta) {
   if (!inputEnabled) return
 
-  const dirPerp = perp(playerDirection)
+  const dirPerp = perp(player.direction)
   dirPerp.x *= -1
   dirPerp.y *= -1
 
   if (keyDown(KEY_W)) {
-    position.x += playerDirection.x * moveSpeed * delta
-    position.y += playerDirection.y * moveSpeed * delta
+    player.x += player.direction.x * moveSpeed * delta
+    player.y += player.direction.y * moveSpeed * delta
   }
 
   if (keyDown(KEY_S)) {
-    position.x -= playerDirection.x * moveSpeed * delta
-    position.y -= playerDirection.y * moveSpeed * delta
+    player.x -= player.direction.x * moveSpeed * delta
+    player.y -= player.direction.y * moveSpeed * delta
   }
 
   const mouseSensitivity = 0.5
   const rotation = mouseMove.x * delta * mouseSensitivity
 
   if (mouseMove.x !== 0) {
-    rotate(playerDirection, rotation)
+    rotate(player.direction, rotation)
   }
 
   // strafe to the left
   if (keyDown(KEY_A)) {
-    position.x -= dirPerp.x * moveSpeed * delta
-    position.y -= dirPerp.y * moveSpeed * delta
+    player.x -= dirPerp.x * moveSpeed * delta
+    player.y -= dirPerp.y * moveSpeed * delta
   }
 
   // strafe to the right
   if (keyDown(KEY_D)) {
-    position.x += dirPerp.x * moveSpeed * delta
-    position.y += dirPerp.y * moveSpeed * delta
+    player.x += dirPerp.x * moveSpeed * delta
+    player.y += dirPerp.y * moveSpeed * delta
   }
 }
 
@@ -437,18 +404,18 @@ function loop () {
   input(delta)
 
   // COLLISION
-  const tx = Math.floor(position.x)
-  const ty = Math.floor(position.y)
+  const tx = Math.floor(player.x)
+  const ty = Math.floor(player.y)
 
   const mapWidth = map[0].length
   const mapHeight = map.length
 
   // level bounds
-  if (position.x - playerRadius < 0) position.x = playerRadius
-  if (position.x + playerRadius > mapWidth) position.x = mapWidth - playerRadius
+  if (player.x - player.radius < 0) player.x = player.radius
+  if (player.x + player.radius > mapWidth) player.x = mapWidth - player.radius
 
-  if (position.y - playerRadius < 0) position.y = playerRadius
-  if (position.y + playerRadius > mapHeight) position.y = mapHeight - playerRadius
+  if (player.y - player.radius < 0) player.y = player.radius
+  if (player.y + player.radius > mapHeight) player.y = mapHeight - player.radius
 
   const near = getSurrounding(tx, ty)
   const solid = near.filter(([x, y]) => {
@@ -457,12 +424,7 @@ function loop () {
   })
   solid.forEach(([x, y]) => {
     const collision = collideCircleRect(
-      // TODO combine position / direction / radius into player object
-      {
-        x: position.x,
-        y: position.y,
-        radius: playerRadius,
-      },
+      player,
       {
         x,
         y,
@@ -472,15 +434,15 @@ function loop () {
     )
 
     if (collision) {
-      position.x += collision.x
-      position.y += collision.y
+      player.x += collision.x
+      player.y += collision.y
     }
   })
 
   // walk towards player
   // sprites.forEach(sprite => {
-  //   let dx = position.x - sprite.x
-  //   let dy = position.y - sprite.y
+  //   let dx = player.x - sprite.x
+  //   let dy = player.y - sprite.y
   //   const m = Math.sqrt((dx * dx) + (dy * dy))
   //   dx /= m
   //   dy /= m
