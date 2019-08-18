@@ -36,6 +36,13 @@ function magnitude (v) {
   return Math.sqrt((v.x * v.x) + (v.y * v.y))
 }
 
+function copy (v) {
+  return {
+    x: v.x,
+    y: v.y
+  }
+}
+
 function normalize (v) {
 
   // shortcuts to avoid magnitude sqrt

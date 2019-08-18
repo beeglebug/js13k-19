@@ -9,6 +9,7 @@ body {
     justify-content: center;
     height:100vh;
 }
+
 canvas {
     image-rendering: pixelated;
     image-rendering: -moz-crisp-edges;
@@ -16,4 +17,8 @@ canvas {
 
 canvas.active {
     cursor: none;
+}
+
+canvas.debug {
+    width: 320px;
 }

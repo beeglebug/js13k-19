@@ -26,10 +26,15 @@ const height = 360
 
 const [canvas, ctx] = createCanvas(width, height)
 const [lightingCanvas, lightingCtx] = createCanvas(width, height)
+const [fogCanvas, fogCtx] = createCanvas(width, height)
 
 document.getElementById('container').appendChild(canvas)
 
+lightingCanvas.classList.add('debug')
+fogCanvas.classList.add('debug')
+
 canvas.after(lightingCanvas)
+canvas.after(fogCanvas)
 
 let inputEnabled = false
 
@@ -55,13 +60,15 @@ const imgSprites = new Image()
 imgSprites.src = 'sprites.png'
 
 const sprites = [
-  { x: 9.5, y: 8.5, index: 0 },
+  // { x: 9.5, y: 8.5, index: 0 },
 ]
 
 function render () {
 
   lightingCtx.fillStyle = '#ffffff'
   lightingCtx.fillRect(0, 0, width, height)
+
+  fogCtx.clearRect(0,0,width, height)
 
   drawFloor()
   drawCeiling()
@@ -82,6 +89,7 @@ function render () {
     // RAYCASTING ======================================================================================================
 
     let rayLength
+    let euclideanRayLength
     let side
     let collision = false
 
@@ -131,6 +139,8 @@ function render () {
       stepY = 1
       distanceY = (mapY + 1 - ray.y) * deltaY
     }
+
+    let normalisedRayDirection = normalize(copy(ray.direction))
 
     // DDA
     while (true) {
@@ -190,8 +200,10 @@ function render () {
       // Calculate distance projected on camera direction (Euclidean distance will give fisheye effect!)
       if (side === 0) {
         rayLength = (mapX - ray.x + (1 - stepX) / 2) / ray.direction.x
+        euclideanRayLength = (mapX - ray.x + (1 - stepX) / 2) / normalisedRayDirection.x
       } else {
         rayLength = (mapY - ray.y + (1 - stepY) / 2) / ray.direction.y
+        euclideanRayLength = (mapY - ray.y + (1 - stepY) / 2) / normalisedRayDirection.y
       }
     }
 
@@ -211,15 +223,14 @@ function render () {
 
     zBuffer.push(rayLength)
 
-    // DRAW WALLS ======================================================================================================
+    // WALLS ======================================================================================================
 
-    // Calculate height of line to draw on screen
+    // calculate height of line to draw on screen
     let sliceHeight = Math.abs(Math.floor(height / rayLength))
 
     // calculate lowest and highest pixel to fill in current stripe
     let drawStart = Math.floor((height - sliceHeight) / 2)
 
-    // TODO second row of sprites (or just do single row?)
     const textureSize = 16
     const textureIndex = textureIndexByTileId[tile]
     const textureX = wallX * (textureSize - 1) + textureIndex * textureSize
@@ -234,16 +245,29 @@ function render () {
       lightingCtx.fillRect(x, drawStart, sliceWidth, sliceHeight)
     }
 
-    // const range = 16
-    // const clampedDistance = Math.min(rayLength, range)
-    //
-    // let tint = clampedDistance / range
-    // if (side === 1) tint += 0.1
-    // const eased = outQuad(tint)
-    //
-    // ctx.fillStyle = "rgba(22,23,26, " + eased + ")"
-    // ctx.fillRect(x, drawStart, sliceWidth, sliceHeight)
+    const min = 5
+    const max = 30
+
+    const clamped = clamp(euclideanRayLength, min, max)
+    const normalised = remap(clamped, min, max, 0, 1)
+    // const eased = outQuad(normalised)
+
+    const fogR = 163
+    const fogG = 177
+    const fogB = 189
+
+    fogCtx.fillStyle = `rgba(${fogR}, ${fogG}, ${fogB}, ${normalised})`
+    fogCtx.fillRect(x, drawStart, sliceWidth, sliceHeight)
   }
+
+  // APPLY LIGHTING ====================================================================================================
+
+  ctx.globalCompositeOperation = 'multiply'
+  ctx.drawImage(lightingCanvas, 0, 0)
+
+  ctx.globalCompositeOperation = 'source-over'
+  ctx.drawImage(fogCanvas, 0, 0)
+
 
   // SPRITES ===========================================================================================================
 
@@ -303,11 +327,6 @@ function render () {
   })
 
   //removeIf(production)
-
-  ctx.save()
-  ctx.globalCompositeOperation = 'multiply'
-  ctx.drawImage(lightingCanvas, 0, 0)
-  ctx.restore()
 
   // DEBUG TEXT
 
@@ -371,6 +390,7 @@ function render () {
 }
 
 function input (delta) {
+
   if (!inputEnabled) return
 
   const dirPerp = perp(player.direction)
@@ -451,18 +471,6 @@ function loop () {
         player.y += collision.y
       }
     })
-
-  // walk towards player
-  // sprites.forEach(sprite => {
-  //   let dx = player.x - sprite.x
-  //   let dy = player.y - sprite.y
-  //   const m = Math.sqrt((dx * dx) + (dy * dy))
-  //   dx /= m
-  //   dy /= m
-  //   const speed = 0.01
-  //   sprite.x += dx * speed
-  //   sprite.y += dy * speed
-  // })
 
   render()
 
