@@ -8,7 +8,7 @@ const map = [
   [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1],
   [0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 1, 0, 1],
   [0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1],
-  [0, 0, 0, 0, 0, 1, 3, 1, 3, 0, 1, 1, 1],
+  [0, 0, 0, 0, 3, 1, 3, 1, 0, 0, 1, 1, 1],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -38,19 +38,17 @@ const camera = { x: 0, y: 0 }
 
 let time = 0 // time of current frame
 let oldTime = 0 // time of previous frame
+let fps = 0
 
 const width = 640
 const height = 360
 
-const canvas = document.getElementById('output')
-const ctx = canvas.getContext('2d')
+const [canvas, ctx] = createCanvas(width, height)
+const [lightingCanvas, lightingCtx] = createCanvas(width, height)
 
-let fps = 0
+document.getElementById('container').appendChild(canvas)
 
-canvas.width = width
-canvas.height = height
-
-ctx.imageSmoothingEnabled = false
+canvas.after(lightingCanvas)
 
 let inputEnabled = false
 
@@ -170,6 +168,7 @@ function render () {
       tile = getMap(mapX, mapY)
 
       // thin walls
+      // TODO optimise and make more generic
       if (tile === 3) {
         // half way down the block
         const start = { x: mapX, y: mapY + 0.5 }
