@@ -1,22 +1,3 @@
-const map = [
-  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1],
-  [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1],
-  [0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 1, 0, 1],
-  [0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1],
-  [0, 0, 0, 0, 3, 1, 3, 1, 0, 0, 1, 1, 1],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-  [1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1],
-]
 
 // start player
 const player = {
@@ -162,7 +143,7 @@ function render () {
       }
 
       // handle out of bounds to avoid infinite loop
-      if (mapX < 0 || mapX >= map[0].length || mapY < 0 || mapY >= map.length) break
+      if (mapX < 0 || mapX >= mapWidth || mapY < 0 || mapY >= mapHeight) break
 
       // Check if ray has hit a wall
       tile = getMap(mapX, mapY)
@@ -333,17 +314,27 @@ function render () {
   // MINIMAP
 
   let size = 5
-  const ox = width - (map[0].length * size) - 10
+  const ox = width - (mapWidth * size) - 10
   const oy = 10
 
   ctx.save()
   ctx.translate(ox, oy)
   ctx.globalAlpha = 0.5
 
-  for (let y = 0; y < map.length; y++) {
-    for (let x = 0; x < map[0].length; x++) {
+  ctx.fillStyle = '#ffffff'
+  ctx.fillRect(0, 0, mapWidth * size, mapHeight * size)
+
+  for (let y = 0; y < mapHeight; y++) {
+    for (let x = 0; x < mapWidth; x++) {
       const tile = map[y][x]
-      ctx.fillStyle = tile === 0 ? '#d2d2d2' : '#333333'
+      if (tile === 0) continue
+      const colorsByTile = {
+        1: '#333333',
+        2: '#6a3918',
+        3: '#6a3918',
+        4: '#6a3918',
+      }
+      ctx.fillStyle = colorsByTile[tile]
       ctx.fillRect(x * size, y * size, size, size)
     }
   }
@@ -424,9 +415,6 @@ function loop () {
   // COLLISION
   const tx = Math.floor(player.x)
   const ty = Math.floor(player.y)
-
-  const mapWidth = map[0].length
-  const mapHeight = map.length
 
   // level bounds
   if (player.x - player.radius < 0) player.x = player.radius
