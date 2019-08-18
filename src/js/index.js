@@ -2,11 +2,11 @@
 // start player
 const player = {
   x: 1.5,
-  y: 5.5,
+  y: 3,
   radius: 0.4,
   direction: {
-    x: 0.7,
-    y: -0.7,
+    x: 1,
+    y: 0,
   }
 }
 
@@ -156,7 +156,7 @@ function render () {
       }
 
       // handle out of bounds to avoid infinite loop
-      if (mapX < 0 || mapX >= mapWidth || mapY < 0 || mapY >= mapHeight) break
+      if (mapX < 0 || mapX >= map.width || mapY < 0 || mapY >= map.height) break
 
       // Check if ray has hit a wall
       tile = getMap(mapX, mapY)
@@ -218,8 +218,8 @@ function render () {
     wallX -= Math.floor(wallX)
 
     // // flip if the wall is opposite
-    if (side === 0 && ray.direction.x > 0) wallX = 1 - wallX
-    if (side === 1 && ray.direction.y < 0) wallX = 1 - wallX
+    if (side === 0 && ray.direction.x < 0) wallX = 1 - wallX
+    if (side === 1 && ray.direction.y > 0) wallX = 1 - wallX
 
     zBuffer.push(rayLength)
 
@@ -233,7 +233,7 @@ function render () {
 
     const textureSize = 16
     const textureIndex = textureIndexByTileId[tile]
-    const textureX = wallX * (textureSize - 1) + textureIndex * textureSize
+    const textureX = Math.floor(wallX * textureSize + textureIndex * textureSize)
 
     ctx.drawImage(imgTextures, textureX, 0, 1, textureSize, x, drawStart, sliceWidth, sliceHeight)
 
@@ -341,7 +341,7 @@ function render () {
   // MINIMAP
 
   let size = 5
-  const ox = width - (mapWidth * size) - 10
+  const ox = width - (map.width * size) - 10
   const oy = 10
 
   ctx.save()
@@ -349,11 +349,11 @@ function render () {
   ctx.globalAlpha = 0.5
 
   ctx.fillStyle = '#ffffff'
-  ctx.fillRect(0, 0, mapWidth * size, mapHeight * size)
+  ctx.fillRect(0, 0, map.width * size, map.height * size)
 
-  for (let y = 0; y < mapHeight; y++) {
-    for (let x = 0; x < mapWidth; x++) {
-      const tile = map[y][x]
+  for (let y = 0; y < map.height; y++) {
+    for (let x = 0; x < map.width; x++) {
+      const tile = getMap(x, y)
       if (tile === null) continue
       const colorsByTileId = {
         '-': '#333333',
@@ -445,10 +445,10 @@ function loop () {
 
   // level bounds
   if (player.x - player.radius < 0) player.x = player.radius
-  if (player.x + player.radius > mapWidth) player.x = mapWidth - player.radius
+  if (player.x + player.radius > map.width) player.x = map.width - player.radius
 
   if (player.y - player.radius < 0) player.y = player.radius
-  if (player.y + player.radius > mapHeight) player.y = mapHeight - player.radius
+  if (player.y + player.radius > map.height) player.y = map.height - player.radius
 
   const tiles = [[tx, ty], ...getSurrounding(tx, ty)]
 
