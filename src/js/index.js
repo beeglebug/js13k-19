@@ -1,67 +1,5 @@
 
-// start player
-const player = {
-  x: 1.4402922505636784,
-  y: 6.104280372117127,
-  radius: 0.4,
-  direction: {
-    x: 0.5049865020882822,
-    y: -0.8631272401614042
-  }
-}
-
-const moveSpeed = 4
-
-const fov = 66
-
-// camera plane
-const camera = { x: 0, y: 0 }
-
-let time = 0 // time of current frame
-let oldTime = 0 // time of previous frame
-let fps = 0
-
-const width = 640
-const height = 360
-
-const [canvas, ctx] = createCanvas(width, height)
-const [lightingCanvas, lightingCtx] = createCanvas(width, height)
-const [fogCanvas, fogCtx] = createCanvas(width, height)
-
-document.getElementById('container').appendChild(canvas)
-
-lightingCanvas.classList.add('debug')
-fogCanvas.classList.add('debug')
-
-canvas.after(lightingCanvas)
-canvas.after(fogCanvas)
-
-let inputEnabled = false
-
-const handlePointerLockChange = () => {
-  if (document.pointerLockElement === canvas) {
-    inputEnabled = true
-    canvas.classList.add('active')
-  } else {
-    inputEnabled = false
-    canvas.classList.remove('active')
-  }
-}
-
-canvas.addEventListener('click', () => canvas.requestPointerLock())
-document.addEventListener('pointerlockchange', handlePointerLockChange)
-
-bindKeyboard(document)
-
-const imgTextures = new Image()
-imgTextures.src = 'textures.png'
-
-const imgSprites = new Image()
-imgSprites.src = 'sprites.png'
-
-const sprites = [
-  // { x: 9.5, y: 8.5, index: 0 },
-]
+let map = map1
 
 function render () {
 
@@ -70,8 +8,8 @@ function render () {
 
   fogCtx.clearRect(0,0,width, height)
 
-  drawFloor()
-  drawCeiling()
+  drawFloor(map.floor)
+  drawCeiling(map.ceiling)
 
   const sliceWidth = 1
 
@@ -252,12 +190,11 @@ function render () {
     const normalised = remap(clamped, min, max, 0, 1)
     // const eased = outQuad(normalised)
 
-    const fogR = 163
-    const fogG = 177
-    const fogB = 189
-
-    fogCtx.fillStyle = `rgba(${fogR}, ${fogG}, ${fogB}, ${normalised})`
-    fogCtx.fillRect(x, drawStart, sliceWidth, sliceHeight)
+    if (map.fog) {
+      const [r, g, b] = hexToRgb(map.fog)
+      fogCtx.fillStyle = `rgba(${r}, ${g}, ${b}, ${normalised})`
+      fogCtx.fillRect(x, drawStart, sliceWidth, sliceHeight)
+    }
   }
 
   // APPLY LIGHTING ====================================================================================================
@@ -335,8 +272,7 @@ function render () {
   ctx.textBaseline = 'top'
   ctx.fillText(`pos: ${player.x.toFixed(2)},${player.y.toFixed(2)}`, 5, 5)
   ctx.fillText(`dir: ${player.direction.x.toFixed(2)},${player.direction.y.toFixed(2)}`, 5, 20)
-  ctx.fillText(`mouse: ${mouseMove.x.toFixed(2)},${mouseMove.y.toFixed(2)}`, 5, 35)
-  ctx.fillText(`fps: ${parseInt(fps)}`, 5, 50)
+  ctx.fillText(`fps: ${parseInt(fps)}`, 5, 35)
 
   // drawMiniMap(map, ctx)
 

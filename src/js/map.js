@@ -1,4 +1,8 @@
-const map = {
+const sky = ctx.createLinearGradient(0, 0, 0, height / 2)
+sky.addColorStop(0, '#7c9dbd')
+sky.addColorStop(1, '#a3b1bd')
+
+const map1 = {
   width: 32,
   height: 32,
   data: parseMap([
@@ -13,8 +17,8 @@ const map = {
     '-                              -',
     '-                              -',
     '-                              -',
-    '-                              -',
-    '-                              -',
+    '-     ==#=                     -',
+    '-     ====                     -',
     '-                              -',
     '-                              -',
     '-                              -',
@@ -30,11 +34,35 @@ const map = {
     '-                              -',
     '-                              -',
     '-                              -',
-    '-     =#==                     -',
-    '-     ====                     -',
+    '-                              -',
+    '-                              -',
     '-                              -',
     '--------------------------------'
-  ])
+  ]),
+  fog: '#A3B1BD',
+  floor: '#373433',
+  ceiling: sky,
+}
+
+const map2 = {
+  width: 5,
+  height: 4,
+  data: parseMap([
+    '=====',
+    '=   =',
+    '=   =',
+    '==#==',
+  ]),
+  floor: '#2e2827',
+  ceiling: '#2e2827',
+}
+
+function loadMap (newMap, x, y, dx, dy) {
+  map = newMap
+  player.x = x
+  player.y = y
+  player.direction.x = dx
+  player.direction.y = dy
 }
 
 function parseMap (arr) {

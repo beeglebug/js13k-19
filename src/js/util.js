@@ -23,6 +23,14 @@ function createCanvas (width, height) {
   return [canvas, ctx]
 }
 
+function hexToRgb (hex) {
+  const num = hex.replace('#', '')
+  const r = parseInt(num.substring(0,2), 16)
+  const g = parseInt(num.substring(2,4), 16)
+  const b = parseInt(num.substring(4,6), 16)
+  return [r, g, b]
+}
+
 // get player data for quick replace
 function debugSave () {
   const data = 'const player = ' + JSON.stringify(player, null, '  ').replace(/\"/g, '')

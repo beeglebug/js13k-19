@@ -18,7 +18,3 @@ canvas {
 canvas.active {
     cursor: none;
 }
-
-canvas.debug {
-    width: 320px;
-}
