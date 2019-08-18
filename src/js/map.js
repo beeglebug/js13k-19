@@ -4,8 +4,8 @@ const map = {
   data: parseMap([
     '--------------------------------',
     '-                              -',
-    '-  ===                         -',
-    '-  =#=                         -',
+    '- ===                          -',
+    '- =#=                          -',
     '-                              -',
     '-                              -',
     '-                              -',
@@ -29,9 +29,9 @@ const map = {
     '-                        ==    -',
     '-                              -',
     '-                              -',
+    '-                              -',
     '-     =#==                     -',
     '-     ====                     -',
-    '-                              -',
     '-                              -',
     '--------------------------------'
   ])
@@ -47,7 +47,7 @@ const textureIndexByTileId = {
   '#': 2,
 }
 
-function getMap (x, y) {
+function getMap (map, x, y) {
   return map.data[y] && map.data[y][x]
 }
 

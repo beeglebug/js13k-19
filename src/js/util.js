@@ -22,3 +22,9 @@ function createCanvas (width, height) {
 
   return [canvas, ctx]
 }
+
+// get player data for quick replace
+function debugSave () {
+  const data = 'const player = ' + JSON.stringify(player, null, '  ').replace(/\"/g, '')
+  console.log(data)
+}

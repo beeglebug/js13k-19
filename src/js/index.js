@@ -1,12 +1,12 @@
 
 // start player
 const player = {
-  x: 1.5,
-  y: 3,
+  x: 1.4402922505636784,
+  y: 6.104280372117127,
   radius: 0.4,
   direction: {
-    x: 1,
-    y: 0,
+    x: 0.5049865020882822,
+    y: -0.8631272401614042
   }
 }
 
@@ -159,7 +159,7 @@ function render () {
       if (mapX < 0 || mapX >= map.width || mapY < 0 || mapY >= map.height) break
 
       // Check if ray has hit a wall
-      tile = getMap(mapX, mapY)
+      tile = getMap(map, mapX, mapY)
 
       // thin walls
       // TODO optimise and make more generic
@@ -338,54 +338,8 @@ function render () {
   ctx.fillText(`mouse: ${mouseMove.x.toFixed(2)},${mouseMove.y.toFixed(2)}`, 5, 35)
   ctx.fillText(`fps: ${parseInt(fps)}`, 5, 50)
 
-  // MINIMAP
+  // drawMiniMap(map, ctx)
 
-  let size = 5
-  const ox = width - (map.width * size) - 10
-  const oy = 10
-
-  ctx.save()
-  ctx.translate(ox, oy)
-  ctx.globalAlpha = 0.5
-
-  ctx.fillStyle = '#ffffff'
-  ctx.fillRect(0, 0, map.width * size, map.height * size)
-
-  for (let y = 0; y < map.height; y++) {
-    for (let x = 0; x < map.width; x++) {
-      const tile = getMap(x, y)
-      if (tile === null) continue
-      const colorsByTileId = {
-        '-': '#333333',
-        '#': '#33cec2',
-      }
-      ctx.fillStyle = colorsByTileId[tile]
-      ctx.fillRect(x * size, y * size, size, size)
-    }
-  }
-
-  ctx.fillStyle = '#ff0000'
-  ctx.beginPath()
-  ctx.arc(player.x * size, player.y * size, player.radius * size, 0, Math.PI * 2)
-  ctx.fill()
-  ctx.closePath()
-
-  ctx.strokeStyle = '#ff0000'
-  ctx.beginPath()
-  ctx.moveTo(player.x * size, player.y * size)
-  ctx.lineTo((player.x + player.direction.x * 2) * size, (player.y + player.direction.y * 2) * size)
-  ctx.stroke()
-  ctx.closePath()
-
-  sprites.forEach(sprite => {
-    ctx.fillStyle = '#007eff'
-    ctx.beginPath()
-    ctx.arc(sprite.x * size, sprite.y * size, player.radius * size, 0, Math.PI * 2)
-    ctx.fill()
-    ctx.closePath()
-  })
-
-  ctx.restore()
   //endRemoveIf
 }
 
@@ -394,6 +348,7 @@ function input (delta) {
   if (!inputEnabled) return
 
   const dirPerp = perp(player.direction)
+
   dirPerp.x *= -1
   dirPerp.y *= -1
 
@@ -450,10 +405,10 @@ function loop () {
   if (player.y - player.radius < 0) player.y = player.radius
   if (player.y + player.radius > map.height) player.y = map.height - player.radius
 
-  const tiles = [[tx, ty], ...getSurrounding(tx, ty)]
+  const tiles = [[tx, ty], ...getSurrounding(map, tx, ty)]
 
   tiles.forEach(([x, y]) => {
-      const tile = getMap(x, y)
+      const tile = getMap(map, x, y)
       if (!tile) return
 
       const collision = collideCircleRect(
