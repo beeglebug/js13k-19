@@ -1,12 +1,12 @@
 
 // start player
 const player = {
-  x: 6.5,
-  y: 11.5,
+  x: 1.5,
+  y: 5.5,
   radius: 0.4,
   direction: {
-    x: 0,
-    y: -1,
+    x: 0.7,
+    y: -0.7,
   }
 }
 
@@ -59,6 +59,9 @@ const sprites = [
 ]
 
 function render () {
+
+  lightingCtx.fillStyle = '#ffffff'
+  lightingCtx.fillRect(0, 0, width, height)
 
   drawFloor()
   drawCeiling()
@@ -172,7 +175,7 @@ function render () {
         side = 0
         collision = true
         break
-      } else if (tile !== 0) {
+      } else if (tile !== null) {
         collision = true
         break
       }
@@ -218,7 +221,7 @@ function render () {
 
     // TODO second row of sprites (or just do single row?)
     const textureSize = 16
-    const textureIndex = tile - 1
+    const textureIndex = textureIndexByTileId[tile]
     const textureX = wallX * (textureSize - 1) + textureIndex * textureSize
 
     ctx.drawImage(imgTextures, textureX, 0, 1, textureSize, x, drawStart, sliceWidth, sliceHeight)
@@ -227,8 +230,8 @@ function render () {
 
     // give horizontal and vertical sides different brightness
     if (side === 1) {
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.3)'
-      ctx.fillRect(x, drawStart, sliceWidth, sliceHeight)
+      lightingCtx.fillStyle = 'rgba(0, 0, 0, 0.3)'
+      lightingCtx.fillRect(x, drawStart, sliceWidth, sliceHeight)
     }
 
     // const range = 16
@@ -301,6 +304,11 @@ function render () {
 
   //removeIf(production)
 
+  ctx.save()
+  ctx.globalCompositeOperation = 'multiply'
+  ctx.drawImage(lightingCanvas, 0, 0)
+  ctx.restore()
+
   // DEBUG TEXT
 
   ctx.fillStyle = '#FFF'
@@ -327,14 +335,12 @@ function render () {
   for (let y = 0; y < mapHeight; y++) {
     for (let x = 0; x < mapWidth; x++) {
       const tile = map[y][x]
-      if (tile === 0) continue
-      const colorsByTile = {
-        1: '#333333',
-        2: '#6a3918',
-        3: '#6a3918',
-        4: '#6a3918',
+      if (tile === null) continue
+      const colorsByTileId = {
+        '-': '#333333',
+        '#': '#33cec2',
       }
-      ctx.fillStyle = colorsByTile[tile]
+      ctx.fillStyle = colorsByTileId[tile]
       ctx.fillRect(x * size, y * size, size, size)
     }
   }
@@ -407,7 +413,8 @@ function loop () {
   // timing for input and FPS counter
   oldTime = time
   time = performance.now()
-  let delta = (time - oldTime) / 1000 // delta is the time this frame has taken, in seconds
+  // time the last frame took in seconds
+  let delta = (time - oldTime) / 1000
   fps = 1 / delta
 
   input(delta)
@@ -427,7 +434,7 @@ function loop () {
 
   tiles.forEach(([x, y]) => {
       const tile = getMap(x, y)
-      if (!tile || tile === 0) return
+      if (!tile) return
 
       const collision = collideCircleRect(
         player,
