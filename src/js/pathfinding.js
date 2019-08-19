@@ -24,6 +24,13 @@ function createInfluenceMap (map) {
   return influenceMap
 }
 
+function clearInfluenceMap (map) {
+  map.data = []
+  for (let y = 0; y < map.height; y++) {
+    map.data[y] = []
+  }
+}
+
 function populateInfluenceMap (map, target) {
 
   map.data[target.y][target.x] = 0

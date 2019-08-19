@@ -5,7 +5,9 @@ const player = {
   direction: {
     x: 0,
     y: 1
-  }
+  },
+  mapX: 0,
+  mapY: 0
 }
 
 const moveSpeed = 4

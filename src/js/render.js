@@ -1,16 +1,16 @@
-function drawFloor (fill) {
+function drawFloor (ctx, fill) {
   ctx.fillStyle = fill
   ctx.fillRect(0, height / 2, width, height / 2)
 }
 
-function drawCeiling (fill) {
+function drawCeiling (ctx, fill) {
   ctx.fillStyle = fill
   ctx.fillRect(0, 0, width, height / 2)
 }
 
 const MINI_MAP_TILE_SIZE = 5
 
-function drawMiniMap (map, ctx) {
+function drawMiniMap (ctx, map) {
 
   const ox = width - (map.width * MINI_MAP_TILE_SIZE) - 10
   const oy = 10
@@ -19,8 +19,7 @@ function drawMiniMap (map, ctx) {
   ctx.translate(ox, oy)
   ctx.globalAlpha = 0.5
 
-  ctx.fillStyle = '#ffffff'
-  ctx.fillRect(0, 0, map.width * MINI_MAP_TILE_SIZE, map.height * MINI_MAP_TILE_SIZE)
+  drawInfluenceMap(ctx, influenceMap)
 
   const colorsByTileId = {
     '-': '#333333',
@@ -61,7 +60,7 @@ function drawMiniMap (map, ctx) {
   ctx.restore()
 }
 
-function renderSprite (sprite) {
+function renderSprite (ctx, sprite) {
 
   // translate sprite player to relative to camera
   const spriteX = sprite.x - player.x
@@ -116,22 +115,13 @@ function drawInfluenceMap (ctx, map) {
 
   if (!map) return
 
-  ctx.save()
-
-  const { height, width, data } = map
-
-  ctx.font = '8px Arial'
-  ctx.textAlign = 'center'
-  ctx.textBaseline = 'middle'
-
-  const sorted = flat(data).sort((a,b) => a - b)
+  const sorted = flat(map.data).sort((a,b) => a - b)
   const min = sorted[0]
   const max = sorted[sorted.length - 1]
 
-  for (let y = 0; y < height; y++) {
-    for (let x = 0; x < width; x++) {
-      const tile = data[y][x]
-      ctx.globalAlpha = 0.5
+  for (let y = 0; y < map.height; y++) {
+    for (let x = 0; x < map.width; x++) {
+      const tile = map.data[y][x]
       if (tile === null) {
         ctx.fillStyle = '#ffffff'
       } else {
@@ -140,17 +130,6 @@ function drawInfluenceMap (ctx, map) {
         ctx.fillStyle = `hsl(${hue}, 100%, 50%)`
       }
       ctx.fillRect(x * MINI_MAP_TILE_SIZE, y * MINI_MAP_TILE_SIZE, MINI_MAP_TILE_SIZE, MINI_MAP_TILE_SIZE)
-      ctx.globalAlpha = 1
-      if (tile !== null) {
-        ctx.fillStyle = '#ffffff'
-        ctx.fillText(
-          tile,
-          (x * MINI_MAP_TILE_SIZE) + MINI_MAP_TILE_SIZE / 2,
-          (y * MINI_MAP_TILE_SIZE) + MINI_MAP_TILE_SIZE / 2
-        )
-      }
     }
   }
-
-  ctx.restore()
 }

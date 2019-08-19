@@ -5,8 +5,8 @@ function render () {
 
   fogCtx.clearRect(0,0,width, height)
 
-  drawFloor(map.floor)
-  drawCeiling(map.ceiling)
+  drawFloor(ctx, map.floor)
+  drawCeiling(ctx, map.ceiling)
 
   const sliceWidth = 1
 
@@ -86,7 +86,7 @@ function render () {
   })
 
   sprites.forEach(sprite => {
-    renderSprite(sprite)
+    renderSprite(ctx, sprite)
   })
 
   //removeIf(production)
@@ -100,7 +100,7 @@ function render () {
   ctx.fillText(`dir: ${player.direction.x.toFixed(2)},${player.direction.y.toFixed(2)}`, 5, 20)
   ctx.fillText(`fps: ${parseInt(fps)}`, 5, 35)
 
-  drawMiniMap(map, ctx)
+  drawMiniMap(ctx, map)
 
   //endRemoveIf
 }
@@ -192,7 +192,15 @@ function loop () {
       }
     })
 
-  // TODO fire event if player changes tile
+  const mapX = Math.floor(player.x)
+  const mapY = Math.floor(player.y)
+
+  if (player.mapX !== mapX || player.mapY !== mapY) {
+    player.mapX = mapX
+    player.mapY = mapY
+    influenceMap = createInfluenceMap(map)
+    populateInfluenceMap(influenceMap, { x: player.mapX, y: player.mapY })
+  }
 
   render()
 }
