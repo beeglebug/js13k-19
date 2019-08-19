@@ -103,7 +103,7 @@ function raycast (x) {
     }
   }
 
-  if (!collision) return null
+  if (!collision) return []
 
   if (rayLength === undefined) {
     // Calculate distance projected on camera direction (Euclidean distance will give fisheye effect!)

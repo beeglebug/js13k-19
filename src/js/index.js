@@ -23,13 +23,11 @@ function render () {
 
     // RAYCASTING ======================================================================================================
 
-    const ray = raycast(x)
-    if (!ray) {
+    const [rayLength, euclideanRayLength, side, wallX, tile] = raycast(x)
+    if (!tile) {
       zBuffer.push(null)
       continue
     }
-
-    const [rayLength, euclideanRayLength, side, wallX, tile] = ray
 
     zBuffer.push(rayLength)
 
@@ -201,7 +199,16 @@ function loop () {
 
 function interact () {
 
-  // TODO replace with proper logic
+  // TODO always be storing this center one to use for reticle etc
+  const [, euclideanRayLength, , , tile] = raycast(width / 2)
+
+  if (euclideanRayLength < 1 && tile === '#') {
+    changeMap()
+  }
+}
+
+// TODO replace with proper connections
+function changeMap () {
   if (map === map1) {
     loadMap(map2, 2.5, 2.5, 0, -1)
   } else if (map === map2) {
