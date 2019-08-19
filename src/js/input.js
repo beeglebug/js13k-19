@@ -1,4 +1,3 @@
-const KEY_Q = 81
 const KEY_E = 69
 const KEY_W = 87
 const KEY_A = 65
@@ -12,7 +11,11 @@ const downKeys = {}
 let mouseTimeout
 
 function handleKeydown (e) {
-  downKeys[e.which] = true
+  const key = e.which
+  if (key === KEY_E && !downKeys[key]) {
+    interact()
+  }
+  downKeys[key] = true
 }
 
 function handleKeyup (e) {

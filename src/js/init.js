@@ -1,6 +1,6 @@
 const player = {
-  x: 1.4402922505636784,
-  y: 6.104280372117127,
+  x: 0,
+  y: 0,
   radius: 0.4,
   direction: {
     x: 0.5049865020882822,
@@ -32,6 +32,8 @@ document.getElementById('container').appendChild(canvas)
 
 let inputEnabled = false
 
+let zBuffer = []
+
 const handlePointerLockChange = () => {
   if (document.pointerLockElement === canvas) {
     inputEnabled = true
@@ -42,16 +44,15 @@ const handlePointerLockChange = () => {
   }
 }
 
-canvas.addEventListener('click', (e) => {
+let ready = false
+
+canvas.addEventListener('mousedown', (e) => {
   canvas.requestPointerLock()
 
-  // TEMP FAKE FOR GIF
-  if (e.which === 3) {
-    if (map === map1) {
-      loadMap(map2, 2.5, 2.5, 0, -1)
-    } else if (map === map2) {
-      loadMap(map1, 3.5, 4.5, 0, 1)
-    }
+  if (!ready) {
+    audioContext = new window.AudioContext()
+    loadMap(map1, 5.36, 6.20, -0.67, -0.75)
+    ready = true
   }
 })
 document.addEventListener('pointerlockchange', handlePointerLockChange)
@@ -65,5 +66,7 @@ const imgSprites = new Image()
 imgSprites.src = 'sprites.png'
 
 const sprites = [
-  // { x: 9.5, y: 8.5, index: 0 },
+  // { x: 9.5, y: 8.5, z: 0, scale: 1, index: 0 },
+  { x: 1.5, y: 3.5, z: -0.25, scale: 0.5, index: 1 },
 ]
+

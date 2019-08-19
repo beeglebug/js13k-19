@@ -1,19 +1,20 @@
-const soundContext = new window.AudioContext()
+let audioContext
+
 const oscTypes = ["square", "sawtooth", "triangle", "sine"]
 
 // start frequency HZ, frequency change, delay between changes, number of changes, volume, type
 function playSound (frequency, increment, delay, times, volume, type = 0) {
 
-  const oscillator = soundContext.createOscillator()
+  const oscillator = audioContext.createOscillator()
   oscillator.frequency.value = frequency
   oscillator.type = oscTypes[type]
 
   // modulation for sound volume control
-  const modulationGain = soundContext.createGain();
+  const modulationGain = audioContext.createGain()
   modulationGain.gain.value = 0;
 
   oscillator.connect(modulationGain);
-  modulationGain.connect(soundContext.destination);
+  modulationGain.connect(audioContext.destination)
   oscillator.start();
 
   let i = 0

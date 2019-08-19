@@ -1,4 +1,4 @@
-function outQuad(t) {
+function outQuad (t) {
   return t * (2 - t)
 }
 
@@ -31,8 +31,12 @@ function hexToRgb (hex) {
   return [r, g, b]
 }
 
+function flat (arr2d) {
+  return [].concat(...arr2d)
+}
+
 // get player data for quick replace
 function debugSave () {
-  const data = 'const player = ' + JSON.stringify(player, null, '  ').replace(/\"/g, '')
+  const data = `${player.x.toFixed(2)}, ${player.y.toFixed(2)}, ${player.direction.x.toFixed(2)}, ${player.direction.y.toFixed(2)}`
   console.log(data)
 }

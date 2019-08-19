@@ -1,6 +1,3 @@
-
-let map = map1
-
 function render () {
 
   lightingCtx.fillStyle = '#ffffff'
@@ -13,7 +10,7 @@ function render () {
 
   const sliceWidth = 1
 
-  const zBuffer = []
+  zBuffer = []
 
   // adjust camera plane based on current player direction
   perp(player.direction, camera)
@@ -26,138 +23,13 @@ function render () {
 
     // RAYCASTING ======================================================================================================
 
-    let rayLength
-    let euclideanRayLength
-    let side
-    let collision = false
-
-    // calculate ray player and direction
-
-    // -1 is left edge, 1 is right edge
-    let nx = (2 * x) / width - 1
-
-    const ray = {
-      x: player.x,
-      y: player.y,
-      direction: {
-        x: player.direction.x + camera.x * -nx,
-        y: player.direction.y + camera.y * -nx
-      }
-    }
-
-    // which map cell are we in
-    let mapX = Math.floor(ray.x)
-    let mapY = Math.floor(ray.y)
-
-    let deltaX = Math.abs(1 / ray.direction.x)
-    let deltaY = Math.abs(1 / ray.direction.y)
-
-    // calculate increments for DDA
-    let stepX
-    let stepY
-
-    let distanceX
-    let distanceY
-
-    // id of the tile we last touched
-    let tile
-
-    if (ray.direction.x < 0) {
-      stepX = -1
-      distanceX = (ray.x - mapX) * deltaX
-    } else {
-      stepX = 1
-      distanceX = (mapX + 1 - ray.x) * deltaX
-    }
-
-    if (ray.direction.y < 0) {
-      stepY = -1
-      distanceY = (ray.y - mapY) * deltaY
-    } else {
-      stepY = 1
-      distanceY = (mapY + 1 - ray.y) * deltaY
-    }
-
-    let normalisedRayDirection = normalize(copy(ray.direction))
-
-    // DDA
-    while (true) {
-
-      if (distanceX < distanceY) {
-        distanceX += deltaX
-        mapX += stepX
-        side = 0
-      } else {
-        distanceY += deltaY
-        mapY += stepY
-        side = 1
-      }
-
-      // handle out of bounds to avoid infinite loop
-      if (mapX < 0 || mapX >= map.width || mapY < 0 || mapY >= map.height) break
-
-      // Check if ray has hit a wall
-      tile = getMap(map, mapX, mapY)
-
-      // thin walls
-      // TODO optimise and make more generic
-      if (tile === 3) {
-        // half way down the block
-        const start = { x: mapX, y: mapY + 0.5 }
-        const end = { x: mapX + 1, y: mapY + 0.5 }
-        const intersects = rayLineSegmentIntersection(ray, start, end)
-        if (!intersects) continue
-        // the ray length is where we intersected
-        rayLength = intersects
-        side = 1
-        collision = true
-        break
-      } else if (tile === 4) {
-        // half way down the block
-        const start = { x: mapX + 0.5, y: mapY }
-        const end = { x: mapX + 0.5, y: mapY + 1 }
-        const intersects = rayLineSegmentIntersection(ray, start, end)
-        if (!intersects) continue
-        // the ray length is where we intersected
-        rayLength = intersects
-        side = 0
-        collision = true
-        break
-      } else if (tile !== null) {
-        collision = true
-        break
-      }
-    }
-
-    if (!collision) {
+    const ray = raycast(x)
+    if (!ray) {
       zBuffer.push(null)
       continue
     }
 
-    if (rayLength === undefined) {
-      // Calculate distance projected on camera direction (Euclidean distance will give fisheye effect!)
-      if (side === 0) {
-        rayLength = (mapX - ray.x + (1 - stepX) / 2) / ray.direction.x
-        euclideanRayLength = (mapX - ray.x + (1 - stepX) / 2) / normalisedRayDirection.x
-      } else {
-        rayLength = (mapY - ray.y + (1 - stepY) / 2) / ray.direction.y
-        euclideanRayLength = (mapY - ray.y + (1 - stepY) / 2) / normalisedRayDirection.y
-      }
-    }
-
-    // where exactly the wall was hit
-    let wallX
-    if (side === 0) {
-      wallX = ray.y + rayLength * ray.direction.y
-    } else {
-      wallX = ray.x + rayLength * ray.direction.x
-    }
-    // we only need to know the 0-1 range
-    wallX -= Math.floor(wallX)
-
-    // // flip if the wall is opposite
-    if (side === 0 && ray.direction.x < 0) wallX = 1 - wallX
-    if (side === 1 && ray.direction.y > 0) wallX = 1 - wallX
+    const [rayLength, euclideanRayLength, side, wallX, tile] = ray
 
     zBuffer.push(rayLength)
 
@@ -216,51 +88,7 @@ function render () {
   })
 
   sprites.forEach(sprite => {
-    // translate sprite player to relative to camera
-    const spriteX = sprite.x - player.x
-    const spriteY = sprite.y - player.y
-
-    const invDet = 1 / (camera.x * player.direction.y - player.direction.x * camera.y)
-
-    const transformX = invDet * (player.direction.y * spriteX - player.direction.x * spriteY) * -1
-    const transformY = invDet * (-camera.y * spriteX + camera.x * spriteY)
-
-    const spriteScreenX = Math.round((width / 2) * (1 + transformX / transformY))
-
-    // calculate height of the sprite on screen
-    const spriteHeight = Math.abs(Math.round(height / transformY))
-
-    // calculate lowest and highest pixel to fill in current stripe
-    let drawStartY = -spriteHeight / 2 + height / 2
-    let drawEndY = spriteHeight / 2 + height / 2
-
-    // calculate width of the sprite
-    const spriteWidth = Math.abs(height / transformY)
-
-    let drawStartX = Math.round(-spriteWidth / 2 + spriteScreenX)
-    if (drawStartX < 0) drawStartX = 0
-
-    let drawEndX = spriteWidth / 2 + spriteScreenX
-    if (drawEndX >= width) drawEndX = width
-
-    // loop through every vertical stripe of the sprite on screen
-    for (let stripe = drawStartX; stripe < drawEndX; stripe++) {
-      const textureSize = 16
-
-      const textureX = ((stripe - (-spriteWidth / 2 + spriteScreenX)) * textureSize) / spriteWidth + sprite.index * textureSize
-      const textureY = 0
-      const buffer = zBuffer[stripe]
-
-      if (
-        transformY > 0 && // in front of the camera
-        stripe >= 0 &&
-        stripe < width && // somewhere on screen
-        (buffer === null || buffer > transformY)
-      ) {
-        // TODO lighting based on distance
-        ctx.drawImage(imgSprites, textureX, textureY, 1, 16, stripe, drawStartY, 1, drawEndY - drawStartY)
-      }
-    }
+    renderSprite(sprite)
   })
 
   //removeIf(production)
@@ -274,7 +102,7 @@ function render () {
   ctx.fillText(`dir: ${player.direction.x.toFixed(2)},${player.direction.y.toFixed(2)}`, 5, 20)
   ctx.fillText(`fps: ${parseInt(fps)}`, 5, 35)
 
-  // drawMiniMap(map, ctx)
+  drawMiniMap(map, ctx)
 
   //endRemoveIf
 }
@@ -321,12 +149,15 @@ function input (delta) {
 requestAnimationFrame(loop)
 
 function loop () {
+  requestAnimationFrame(loop)
   // timing for input and FPS counter
   oldTime = time
   time = performance.now()
   // time the last frame took in seconds
   let delta = (time - oldTime) / 1000
   fps = 1 / delta
+
+  if (!ready) return
 
   input(delta)
 
@@ -363,7 +194,17 @@ function loop () {
       }
     })
 
-  render()
+  // TODO fire event if player changes tile
 
-  requestAnimationFrame(loop)
+  render()
+}
+
+function interact () {
+
+  // TODO replace with proper logic
+  if (map === map1) {
+    loadMap(map2, 2.5, 2.5, 0, -1)
+  } else if (map === map2) {
+    loadMap(map1, 3.5, 4.5, 0, 1)
+  }
 }
