@@ -12,11 +12,12 @@ function createInfluenceMap (map) {
   for (let y = 0; y < height; y++) {
     influenceMap.data[y] = []
     for (let x = 0; x < width; x++) {
-      const tile = getMap(map, x, y)
-      if (tile !== null) {
-        influenceMap.data[y][x] = null
-      } else {
+      const tile = map.data[y][x]
+      // empty tiles only
+      if (isEmpty(tile)) {
         influenceMap.data[y][x] = { x, y, weight: MAX, open: true }
+      } else {
+        influenceMap.data[y][x] = null
       }
     }
   }

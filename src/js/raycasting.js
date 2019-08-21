@@ -96,7 +96,7 @@ function raycast (x) {
       side = 0
       collision = true
       break
-    } else if (tile !== null) {
+    } else if (!isEmpty(tile)) {
       collision = true
       break
     }

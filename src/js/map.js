@@ -3,9 +3,7 @@ sky.addColorStop(0, '#7c9dbd')
 sky.addColorStop(1, '#a3b1bd')
 
 const map1 = {
-  width: 32,
-  height: 32,
-  data: parseMap([
+  ...parseMap([
     '--------------------------------',
     '-                              -',
     '- ===                          -',
@@ -45,9 +43,7 @@ const map1 = {
 }
 
 const map2 = {
-  width: 5,
-  height: 4,
-  data: parseMap([
+  ...parseMap([
     '=====',
     '=   =',
     '=   =',
@@ -70,10 +66,17 @@ function loadMap (newMap, x, y, dx, dy) {
 }
 
 function parseMap (arr) {
-  return arr.map(row => row.split('').map(tile => tile === ' ' ? null : tile))
+  const height = arr.length
+  const width = arr[0].length
+  const data = arr.map((row, y) => row.split('').map((type, x) => ({ x, y, type })))
+  return {
+    height,
+    width,
+    data
+  }
 }
 
-const textureIndexByTileId = {
+const textureIndexByTileType = {
   '-': 0,
   '=': 1,
   '#': 2,
@@ -81,6 +84,10 @@ const textureIndexByTileId = {
 
 function getMap (map, x, y) {
   return map.data[y] && map.data[y][x]
+}
+
+function isEmpty (tile) {
+  return tile.type === ' '
 }
 
 function getNeighbours (map, x, y) {

@@ -40,7 +40,7 @@ function render () {
     let drawStart = Math.floor((height - sliceHeight) / 2)
 
     const textureSize = 16
-    const textureIndex = textureIndexByTileId[tile]
+    const textureIndex = textureIndexByTileType[tile.type]
     const textureX = Math.floor(wallX * textureSize + textureIndex * textureSize)
 
     ctx.drawImage(imgTextures, textureX, 0, 1, textureSize, x, drawStart, sliceWidth, sliceHeight)
@@ -200,7 +200,7 @@ function interact () {
   // TODO always be storing this center one to use for reticle etc
   const [, euclideanRayLength, , , tile] = raycast(width / 2)
 
-  if (euclideanRayLength < 1 && tile === '#') {
+  if (euclideanRayLength < 1 && tile.type === '#') {
     changeMap()
   }
 }

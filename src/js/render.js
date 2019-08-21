@@ -17,12 +17,11 @@ function drawMiniMap (ctx, map) {
 
   ctx.save()
   ctx.translate(ox, oy)
-  ctx.globalAlpha = 0.5
 
   drawInfluenceMap(ctx, influenceMap)
 
-  const colorsByTileId = {
-    '-': '#333333',
+  const colorsByTileType = {
+    '-': '#ffffff',
     '=': '#555555',
     '#': '#33cec2',
   }
@@ -30,8 +29,8 @@ function drawMiniMap (ctx, map) {
   for (let y = 0; y < map.height; y++) {
     for (let x = 0; x < map.width; x++) {
       const tile = getMap(map, x, y)
-      if (tile === null) continue
-      ctx.fillStyle = colorsByTileId[tile] || '#FF00FF'
+      if (isEmpty(tile)) continue
+      ctx.fillStyle = colorsByTileType[tile.type] || '#FF00FF'
       ctx.fillRect(x * MINI_MAP_TILE_SIZE, y * MINI_MAP_TILE_SIZE, MINI_MAP_TILE_SIZE, MINI_MAP_TILE_SIZE)
     }
   }
