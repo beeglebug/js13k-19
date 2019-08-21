@@ -6,7 +6,7 @@ function createInfluenceMap (map) {
 
   const influenceMap = {
     width, height,
-    data: []
+    data: [],
   }
 
   for (let y = 0; y < height; y++) {
@@ -16,7 +16,7 @@ function createInfluenceMap (map) {
       if (tile !== null) {
         influenceMap.data[y][x] = null
       } else {
-        influenceMap.data[y][x] = MAX
+        influenceMap.data[y][x] = { x, y, value: MAX, open: true }
       }
     }
   }
@@ -24,38 +24,33 @@ function createInfluenceMap (map) {
   return influenceMap
 }
 
-function clearInfluenceMap (map) {
-  map.data = []
-  for (let y = 0; y < map.height; y++) {
-    map.data[y] = []
-  }
-}
-
 function populateInfluenceMap (map, target) {
 
-  map.data[target.y][target.x] = 0
+  const initialValue = 0
 
-  while (!isSolved(map)) {
-    iterate(map, (x, y) => solve(x, y, map))
-    iterateReverse(map, (x, y) => solve(x, y, map))
+  let queue = []
+
+  const current = map.data[target.y][target.x]
+  current.value = initialValue
+
+  queue.push(current)
+
+  while (queue.length) {
+    // grab the first item from the queue
+    const current = queue.shift()
+    const neighbours = getSurrounding(map, current.x, current.y).map(([x, y]) => map.data[y][x])
+    neighbours.forEach(neighbour => {
+      // if the neighbour is not solid, or not already done, add to queue
+      if (neighbour !== null && neighbour.open) {
+        queue.push(neighbour)
+        neighbour.open = false
+      }
+    })
+    // special case for target
+    if (current.value === initialValue) continue
+    const lowest = neighbours.filter(Boolean).sort(byValue)[0]
+    current.value = lowest.value + 1
   }
 }
 
-function isSolved (map) {
-  return !flat(map.data).includes(MAX)
-}
-
-function solve (x, y, map) {
-
-  const lowest = getSurrounding(map, x, y, false)
-      .map(([x, y]) => map.data[y][x])
-      .filter(v => v !== null)
-      .sort((a, b) => a - b)[0]
-
-  const current = map.data[y][x]
-
-  if (current - lowest > 1) {
-    map.data[y][x] = lowest + 1
-  }
-}
-
+const byValue = (a, b) => a.value - b.value

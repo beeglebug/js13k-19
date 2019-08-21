@@ -115,7 +115,8 @@ function drawInfluenceMap (ctx, map) {
 
   if (!map) return
 
-  const sorted = flat(map.data).sort((a,b) => a - b)
+  const sorted = flat(map.data).filter(Boolean).map(cell => cell.value).sort((a,b) => a - b)
+
   const min = sorted[0]
   const max = sorted[sorted.length - 1]
 
@@ -125,7 +126,7 @@ function drawInfluenceMap (ctx, map) {
       if (tile === null) {
         ctx.fillStyle = '#ffffff'
       } else {
-        const value = remap(tile, min, max, 0, 1)
+        const value = remap(tile.value, min, max, 0, 1)
         const hue = (1 - value) * 240
         ctx.fillStyle = `hsl(${hue}, 100%, 50%)`
       }

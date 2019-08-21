@@ -56,7 +56,6 @@ function raycast (x) {
 
   // DDA
   while (true) {
-
     if (distanceX < distanceY) {
       distanceX += deltaX
       mapX += stepX

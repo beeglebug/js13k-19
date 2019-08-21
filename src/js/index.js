@@ -192,16 +192,6 @@ function loop () {
       }
     })
 
-  const mapX = Math.floor(player.x)
-  const mapY = Math.floor(player.y)
-
-  if (player.mapX !== mapX || player.mapY !== mapY) {
-    player.mapX = mapX
-    player.mapY = mapY
-    influenceMap = createInfluenceMap(map)
-    populateInfluenceMap(influenceMap, { x: player.mapX, y: player.mapY })
-  }
-
   render()
 }
 

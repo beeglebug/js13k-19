@@ -83,17 +83,13 @@ function getMap (map, x, y) {
   return map.data[y] && map.data[y][x]
 }
 
-function getSurrounding (map, x, y, diagonal = true) {
+function getSurrounding (map, x, y) {
 
   const neighbours = []
 
   // above
   if (y > 0) {
     neighbours.push([x, y - 1])
-    if (diagonal) {
-      if (x > 0) neighbours.push([x - 1, y - 1])
-      if (x < map.width - 1) neighbours.push([x + 1, y - 1])
-    }
   }
 
   // left
@@ -105,29 +101,7 @@ function getSurrounding (map, x, y, diagonal = true) {
   // below
   if (y < map.height - 1) {
     neighbours.push([x, y + 1])
-    if (diagonal) {
-      if (x > 0) neighbours.push([x - 1, y + 1])
-      if (x < map.width - 1) neighbours.push([x + 1, y + 1])
-    }
   }
 
   return neighbours
-}
-
-function iterate (map, callback) {
-  const { height, width } = map
-  for (let y = 0; y < height; y++) {
-    for (let x = 0; x < width; x++) {
-      callback(x, y)
-    }
-  }
-}
-
-function iterateReverse (map, callback) {
-  const { height, width } = map
-  for (let y = height - 1; y >= 0; y--) {
-    for (let x = width - 1; x >= 0; x--) {
-      callback(x,y)
-    }
-  }
 }

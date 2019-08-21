@@ -55,6 +55,10 @@ canvas.addEventListener('mousedown', (e) => {
     audioContext = new window.AudioContext()
     loadMap(map1, 5.36, 6.20, -0.67, -0.75)
     ready = true
+    setInterval(() => {
+      influenceMap = createInfluenceMap(map)
+      populateInfluenceMap(influenceMap, { x: Math.floor(player.x), y: Math.floor(player.y) })
+    }, 1000)
   }
 })
 document.addEventListener('pointerlockchange', handlePointerLockChange)
@@ -68,7 +72,6 @@ const imgSprites = new Image()
 imgSprites.src = 'sprites.png'
 
 const sprites = [
-  // { x: 9.5, y: 8.5, z: 0, scale: 1, index: 0 },
+  { x: 9.5, y: 8.5, z: 0, scale: 1, index: 0 },
   { x: 1.5, y: 3.5, z: -0.25, scale: 0.5, index: 1 },
 ]
-
