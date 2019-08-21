@@ -89,8 +89,6 @@ function render () {
     renderSprite(ctx, sprite)
   })
 
-  //removeIf(production)
-
   // DEBUG TEXT
 
   ctx.fillStyle = '#FFF'
@@ -101,8 +99,6 @@ function render () {
   ctx.fillText(`fps: ${parseInt(fps)}`, 5, 35)
 
   drawMiniMap(ctx, map)
-
-  //endRemoveIf
 }
 
 function input (delta) {

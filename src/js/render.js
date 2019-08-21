@@ -110,8 +110,6 @@ function renderSprite (ctx, sprite) {
 
 }
 
-//removeIf(production)
-
 function drawInfluenceMap (ctx, map) {
 
   if (!map) return
@@ -208,5 +206,3 @@ function renderGraph (ctx, graph) {
 
   ctx.restore()
 }
-
-//endRemoveIf
