@@ -160,8 +160,8 @@ function loop () {
   input(delta)
 
   // COLLISION
-  const tx = Math.floor(player.x)
-  const ty = Math.floor(player.y)
+  const x = Math.floor(player.x)
+  const y = Math.floor(player.y)
 
   // level bounds
   if (player.x - player.radius < 0) player.x = player.radius
@@ -170,27 +170,25 @@ function loop () {
   if (player.y - player.radius < 0) player.y = player.radius
   if (player.y + player.radius > map.height) player.y = map.height - player.radius
 
-  // const tiles = [[tx, ty], ...getNeighbours(map, tx, ty)]
-  //
-  // tiles.forEach(([x, y]) => {
-  //     const tile = getMap(map, x, y)
-  //     if (!tile) return
-  //
-  //     const collision = collideCircleRect(
-  //       player,
-  //       {
-  //         x: tile === 4 ? x + 0.35 : x,
-  //         y : tile === 3 ? y + 0.35 : y,
-  //         width: tile === 4 ? 0.3 : 1,
-  //         height: tile === 3 ? 0.3 : 1,
-  //       },
-  //     )
-  //
-  //     if (collision) {
-  //       player.x += collision.x
-  //       player.y += collision.y
-  //     }
-  //   })
+  const tiles = [{ x, y }, ...getNeighbours(map, x, y)]
+
+  tiles.forEach(({x, y}) => {
+    const tile = getMap(map, x, y)
+    if (isEmpty(tile)) return
+    const collision = collideCircleRect(
+      player,
+      {
+        x: tile.type === 4 ? x + 0.35 : x,
+        y : tile.type === 3 ? y + 0.35 : y,
+        width: tile.type === 4 ? 0.3 : 1,
+        height: tile.type === 3 ? 0.3 : 1,
+      },
+    )
+    if (collision) {
+      player.x += collision.x
+      player.y += collision.y
+    }
+  })
 
   render()
 }
