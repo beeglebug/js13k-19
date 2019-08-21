@@ -170,27 +170,27 @@ function loop () {
   if (player.y - player.radius < 0) player.y = player.radius
   if (player.y + player.radius > map.height) player.y = map.height - player.radius
 
-  const tiles = [[tx, ty], ...getSurrounding(map, tx, ty)]
-
-  tiles.forEach(([x, y]) => {
-      const tile = getMap(map, x, y)
-      if (!tile) return
-
-      const collision = collideCircleRect(
-        player,
-        {
-          x: tile === 4 ? x + 0.35 : x,
-          y : tile === 3 ? y + 0.35 : y,
-          width: tile === 4 ? 0.3 : 1,
-          height: tile === 3 ? 0.3 : 1,
-        },
-      )
-
-      if (collision) {
-        player.x += collision.x
-        player.y += collision.y
-      }
-    })
+  // const tiles = [[tx, ty], ...getNeighbours(map, tx, ty)]
+  //
+  // tiles.forEach(([x, y]) => {
+  //     const tile = getMap(map, x, y)
+  //     if (!tile) return
+  //
+  //     const collision = collideCircleRect(
+  //       player,
+  //       {
+  //         x: tile === 4 ? x + 0.35 : x,
+  //         y : tile === 3 ? y + 0.35 : y,
+  //         width: tile === 4 ? 0.3 : 1,
+  //         height: tile === 3 ? 0.3 : 1,
+  //       },
+  //     )
+  //
+  //     if (collision) {
+  //       player.x += collision.x
+  //       player.y += collision.y
+  //     }
+  //   })
 
   render()
 }

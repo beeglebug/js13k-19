@@ -16,7 +16,7 @@ function createInfluenceMap (map) {
       if (tile !== null) {
         influenceMap.data[y][x] = null
       } else {
-        influenceMap.data[y][x] = { x, y, value: MAX, open: true }
+        influenceMap.data[y][x] = { x, y, weight: MAX, open: true }
       }
     }
   }
@@ -26,19 +26,19 @@ function createInfluenceMap (map) {
 
 function populateInfluenceMap (map, target) {
 
-  const initialValue = 0
+  const initialWeight = 0
 
   let queue = []
 
   const current = map.data[target.y][target.x]
-  current.value = initialValue
+  current.weight = initialWeight
 
   queue.push(current)
 
   while (queue.length) {
     // grab the first item from the queue
     const current = queue.shift()
-    const neighbours = getSurrounding(map, current.x, current.y).map(([x, y]) => map.data[y][x])
+    const neighbours = getNeighbours(map, current.x, current.y)
     neighbours.forEach(neighbour => {
       // if the neighbour is not solid, or not already done, add to queue
       if (neighbour !== null && neighbour.open) {
@@ -47,10 +47,8 @@ function populateInfluenceMap (map, target) {
       }
     })
     // special case for target
-    if (current.value === initialValue) continue
-    const lowest = neighbours.filter(Boolean).sort(byValue)[0]
-    current.value = lowest.value + 1
+    if (current.weight === initialWeight) continue
+    const lowest = neighbours.filter(Boolean).sort(byWeight)[0]
+    current.weight = lowest.weight + 1
   }
 }
-
-const byValue = (a, b) => a.value - b.value

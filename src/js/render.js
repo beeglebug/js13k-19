@@ -115,7 +115,7 @@ function drawInfluenceMap (ctx, map) {
 
   if (!map) return
 
-  const sorted = flat(map.data).filter(Boolean).map(cell => cell.value).sort((a,b) => a - b)
+  const sorted = flat(map.data).filter(Boolean).map(cell => cell.weight).sort((a,b) => a - b)
 
   const min = sorted[0]
   const max = sorted[sorted.length - 1]
@@ -126,11 +126,84 @@ function drawInfluenceMap (ctx, map) {
       if (tile === null) {
         ctx.fillStyle = '#ffffff'
       } else {
-        const value = remap(tile.value, min, max, 0, 1)
-        const hue = (1 - value) * 240
+        const weight = remap(tile.weight, min, max, 0, 1)
+        const hue = (1 - weight) * 240
         ctx.fillStyle = `hsl(${hue}, 100%, 50%)`
       }
       ctx.fillRect(x * MINI_MAP_TILE_SIZE, y * MINI_MAP_TILE_SIZE, MINI_MAP_TILE_SIZE, MINI_MAP_TILE_SIZE)
     }
   }
+}
+
+
+function renderGraph (ctx, graph) {
+
+  const size = 20
+
+
+  ctx.save()
+  ctx.translate(100, 100)
+
+  ctx.strokeStyle = '#ffffff'
+  ctx.strokeWidth = 2
+  ctx.lineCap = 'square'
+
+  for (let y = 0; y < graph.height; y++) {
+
+    for (let x = 0; x < graph.width; x++) {
+
+      const node = graph.data[y][x]
+
+      const xs = x * size
+      const ys = y * size
+
+      if (node.entrance) {
+        ctx.fillStyle = '#20495a'
+      } else if (node.exit) {
+        ctx.fillStyle = '#81560f'
+      } else {
+        ctx.fillStyle = '#3e3e3e'
+      }
+      ctx.fillRect(x * size, y * size, size, size)
+
+      ctx.translate(0.5, 0.5)
+
+      if (node.top) {
+        ctx.beginPath()
+        ctx.moveTo(xs, ys)
+        ctx.lineTo(xs + size, ys)
+        ctx.stroke()
+      }
+
+      if (node.left) {
+        ctx.beginPath()
+        ctx.moveTo(xs, ys)
+        ctx.lineTo(xs, ys + size)
+        ctx.stroke()
+      }
+
+      if (node.bottom) {
+        ctx.beginPath()
+        ctx.moveTo(xs, ys + size)
+        ctx.lineTo(xs + size, ys + size)
+        ctx.stroke()
+      }
+
+      if (node.right) {
+        ctx.beginPath()
+        ctx.moveTo(xs + size, ys)
+        ctx.lineTo(xs + size, ys + size)
+        ctx.stroke()
+      }
+
+      ctx.translate(-0.5, -0.5)
+
+      ctx.fillStyle = '#FFFFFF'
+      ctx.textBaseline = 'middle'
+      ctx.textAlign = 'center'
+      ctx.fillText(node.weight, xs + size / 2, ys + size / 2)
+    }
+  }
+
+  ctx.restore()
 }

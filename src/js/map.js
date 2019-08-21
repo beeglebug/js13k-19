@@ -83,24 +83,24 @@ function getMap (map, x, y) {
   return map.data[y] && map.data[y][x]
 }
 
-function getSurrounding (map, x, y) {
+function getNeighbours (map, x, y) {
 
   const neighbours = []
 
-  // above
-  if (y > 0) {
-    neighbours.push([x, y - 1])
-  }
-
   // left
-  if (x > 0) neighbours.push([x - 1, y])
+  if (x > 0) neighbours.push(map.data[y][x - 1])
 
   // right
-  if (x < map.width - 1) neighbours.push([x + 1, y])
+  if (x < map.width - 1) neighbours.push(map.data[y][x + 1])
+
+  // above
+  if (y > 0) {
+    neighbours.push(map.data[y - 1][x])
+  }
 
   // below
   if (y < map.height - 1) {
-    neighbours.push([x, y + 1])
+    neighbours.push(map.data[y + 1][x])
   }
 
   return neighbours
