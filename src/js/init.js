@@ -1,3 +1,5 @@
+const EMPTY_TILE = ' '
+
 const player = {
   x: 1,
   y: 1,
@@ -53,7 +55,10 @@ canvas.addEventListener('mousedown', (e) => {
 
   if (!ready) {
     audioContext = new window.AudioContext()
-    loadMap(map1, 5.36, 6.20, -0.67, -0.75)
+
+    // starting map
+    loadMap(map3, 5.5, 5.5, 0, 1)
+
     ready = true
     setInterval(() => {
       influenceMap = createInfluenceMap(map)
@@ -72,6 +77,6 @@ const imgSprites = new Image()
 imgSprites.src = 'sprites.png'
 
 const sprites = [
-  { x: 9.5, y: 8.5, z: 0, scale: 1, index: 0 },
-  { x: 1.5, y: 3.5, z: -0.25, scale: 0.5, index: 1 },
+  //{ x: 9.5, y: 8.5, z: 0, scale: 1, index: 0 },
+  //{ x: 1.5, y: 3.5, z: -0.25, scale: 0.5, index: 1 },
 ]

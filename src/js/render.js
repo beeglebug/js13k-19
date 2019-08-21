@@ -8,7 +8,7 @@ function drawCeiling (ctx, fill) {
   ctx.fillRect(0, 0, width, height / 2)
 }
 
-const MINI_MAP_TILE_SIZE = 5
+const MINI_MAP_TILE_SIZE = 3
 
 function drawMiniMap (ctx, map) {
 
@@ -35,13 +35,15 @@ function drawMiniMap (ctx, map) {
     }
   }
 
-  ctx.fillStyle = '#ff0000'
+  ctx.translate(0.5, 0.5)
+
+  ctx.fillStyle = '#ffffff'
   ctx.beginPath()
   ctx.arc(player.x * MINI_MAP_TILE_SIZE, player.y * MINI_MAP_TILE_SIZE, player.radius * MINI_MAP_TILE_SIZE, 0, Math.PI * 2)
   ctx.fill()
   ctx.closePath()
 
-  ctx.strokeStyle = '#ff0000'
+  ctx.strokeStyle = '#ff0e00'
   ctx.beginPath()
   ctx.moveTo(player.x * MINI_MAP_TILE_SIZE, player.y * MINI_MAP_TILE_SIZE)
   ctx.lineTo((player.x + player.direction.x * 2) * MINI_MAP_TILE_SIZE, (player.y + player.direction.y * 2) * MINI_MAP_TILE_SIZE)

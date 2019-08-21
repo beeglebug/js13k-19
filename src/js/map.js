@@ -53,6 +53,10 @@ const map2 = {
   ceiling: '#2e2827',
 }
 
+const rng = new RNG()
+
+const map3 = generateDungeon(rng)
+
 let influenceMap
 
 function loadMap (newMap, x, y, dx, dy) {
@@ -87,7 +91,7 @@ function getMap (map, x, y) {
 }
 
 function isEmpty (tile) {
-  return tile.type === ' '
+  return tile.type === EMPTY_TILE
 }
 
 function getNeighbours (map, x, y) {

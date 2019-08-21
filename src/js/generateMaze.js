@@ -1,4 +1,4 @@
-function generate (rng, width, height, x, y) {
+function generateMaze (rng, width, height, x, y) {
 
   const graph = createGraph(width, height)
 
@@ -52,7 +52,7 @@ function generate (rng, width, height, x, y) {
   }
 
   // pick exit
-  const all = [].concat(...graph.data)
+  const all = flat(graph.data)
   const ends = all.filter(isEnd)
   ends.sort(byWeight)
   const possible = ends.slice(-5)
