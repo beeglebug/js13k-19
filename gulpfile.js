@@ -14,18 +14,6 @@ task('clean', () =>
     .pipe(clean()),
 )
 
-task('compile', () =>
-    src('src/index.html')
-    .pipe(htmlSrc())
-    .pipe(concat('app.js'))
-    .pipe(removeCode({ production: true }))
-    .pipe(terser({
-      mangle: true,
-      toplevel: true,
-    }))
-    .pipe(dest('dist')),
-)
-
 task('images', () =>
   src('src/*.png')
     .pipe(imagemin([
@@ -34,10 +22,22 @@ task('images', () =>
     .pipe(dest('dist')),
 )
 
+const compile = () => src('src/index.html')
+  .pipe(htmlSrc())
+  .pipe(concat('app.js'))
+  .pipe(removeCode({ production: true }))
+  .pipe(terser({
+    mangle: true,
+    toplevel: true,
+  }))
+
 task('html', () =>
   src('src/index.html')
     .pipe(htmlreplace({
-      js: 'app.js',
+      js: {
+        src: compile(),
+        tpl: '<script>%s</script>'
+      },
       css: {
         src: src('src/style.css').pipe(cleanCSS()),
         tpl: '<style>%s</style>',
@@ -51,4 +51,4 @@ task('zip', () => src('dist/*')
   .pipe(dest('./')),
 )
 
-task('build', series('clean', parallel('compile', 'images', 'html'), 'zip'))
+task('build', series('clean', parallel('images', 'html'), 'zip'))
