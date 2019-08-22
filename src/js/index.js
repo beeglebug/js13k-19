@@ -114,7 +114,7 @@ function shoot () {
     x,
     y,
     z: 0,
-    scale: 0.5,
+    scale: 1,
     index: 2,
     speed: 0,
     direction: copy(player.direction)
