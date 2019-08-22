@@ -53,16 +53,16 @@ function render () {
       lightingCtx.fillRect(x, drawStart, sliceWidth, sliceHeight)
     }
 
-    const min = 5
-    const max = 30
-
-    const clamped = clamp(euclideanRayLength, min, max)
-    const normalised = remap(clamped, min, max, 0, 1)
-    // const eased = outQuad(normalised)
-
     if (map.fog) {
+      const min = 5
+      const max = map.fogDistance || 30
+
+      const clamped = clamp(euclideanRayLength, min, max)
+      const normalised = remap(clamped, min, max, 0, 1)
+      const eased = outQuad(normalised)
+
       const [r, g, b] = hexToRgb(map.fog)
-      fogCtx.fillStyle = `rgba(${r}, ${g}, ${b}, ${normalised})`
+      fogCtx.fillStyle = `rgba(${r}, ${g}, ${b}, ${eased})`
       fogCtx.fillRect(x, drawStart, sliceWidth, sliceHeight)
     }
   }

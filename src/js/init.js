@@ -57,7 +57,7 @@ canvas.addEventListener('mousedown', (e) => {
     audioContext = new window.AudioContext()
 
     // starting map
-    loadMap(map3, 5.5, 5.5, 0, 1)
+    loadMap(map3, 4.5, 4.5, 0, 1)
 
     ready = true
     setInterval(() => {

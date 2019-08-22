@@ -54,5 +54,7 @@ function generateDungeon (rng) {
     data,
     floor: '#2e2827',
     ceiling: '#2e2827',
+    fog: '#2e2827',
+    fogDistance: 20,
   }
 }
