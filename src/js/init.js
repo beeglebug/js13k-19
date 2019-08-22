@@ -77,6 +77,12 @@ const imgSprites = new Image()
 imgSprites.src = 'sprites.png'
 
 const sprites = [
-  //{ x: 9.5, y: 8.5, z: 0, scale: 1, index: 0 },
-  //{ x: 1.5, y: 3.5, z: -0.25, scale: 0.5, index: 1 },
+  { x: 3, y: 7, z: 0, scale: 1, index: 0 },
+  { x: 5, y: 7, z: -0.25, scale: 0.5, index: 1 },
+]
+
+const spriteSheet = [
+  { x: 0, y: 0, width: 16, height: 16 },
+  { x: 16, y: 7, width: 8, height: 9 },
+  { x: 16, y: 0, width: 7, height: 7 },
 ]

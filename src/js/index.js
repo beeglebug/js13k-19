@@ -103,15 +103,20 @@ function render () {
 }
 
 let shootCoolDown = 0
+
 function shoot () {
 
+  const offset = 0.2
+  const x = player.x + player.direction.x * offset
+  const y = player.y + player.direction.y * offset
+
   sprites.push({
-    x: player.x,
-    y: player.y,
+    x,
+    y,
     z: 0,
     scale: 0.5,
     index: 2,
-    speed: 8,
+    speed: 0,
     direction: copy(player.direction)
   })
 

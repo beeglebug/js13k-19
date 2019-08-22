@@ -72,6 +72,9 @@ function renderSprite (ctx, sprite) {
   const transformX = invDet * (player.direction.y * spriteX - player.direction.x * spriteY) * -1
   const transformY = invDet * (-camera.y * spriteX + camera.x * spriteY)
 
+  // not in front of the camera
+  if (transformY <= 0) return
+
   const spriteScreenX = Math.round((width / 2) * (1 + transformX / transformY))
 
   // calculate size of sprite on screen
@@ -92,20 +95,19 @@ function renderSprite (ctx, sprite) {
 
   // loop through every vertical stripe of the sprite on screen
   for (let stripe = drawStartX; stripe < drawEndX; stripe++) {
-    const textureSize = 16
-
-    const textureX = Math.floor(((stripe - (-spriteWidth / 2 + spriteScreenX)) * textureSize) / spriteWidth + sprite.index * textureSize)
-    const textureY = 0
+    const spriteRect = spriteSheet[sprite.index]
+    const textureLocalX = Math.floor(((stripe - (-spriteWidth / 2 + spriteScreenX)) * spriteRect.width) / spriteWidth)
+    const textureX = textureLocalX + spriteRect.x
+    const textureY = spriteRect.y
     const buffer = zBuffer[stripe]
 
     if (
-      transformY > 0 && // in front of the camera
       stripe >= 0 &&
       stripe < width && // somewhere on screen
       (buffer === null || buffer > transformY)
     ) {
       // TODO lighting based on distance
-      ctx.drawImage(imgSprites, textureX, textureY, 1, 16, stripe, drawStartY, 1, drawEndY - drawStartY)
+      ctx.drawImage(imgSprites, textureX, textureY, 1, spriteRect.height, stripe, drawStartY, 1, drawEndY - drawStartY)
     }
   }
 
