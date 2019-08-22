@@ -97,8 +97,25 @@ function render () {
   ctx.fillText(`pos: ${player.x.toFixed(2)},${player.y.toFixed(2)}`, 5, 5)
   ctx.fillText(`dir: ${player.direction.x.toFixed(2)},${player.direction.y.toFixed(2)}`, 5, 20)
   ctx.fillText(`fps: ${parseInt(fps)}`, 5, 35)
+  ctx.fillText(`sprites: ${sprites.length}`, 5, 50)
 
   drawMiniMap(ctx, map)
+}
+
+let shootCoolDown = 0
+function shoot () {
+
+  sprites.push({
+    x: player.x,
+    y: player.y,
+    z: 0,
+    scale: 0.5,
+    index: 2,
+    speed: 8,
+    direction: copy(player.direction)
+  })
+
+  shootCoolDown += 200
 }
 
 function input (delta) {
@@ -138,6 +155,12 @@ function input (delta) {
     player.x += dirPerp.x * moveSpeed * delta
     player.y += dirPerp.y * moveSpeed * delta
   }
+
+  if (mouseDown(MOUSE_LEFT)) {
+    if (shootCoolDown === 0) {
+      shoot()
+    }
+  }
 }
 
 requestAnimationFrame(loop)
@@ -168,14 +191,14 @@ function loop () {
 
   const tiles = [{ x, y }, ...getNeighbours(map, x, y, true)]
 
-  tiles.forEach(({x, y}) => {
+  tiles.forEach(({ x, y }) => {
     const tile = getMap(map, x, y)
     if (isEmpty(tile)) return
     const collision = collideCircleRect(
       player,
       {
         x: tile.type === 4 ? x + 0.35 : x,
-        y : tile.type === 3 ? y + 0.35 : y,
+        y: tile.type === 3 ? y + 0.35 : y,
         width: tile.type === 4 ? 0.3 : 1,
         height: tile.type === 3 ? 0.3 : 1,
       },
@@ -183,6 +206,18 @@ function loop () {
     if (collision) {
       player.x += collision.x
       player.y += collision.y
+    }
+  })
+
+  if (shootCoolDown > 0) {
+    shootCoolDown -= delta * 1000
+    if (shootCoolDown < 0) shootCoolDown = 0
+  }
+
+  sprites.forEach(sprite => {
+    if (sprite.speed) {
+      sprite.x += sprite.direction.x * sprite.speed * delta
+      sprite.y += sprite.direction.y * sprite.speed * delta
     }
   })
 
