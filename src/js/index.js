@@ -166,7 +166,7 @@ function loop () {
   if (player.y - player.radius < 0) player.y = player.radius
   if (player.y + player.radius > map.height) player.y = map.height - player.radius
 
-  const tiles = [{ x, y }, ...getNeighbours(map, x, y)]
+  const tiles = [{ x, y }, ...getNeighbours(map, x, y, true)]
 
   tiles.forEach(({x, y}) => {
     const tile = getMap(map, x, y)

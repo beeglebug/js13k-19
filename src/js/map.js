@@ -94,7 +94,7 @@ function isEmpty (tile) {
   return tile.type === EMPTY_TILE
 }
 
-function getNeighbours (map, x, y) {
+function getNeighbours (map, x, y, diagonal = false) {
 
   const neighbours = []
 
@@ -107,11 +107,19 @@ function getNeighbours (map, x, y) {
   // above
   if (y > 0) {
     neighbours.push(map.data[y - 1][x])
+    if (diagonal) {
+      if (x > 0) neighbours.push(map.data[y - 1][x - 1])
+      if (x < map.width - 1) neighbours.push(map.data[y - 1][x + 1])
+    }
   }
 
   // below
   if (y < map.height - 1) {
     neighbours.push(map.data[y + 1][x])
+    if (diagonal) {
+      if (x > 0) neighbours.push(map.data[y + 1][x - 1])
+      if (x < map.width - 1) neighbours.push(map.data[y + 1][x + 1])
+    }
   }
 
   return neighbours
