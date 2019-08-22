@@ -102,7 +102,8 @@ function render () {
   drawMiniMap(ctx, map)
 }
 
-let shootCoolDown = 0
+// start it high so initial click doesn't fire
+let shootCoolDown = 500
 
 function shoot () {
 
@@ -114,9 +115,9 @@ function shoot () {
     x,
     y,
     z: 0,
-    scale: 1,
+    scale: 0.5,
     index: 2,
-    speed: 0,
+    speed: 8,
     direction: copy(player.direction)
   })
 

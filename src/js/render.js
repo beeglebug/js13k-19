@@ -50,13 +50,13 @@ function drawMiniMap (ctx, map) {
   ctx.stroke()
   ctx.closePath()
 
-  sprites.forEach(sprite => {
-    ctx.fillStyle = '#007eff'
-    ctx.beginPath()
-    ctx.arc(sprite.x * MINI_MAP_TILE_SIZE, sprite.y * MINI_MAP_TILE_SIZE, player.radius * MINI_MAP_TILE_SIZE, 0, Math.PI * 2)
-    ctx.fill()
-    ctx.closePath()
-  })
+  // sprites.forEach(sprite => {
+  //   ctx.fillStyle = '#007eff'
+  //   ctx.beginPath()
+  //   ctx.arc(sprite.x * MINI_MAP_TILE_SIZE, sprite.y * MINI_MAP_TILE_SIZE, player.radius * MINI_MAP_TILE_SIZE, 0, Math.PI * 2)
+  //   ctx.fill()
+  //   ctx.closePath()
+  // })
 
   ctx.restore()
 }
@@ -77,11 +77,9 @@ function renderSprite (ctx, sprite) {
 
   const spriteScreenX = Math.round((width / 2) * (1 + transformX / transformY))
 
-  const spriteRect = spriteSheet[sprite.index]
-
-  // calculate size of sprite on screen (16 is base size for textures, so sprites smaller than that get auto scaled)
-  const spriteWidth = Math.abs(height / transformY) * (spriteRect.width / 16 * sprite.scale)
-  const spriteHeight = Math.abs(Math.round(height / transformY)) * (spriteRect.width / 16 * sprite.scale)
+  // calculate size of sprite on screen
+  const spriteWidth = Math.abs(height / transformY) * sprite.scale
+  const spriteHeight = Math.abs(Math.round(height / transformY)) * sprite.scale
 
   const z = sprite.z / transformY * 360 // no idea why 360 but it works
 
@@ -99,9 +97,9 @@ function renderSprite (ctx, sprite) {
 
   // loop through every vertical stripe of the sprite on screen
   for (let stripe = drawStartX; stripe < drawEndX; stripe++) {
-    const textureLocalX = Math.floor(((stripe - (-spriteWidth / 2 + spriteScreenX)) * spriteRect.width) / spriteWidth)
-    const textureX = textureLocalX + spriteRect.x
-    const textureY = spriteRect.y
+    const textureLocalX = Math.floor(((stripe - (-spriteWidth / 2 + spriteScreenX)) * 16) / spriteWidth)
+    const textureX = textureLocalX + sprite.index * 16
+    const textureY = 0
     const buffer = zBuffer[stripe]
 
     if (
@@ -110,7 +108,7 @@ function renderSprite (ctx, sprite) {
       (buffer === null || buffer > transformY)
     ) {
       // TODO lighting based on distance
-      ctx.drawImage(imgSprites, textureX, textureY, 1, spriteRect.height, stripe, drawStartY, 1, drawEndY - drawStartY)
+      ctx.drawImage(imgSprites, textureX, textureY, 1, 16, stripe, drawStartY, 1, drawEndY - drawStartY)
     }
   }
 
