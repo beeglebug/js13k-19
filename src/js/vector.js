@@ -73,6 +73,12 @@ function sub (v1, v2) {
   }
 }
 
+function multiply (v, scalar) {
+  v.x *= scalar
+  v.y *= scalar
+  return v
+}
+
 function cross (v1, v2) {
   return (v1.x * v2.y) - (v1.y * v2.x)
 }

@@ -106,19 +106,25 @@ function render () {
 let shootCoolDown = 500
 
 function shoot () {
-
   const offset = 0.2
   const x = player.x + player.direction.x * offset
   const y = player.y + player.direction.y * offset
-
+  const direction = copy(player.direction)
+  const speed = 8
   sprites.push({
+    type: TYPE_PROJECTILE,
     x,
     y,
     z: 0,
+    radius: 0.1,
     scale: 0.5,
     index: 2,
-    speed: 8,
-    direction: copy(player.direction)
+    speed,
+    direction,
+    velocity: {
+      x: direction.x * speed,
+      y: direction.y * speed,
+    },
   })
 
   shootCoolDown += 200
@@ -133,14 +139,17 @@ function input (delta) {
   dirPerp.x *= -1
   dirPerp.y *= -1
 
+  player.velocity.x = 0
+  player.velocity.y = 0
+
   if (keyDown(KEY_W)) {
-    player.x += player.direction.x * moveSpeed * delta
-    player.y += player.direction.y * moveSpeed * delta
+    player.velocity.x += player.direction.x
+    player.velocity.y += player.direction.y
   }
 
   if (keyDown(KEY_S)) {
-    player.x -= player.direction.x * moveSpeed * delta
-    player.y -= player.direction.y * moveSpeed * delta
+    player.velocity.x -= player.direction.x
+    player.velocity.y -= player.direction.y
   }
 
   const mouseSensitivity = 0.5
@@ -152,15 +161,18 @@ function input (delta) {
 
   // strafe to the left
   if (keyDown(KEY_A)) {
-    player.x -= dirPerp.x * moveSpeed * delta
-    player.y -= dirPerp.y * moveSpeed * delta
+    player.velocity.x -= dirPerp.x
+    player.velocity.y -= dirPerp.y
   }
 
   // strafe to the right
   if (keyDown(KEY_D)) {
-    player.x += dirPerp.x * moveSpeed * delta
-    player.y += dirPerp.y * moveSpeed * delta
+    player.velocity.x += dirPerp.x
+    player.velocity.y += dirPerp.y
   }
+
+  normalize(player.velocity)
+  multiply(player.velocity, player.speed)
 
   if (mouseDown(MOUSE_LEFT)) {
     if (shootCoolDown === 0) {
@@ -176,24 +188,43 @@ function loop () {
   // timing for input and FPS counter
   oldTime = time
   time = performance.now()
-  // time the last frame took in seconds
-  let delta = (time - oldTime) / 1000
+  let delta = (time - oldTime) / 1000 // time the last frame took in seconds
   fps = 1 / delta
 
   if (!ready) return
 
   input(delta)
 
-  // COLLISION
-  const x = Math.floor(player.x)
-  const y = Math.floor(player.y)
+  update (player, delta)
+
+  sprites.forEach(sprite => update (sprite, delta))
+
+  if (shootCoolDown > 0) {
+    shootCoolDown -= delta * 1000
+    if (shootCoolDown < 0) shootCoolDown = 0
+  }
+
+  render()
+}
+
+function update (entity, delta) {
+  if (!entity.velocity) return
+  entity.x += entity.velocity.x * delta
+  entity.y += entity.velocity.y * delta
+  handleCollision(entity)
+}
+
+function handleCollision (entity) {
+
+  const x = Math.floor(entity.x)
+  const y = Math.floor(entity.y)
 
   // level bounds
-  if (player.x - player.radius < 0) player.x = player.radius
-  if (player.x + player.radius > map.width) player.x = map.width - player.radius
+  if (entity.x - entity.radius < 0) entity.x = entity.radius
+  if (entity.x + entity.radius > map.width) entity.x = map.width - entity.radius
 
-  if (player.y - player.radius < 0) player.y = player.radius
-  if (player.y + player.radius > map.height) player.y = map.height - player.radius
+  if (entity.y - entity.radius < 0) entity.y = entity.radius
+  if (entity.y + entity.radius > map.height) entity.y = map.height - entity.radius
 
   const tiles = [{ x, y }, ...getNeighbours(map, x, y, true)]
 
@@ -201,7 +232,7 @@ function loop () {
     const tile = getMap(map, x, y)
     if (isEmpty(tile)) return
     const collision = collideCircleRect(
-      player,
+      entity,
       {
         x: tile.type === 4 ? x + 0.35 : x,
         y: tile.type === 3 ? y + 0.35 : y,
@@ -210,24 +241,21 @@ function loop () {
       },
     )
     if (collision) {
-      player.x += collision.x
-      player.y += collision.y
+      entity.x += collision.x
+      entity.y += collision.y
+      emit('collide_entity_wall', entity, tile)
     }
   })
+}
 
-  if (shootCoolDown > 0) {
-    shootCoolDown -= delta * 1000
-    if (shootCoolDown < 0) shootCoolDown = 0
+on('collide_entity_wall', (entity, wall) => {
+  if (entity.type === TYPE_PROJECTILE) {
+    kill(entity)
   }
+})
 
-  sprites.forEach(sprite => {
-    if (sprite.speed) {
-      sprite.x += sprite.direction.x * sprite.speed * delta
-      sprite.y += sprite.direction.y * sprite.speed * delta
-    }
-  })
-
-  render()
+function kill (entity) {
+  sprites = sprites.filter(sprite => sprite !== entity)
 }
 
 function interact () {

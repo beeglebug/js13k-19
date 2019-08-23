@@ -1,9 +1,15 @@
 const EMPTY_TILE = ' '
+const TYPE_PROJECTILE = 'projectile'
 
 const player = {
   x: 1,
   y: 1,
   radius: 0.4,
+  velocity: {
+    x: 0,
+    y: 0,
+  },
+  speed: 4,
   direction: {
     x: 0,
     y: 1
@@ -12,7 +18,6 @@ const player = {
   mapY: 0
 }
 
-const moveSpeed = 4
 const fov = 66
 
 // camera plane
@@ -76,7 +81,7 @@ imgTextures.src = 'textures.png'
 const imgSprites = new Image()
 imgSprites.src = 'sprites.png'
 
-const sprites = [
+let sprites = [
   { x: 3, y: 7, z: 0, scale: 1, index: 0 },
   { x: 1.5, y: 1.5, z: -0.25, scale: 0.5, index: 1 },
   { x: 2, y: 2, z: 0, scale: 1, index: 4 },
