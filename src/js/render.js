@@ -78,10 +78,10 @@ function renderSprite (ctx, sprite) {
   const spriteScreenX = Math.round((width / 2) * (1 + transformX / transformY))
 
   // calculate size of sprite on screen
-  const spriteWidth = Math.abs(height / transformY) * sprite.scale
+  const spriteWidth = Math.abs(Math.round(height / transformY)) * sprite.scale
   const spriteHeight = Math.abs(Math.round(height / transformY)) * sprite.scale
 
-  const z = sprite.z / transformY * 360 // no idea why 360 but it works
+  const z = height / transformY * sprite.z
 
   // calculate lowest and highest pixel to fill in current stripe
   let drawStartY = (-spriteHeight / 2 + height / 2) - z
