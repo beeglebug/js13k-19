@@ -12,7 +12,7 @@ const MINI_MAP_TILE_SIZE = 3
 
 function drawMiniMap (ctx, map) {
 
-  const ox = width - (map.width * MINI_MAP_TILE_SIZE) - 10
+  const ox = width * 2 - (map.width * MINI_MAP_TILE_SIZE) - 10
   const oy = 10
 
   ctx.save()
@@ -139,6 +139,15 @@ function drawInfluenceMap (ctx, map) {
   }
 }
 
+function drawDebugText (ctx) {
+  ctx.fillStyle = '#FFF'
+  ctx.font = '12px Courier'
+  ctx.textBaseline = 'top'
+  ctx.fillText(`pos: ${player.x.toFixed(2)},${player.y.toFixed(2)}`, 5, 5)
+  ctx.fillText(`dir: ${player.direction.x.toFixed(2)},${player.direction.y.toFixed(2)}`, 5, 20)
+  ctx.fillText(`fps: ${parseInt(fps)}`, 5, 35)
+  ctx.fillText(`sprites: ${sprites.length}`, 5, 50)
+}
 
 function renderGraph (ctx, graph) {
 

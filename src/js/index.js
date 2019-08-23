@@ -93,17 +93,10 @@ function render () {
     renderSprite(ctx, sprite)
   })
 
-  // DEBUG TEXT
+  outputCtx.drawImage(canvas, 0, 0, width * 2, height * 2)
 
-  ctx.fillStyle = '#FFF'
-  ctx.font = '12px Courier'
-  ctx.textBaseline = 'top'
-  ctx.fillText(`pos: ${player.x.toFixed(2)},${player.y.toFixed(2)}`, 5, 5)
-  ctx.fillText(`dir: ${player.direction.x.toFixed(2)},${player.direction.y.toFixed(2)}`, 5, 20)
-  ctx.fillText(`fps: ${parseInt(fps)}`, 5, 35)
-  ctx.fillText(`sprites: ${sprites.length}`, 5, 50)
-
-  drawMiniMap(ctx, map)
+  drawDebugText(outputCtx)
+  drawMiniMap(outputCtx, map)
 }
 
 // start it high so initial click doesn't fire
