@@ -33,10 +33,15 @@ function collideCircleRect (circle, rect) {
     y: circle.y - point.y,
   })
 
-  // mtd
+  // TODO handle point inside, normal is whack
+  if (normal.x === 0 && normal.y === 0) {
+    // debugger
+  }
+
   return {
-    x: normal.x * depth,
-    y: normal.y * depth
+    ...point,
+    normal,
+    depth
   }
 }
 

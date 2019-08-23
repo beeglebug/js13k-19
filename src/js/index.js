@@ -93,6 +93,8 @@ function render () {
     renderSprite(ctx, sprite)
   })
 
+  drawReticle(ctx)
+
   outputCtx.drawImage(canvas, 0, 0, width * 2, height * 2)
 
   drawDebugText(outputCtx)
@@ -103,18 +105,18 @@ function render () {
 let shootCoolDown = 500
 
 function shoot () {
-  const offset = 0.2
+  const offset = 0.25
   const x = player.x + player.direction.x * offset
   const y = player.y + player.direction.y * offset
   const direction = copy(player.direction)
-  const speed = 8
+  const speed = 10
   sprites.push({
     type: TYPE_PROJECTILE,
     x,
     y,
     z: 0,
     radius: 0.1,
-    scale: 0.5,
+    scale: 0.3,
     index: 2,
     speed,
     direction,
@@ -208,7 +210,9 @@ function update (entity, delta) {
   if (!entity.velocity) return
   entity.x += entity.velocity.x * delta
   entity.y += entity.velocity.y * delta
-  handleCollision(entity)
+  if (entity.radius) {
+    handleCollision(entity)
+  }
 }
 
 function handleCollision (entity) {
@@ -238,16 +242,29 @@ function handleCollision (entity) {
       },
     )
     if (collision) {
-      entity.x += collision.x
-      entity.y += collision.y
-      emit('collide_entity_wall', entity, tile)
+      emit('collide_entity_wall', entity, tile, collision)
     }
   })
 }
 
-on('collide_entity_wall', (entity, wall) => {
+on('collide_entity_wall', (entity, wall, collision) => {
+
+  // handle mtd
+  entity.x += collision.normal.x * collision.depth
+  entity.y += collision.normal.y * collision.depth
+
+  // TODO handle different projectiles
   if (entity.type === TYPE_PROJECTILE) {
-    kill(entity)
+    entity.velocity.x = 0
+    entity.velocity.y = 0
+
+    // stop further collision
+    entity.radius = 0
+
+    // change sprite
+    entity.index += 1
+
+    setTimeout(() => kill(entity), 200)
   }
 })
 

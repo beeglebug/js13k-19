@@ -147,6 +147,15 @@ function drawDebugText (ctx) {
   ctx.fillText(`dir: ${player.direction.x.toFixed(2)},${player.direction.y.toFixed(2)}`, 5, 20)
   ctx.fillText(`fps: ${parseInt(fps)}`, 5, 35)
   ctx.fillText(`sprites: ${sprites.length}`, 5, 50)
+  ctx.fillText(`mouseMove: ${mouseMove.x},${mouseMove.y}`, 5, 65)
+}
+
+function drawReticle (ctx) {
+  ctx.fillStyle = '#FFFFFF'
+  const cx = width / 2
+  const cy = height / 2
+  ctx.fillRect(cx - 1, cy, 3, 1)
+  ctx.fillRect(cx, cy - 1, 1, 3)
 }
 
 function renderGraph (ctx, graph) {

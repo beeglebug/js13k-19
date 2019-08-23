@@ -84,7 +84,7 @@ imgSprites.src = 'sprites.png'
 
 let sprites = [
   { x: 3, y: 7, z: 0, scale: 1, index: 0 },
-  { x: 1.2, y: 1.2, z: -0.25, scale: 0.5, index: 1 },
+  { x: 1.5, y: 1.5, z: -0.25, scale: 0.5, index: 1 },
   { x: 2, y: 2, z: 0, scale: 1, index: 4 },
   { x: 4, y: 7, z: 0, scale: 1, index: 5 },
 ]
