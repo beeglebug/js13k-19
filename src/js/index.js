@@ -1,3 +1,9 @@
+/**
+available savings:
+ - remove heatmap code
+ - rename const -> let
+*/
+
 function render () {
 
   lightingCtx.fillStyle = '#ffffff'
