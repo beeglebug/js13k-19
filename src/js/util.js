@@ -13,7 +13,7 @@ function remap (val, min, max, a, b) {
 
 function createCanvas (width, height) {
   const canvas = document.createElement('canvas')
-  const ctx = canvas.getContext('2d')
+  const ctx = canvas.getContext('2d', { alpha: false })
 
   canvas.width = width
   canvas.height = height

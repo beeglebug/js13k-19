@@ -8,18 +8,16 @@ function render () {
   drawFloor(ctx, map.floor)
   drawCeiling(ctx, map.ceiling)
 
-  const sliceWidth = 1
-
   zBuffer = []
 
   // adjust camera plane based on current player direction
   perp(player.direction, camera)
 
-  camera.x *= (fov / 100) * 1.33
-  camera.y *= (fov / 100) * 1.33
+  // scale to correct fov
+  multiply(camera, (fov / 100) * 1.33)
 
   // iterate over every column of screen pixels
-  for (let x = 0; x < width; x += sliceWidth) {
+  for (let x = 0; x < width; x += 1) {
 
     // RAYCASTING ======================================================================================================
 
@@ -43,14 +41,14 @@ function render () {
     const textureIndex = textureIndexByTileType[tile.type]
     const textureX = Math.floor(wallX * textureSize + textureIndex * textureSize)
 
-    ctx.drawImage(imgTextures, textureX, 0, 1, textureSize, x, drawStart, sliceWidth, sliceHeight)
+    ctx.drawImage(imgTextures, textureX, 0, 1, textureSize, x, drawStart, 1, sliceHeight)
 
     // LIGHTING ========================================================================================================
 
     // give horizontal and vertical sides different brightness
     if (side === 1) {
       lightingCtx.fillStyle = 'rgba(0, 0, 0, 0.3)'
-      lightingCtx.fillRect(x, drawStart, sliceWidth, sliceHeight)
+      lightingCtx.fillRect(x, drawStart, 1, sliceHeight)
     }
 
     if (map.fog) {
@@ -63,7 +61,7 @@ function render () {
 
       const [r, g, b] = hexToRgb(map.fog)
       fogCtx.fillStyle = `rgba(${r}, ${g}, ${b}, ${eased})`
-      fogCtx.fillRect(x, drawStart, sliceWidth, sliceHeight)
+      fogCtx.fillRect(x, drawStart, 1, sliceHeight)
     }
   }
 
