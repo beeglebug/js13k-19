@@ -95,6 +95,8 @@ function render () {
 
   drawReticle(ctx)
 
+  drawWeapon(ctx)
+
   outputCtx.drawImage(canvas, 0, 0, width * 2, height * 2)
 
   drawDebugText(outputCtx)
@@ -174,6 +176,8 @@ function input (delta) {
   multiply(player.velocity, player.speed)
 
   if (mouseDown(MOUSE_LEFT)) {
+    weapon.x = weapon.restingX - 10
+    weapon.y = weapon.restingY - 10
     if (shootCoolDown === 0) {
       shoot()
     }
@@ -195,6 +199,15 @@ function loop () {
   input(delta)
 
   update (player, delta)
+
+  // drag towards
+  if (weapon.y !== weapon.restingY || weapon.x !== weapon.restingX) {
+    const dx = Math.sign(weapon.x - weapon.restingX)
+    const dy = Math.sign(weapon.y - weapon.restingY)
+    const speed = 1
+    weapon.x -= dx * speed
+    weapon.y -= dy * speed
+  }
 
   sprites.forEach(sprite => update (sprite, delta))
 

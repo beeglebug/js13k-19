@@ -18,6 +18,13 @@ const player = {
   mapY: 0
 }
 
+let weapon = {
+  x: 170,
+  y: 70,
+  restingX: 170,
+  restingY: 70
+}
+
 const fov = 66
 
 // camera plane
@@ -37,8 +44,8 @@ const [outputCanvas, outputCtx] = createCanvas(width * 2, height * 2)
 
 document.getElementById('container').appendChild(outputCanvas)
 
-// canvas.after(lightingCanvas)
-// canvas.after(fogCanvas)
+// outputCanvas.after(lightingCanvas)
+// outputCanvas.after(fogCanvas)
 
 let inputEnabled = false
 

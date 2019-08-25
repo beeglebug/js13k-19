@@ -158,6 +158,11 @@ function drawReticle (ctx) {
   ctx.fillRect(cx, cy - 1, 1, 3)
 }
 
+function drawWeapon (ctx) {
+
+  ctx.drawImage(imgSprites, 96, 0, 16, 16, weapon.x, weapon.y, 16 * 8, 16 * 8)
+}
+
 function renderGraph (ctx, graph) {
 
   const size = 20
