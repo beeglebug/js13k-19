@@ -159,8 +159,11 @@ function drawReticle (ctx) {
 }
 
 function drawWeapon (ctx) {
-
-  ctx.drawImage(imgSprites, 96, 0, 16, 16, weapon.x, weapon.y, 16 * 8, 16 * 8)
+  ctx.drawImage(imgSprites, 96, 0, 16, 16, Math.floor(weapon.x), Math.floor(weapon.y), 16 * 8, 16 * 8)
+  if (shootCoolDown) {
+    ctx.fillStyle = '#FFFFFF'
+    ctx.fillRect(Math.floor(weapon.x + 24), Math.floor(weapon.y + 40), 16, 16)
+  }
 }
 
 function renderGraph (ctx, graph) {

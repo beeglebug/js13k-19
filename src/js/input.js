@@ -62,3 +62,59 @@ const clearMouseMove = () => {
   mouseMove.x = 0
   mouseMove.y = 0
 }
+
+
+function handleInput (delta) {
+
+  if (!inputEnabled) return
+
+  const dirPerp = perp(player.direction)
+
+  dirPerp.x *= -1
+  dirPerp.y *= -1
+
+  player.velocity.x = 0
+  player.velocity.y = 0
+
+  if (keyDown(KEY_W)) {
+    player.velocity.x += player.direction.x
+    player.velocity.y += player.direction.y
+  }
+
+  if (keyDown(KEY_S)) {
+    player.velocity.x -= player.direction.x
+    player.velocity.y -= player.direction.y
+  }
+
+  const mouseSensitivity = 0.5
+  const rotation = mouseMove.x * delta * mouseSensitivity
+
+  if (mouseMove.x !== 0) {
+    rotate(player.direction, rotation)
+  }
+
+  // strafe to the left
+  if (keyDown(KEY_A)) {
+    player.velocity.x -= dirPerp.x
+    player.velocity.y -= dirPerp.y
+    // weapon.x = weapon.restingX - 5
+  }
+
+  // strafe to the right
+  if (keyDown(KEY_D)) {
+    player.velocity.x += dirPerp.x
+    player.velocity.y += dirPerp.y
+    // weapon.x = weapon.restingX + 5
+  }
+
+  normalize(player.velocity)
+  multiply(player.velocity, player.speed)
+
+  if (mouseDown(MOUSE_LEFT)) {
+    weapon.offsetX = -50
+    weapon.offsetY = -50
+    if (shootCoolDown === 0) {
+      shoot()
+    }
+  }
+}

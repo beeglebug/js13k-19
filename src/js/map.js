@@ -91,7 +91,7 @@ function getMap (map, x, y) {
 }
 
 function isEmpty (tile) {
-  return tile.type === EMPTY_TILE
+  return tile && tile.type === EMPTY_TILE
 }
 
 function getNeighbours (map, x, y, diagonal = false) {

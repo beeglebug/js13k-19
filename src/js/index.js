@@ -105,6 +105,7 @@ function render () {
 
 // start it high so initial click doesn't fire
 let shootCoolDown = 500
+const SHOOT_DELAY = 200
 
 function shoot () {
   const offset = 0.25
@@ -128,60 +129,7 @@ function shoot () {
     },
   })
 
-  shootCoolDown += 200
-}
-
-function input (delta) {
-
-  if (!inputEnabled) return
-
-  const dirPerp = perp(player.direction)
-
-  dirPerp.x *= -1
-  dirPerp.y *= -1
-
-  player.velocity.x = 0
-  player.velocity.y = 0
-
-  if (keyDown(KEY_W)) {
-    player.velocity.x += player.direction.x
-    player.velocity.y += player.direction.y
-  }
-
-  if (keyDown(KEY_S)) {
-    player.velocity.x -= player.direction.x
-    player.velocity.y -= player.direction.y
-  }
-
-  const mouseSensitivity = 0.5
-  const rotation = mouseMove.x * delta * mouseSensitivity
-
-  if (mouseMove.x !== 0) {
-    rotate(player.direction, rotation)
-  }
-
-  // strafe to the left
-  if (keyDown(KEY_A)) {
-    player.velocity.x -= dirPerp.x
-    player.velocity.y -= dirPerp.y
-  }
-
-  // strafe to the right
-  if (keyDown(KEY_D)) {
-    player.velocity.x += dirPerp.x
-    player.velocity.y += dirPerp.y
-  }
-
-  normalize(player.velocity)
-  multiply(player.velocity, player.speed)
-
-  if (mouseDown(MOUSE_LEFT)) {
-    weapon.x = weapon.restingX - 10
-    weapon.y = weapon.restingY - 10
-    if (shootCoolDown === 0) {
-      shoot()
-    }
-  }
+  shootCoolDown += SHOOT_DELAY
 }
 
 requestAnimationFrame(loop)
@@ -196,27 +144,29 @@ function loop () {
 
   if (!ready) return
 
-  input(delta)
+  handleInput(delta)
 
   update (player, delta)
 
-  // drag towards
-  if (weapon.y !== weapon.restingY || weapon.x !== weapon.restingX) {
-    const dx = Math.sign(weapon.x - weapon.restingX)
-    const dy = Math.sign(weapon.y - weapon.restingY)
-    const speed = 1
-    weapon.x -= dx * speed
-    weapon.y -= dy * speed
-  }
+  handleWeaponSway(time / 1000)
+
+  // // drag towards
+  // if (weapon.y !== weapon.restingY || weapon.x !== weapon.restingX) {
+  //   const dx = Math.sign(weapon.x - weapon.restingX)
+  //   const dy = Math.sign(weapon.y - weapon.restingY)
+  //   const speed = 1
+  //   weapon.x -= dx * speed
+  //   weapon.y -= dy * speed
+  // }
 
   sprites.forEach(sprite => update (sprite, delta))
+
+  render()
 
   if (shootCoolDown > 0) {
     shootCoolDown -= delta * 1000
     if (shootCoolDown < 0) shootCoolDown = 0
   }
-
-  render()
 }
 
 function update (entity, delta) {

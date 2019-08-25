@@ -11,6 +11,10 @@ function remap (val, min, max, a, b) {
   return a + (((val - min) * (b-a)) / (max - min))
 }
 
+function lerp (a, b, n) {
+  return (1 - n) * a + n * b
+}
+
 function createCanvas (width, height) {
   const canvas = document.createElement('canvas')
   const ctx = canvas.getContext('2d', { alpha: false })

@@ -18,13 +18,6 @@ const player = {
   mapY: 0
 }
 
-let weapon = {
-  x: 170,
-  y: 70,
-  restingX: 170,
-  restingY: 70
-}
-
 const fov = 66
 
 // camera plane
