@@ -132,6 +132,7 @@ function shoot () {
     },
   })
 
+  soundpew()
   shootCoolDown += SHOOT_DELAY
 }
 
@@ -246,6 +247,7 @@ on('collide_entity_wall', (entity, wall, collision) => {
     // change sprite
     entity.index += 1
 
+    soundImpact()
     setTimeout(() => kill(entity), 200)
   }
 })
