@@ -17,7 +17,7 @@ function generateMaze (rng, width, height, x, y) {
     // nearby nodes already in maze
     const closedNeighbours = getNeighbours(graph, nextNode.x, nextNode.y).filter(node => node.open === false)
 
-    const alreadyIn = rng.randomItemFromArray(closedNeighbours)
+    const alreadyIn = rng.randomItem(closedNeighbours)
 
     // join them on the shared edge
     if (nextNode.x === alreadyIn.x) {
@@ -56,7 +56,7 @@ function generateMaze (rng, width, height, x, y) {
   const ends = all.filter(isEnd)
   ends.sort(byWeight)
   const possible = ends.slice(-5)
-  const exitNode = rng.randomItemFromArray(possible)
+  const exitNode = rng.randomItem(possible)
   exitNode.exit = true
   graph.exit = exitNode
 

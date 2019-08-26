@@ -57,6 +57,12 @@ const rng = new RNG()
 
 const map3 = generateDungeon(rng)
 
+let tombText = generateTombText(rng)
+
+setInterval(() => {
+  tombText = generateTombText(rng)
+}, 1000)
+
 let influenceMap
 
 function loadMap (newMap, x, y, dx, dy) {

@@ -97,6 +97,8 @@ function render () {
 
   drawWeapon(ctx)
 
+  renderText(ctx, tombText, '#5c5f5d')
+
   outputCtx.drawImage(canvas, 0, 0, width * 2, height * 2)
 
   drawDebugText(outputCtx)

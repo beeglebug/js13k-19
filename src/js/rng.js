@@ -25,7 +25,11 @@ class RNG {
     return start + Math.floor(randomUnder1 * size)
   }
 
-  randomItemFromArray (array) {
+  randomItem (array) {
     return array[this.randomIntBetween(0, array.length)]
+  }
+
+  randomChance (percent) {
+    return this.random() < percent / 100
   }
 }
