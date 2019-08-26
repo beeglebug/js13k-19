@@ -117,6 +117,7 @@ function shoot () {
   const speed = 10
   sprites.push({
     type: TYPE_PROJECTILE,
+    source: player,
     x,
     y,
     z: 0,
@@ -210,7 +211,23 @@ function handleCollision (entity) {
       emit('collide_entity_wall', entity, tile, collision)
     }
   })
+
+  sprites.forEach(sprite => {
+    if (sprite === entity) return
+    if (!sprite.radius) return
+    if (sprite.type === TYPE_PROJECTILE && sprite.source === entity) return // ignore own projectiles
+    const collision = collideCircleCircle(entity, sprite)
+    if (collision) {
+      emit('collide_entity_entity', entity, sprite, collision)
+    }
+  })
+
 }
+
+on('collide_entity_entity', (entity1, entity2, collision) => {
+  entity1.x += collision.normal.x * collision.depth
+  entity1.y += collision.normal.y * collision.depth
+})
 
 on('collide_entity_wall', (entity, wall, collision) => {
 

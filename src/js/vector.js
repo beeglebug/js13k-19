@@ -36,6 +36,10 @@ function magnitude (v) {
   return Math.sqrt((v.x * v.x) + (v.y * v.y))
 }
 
+function setMagnitude (v, m) {
+  return multiply(normalize(v), m)
+}
+
 function copy (v) {
   return {
     x: v.x,
@@ -64,6 +68,10 @@ function normalize (v) {
   v.y /= m
 
   return v
+}
+
+function distanceTo (v1, v2) {
+  return magnitude(sub(v1, v2))
 }
 
 function sub (v1, v2) {

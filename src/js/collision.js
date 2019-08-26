@@ -19,11 +19,30 @@ function closestPointRect (point, rect, output = { x: 0, y: 0 }) {
   return output
 }
 
+function closestPointCircle (point, circle, output = { x: 0, y: 0 }) {
+
+  output.x = point.x
+  output.y = point.y
+
+  if (!pointInCircle(point, circle)) {
+
+    output.x -= circle.x
+    output.y -= circle.y
+
+    setMagnitude(output, circle.radius)
+
+    output.x += circle.x
+    output.y += circle.y
+  }
+
+  return output
+}
+
 function collideCircleRect (circle, rect) {
 
   const point = closestPointRect(circle, rect)
 
-  if (!collidePointCircle(point, circle)) return false
+  if (!pointInCircle(point, circle)) return false
 
   const distance = distanceBetween(point, circle)
   const depth = circle.radius - distance
@@ -45,7 +64,34 @@ function collideCircleRect (circle, rect) {
   }
 }
 
-function collidePointCircle (point, circle) {
+function collideCircleCircle (circle1, circle2) {
+
+  const dx = circle1.x - circle2.x
+  const dy = circle1.y - circle2.y
+  const dr = circle1.radius + circle2.radius
+
+  // no need for sqrt
+  const distance = (dx * dx) + (dy * dy)
+
+  if (distance > (dr * dr)) return false
+
+  const point = closestPointCircle(circle1, circle2)
+
+  const normal = normalize({
+    x: dx,
+    y: dy,
+  })
+
+  const depth = circle1.radius - distanceTo(circle1, point)
+
+  return {
+    ...point,
+    normal,
+    depth
+  }
+}
+
+function pointInCircle (point, circle) {
 
   const dx = Math.abs(circle.x - point.x)
   const dy = Math.abs(circle.y - point.y)
