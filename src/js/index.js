@@ -97,12 +97,14 @@ function render () {
 
   drawWeapon(ctx)
 
-  // renderText(ctx, tombText, '#5c5f5d')
+  if (screenText) {
+    renderText(ctx, screenText, '#5c5f5d')
+  }
 
   outputCtx.drawImage(canvas, 0, 0, width * 2, height * 2)
 
-  drawDebugText(outputCtx)
-  drawMiniMap(outputCtx, map)
+  // drawDebugText(outputCtx)
+  // drawMiniMap(outputCtx, map)
 }
 
 // start it high so initial click doesn't fire
@@ -261,6 +263,16 @@ function interact () {
   // TODO always be storing this center one to use for reticle etc
   const [, euclideanRayLength, , , tile] = raycast(width / 2)
 
+  // check sprites
+  sprites.forEach(sprite => {
+    if (!sprite.interactive) return
+
+    // TODO use this to see if you can interact
+    collideSprite(sprite)
+
+    screenText = generateEpitaph(rng)
+  })
+
   if (euclideanRayLength < 1 && tile.type === '#') {
     changeMap()
   }
@@ -273,4 +285,28 @@ function changeMap () {
   } else if (map === map2) {
     loadMap(map1, 3.5, 4.5, 0, 1)
   }
+}
+
+// TODO share code with renderSprite
+function collideSprite (sprite) {
+
+  // translate sprite player to relative to camera
+  const spriteX = sprite.x - player.x
+  const spriteY = sprite.y - player.y
+
+  const invDet = 1 / (camera.x * player.direction.y - player.direction.x * camera.y)
+
+  const transformX = invDet * (player.direction.y * spriteX - player.direction.x * spriteY) * -1
+  const transformY = invDet * (-camera.y * spriteX + camera.x * spriteY)
+
+  // not in front of the camera
+  if (transformY <= 0) return
+
+  const spriteScreenX = Math.round((width / 2) * (1 + transformX / transformY))
+
+  // calculate size of sprite on screen
+  const spriteWidth = Math.abs(Math.round(height / transformY)) * sprite.scale
+
+  console.log(spriteScreenX, spriteWidth)
+
 }

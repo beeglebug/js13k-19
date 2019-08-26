@@ -100,7 +100,7 @@ const cardinals = [
   'tenth'
 ]
 
-function generateTombText (rng) {
+function generateEpitaph (rng) {
 
   // generate a name
 
