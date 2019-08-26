@@ -19,6 +19,7 @@ function renderText (ctx, text) {
 
   lines.forEach((line, y) => line.split('').forEach((c, x) => {
     const sx = getX(c)
+    if (sx === null) return
     const dx = x * 4 + pad
     const dy = (y * lineHeight) + pad
     ctx.drawImage(
@@ -32,14 +33,11 @@ function renderText (ctx, text) {
   }))
 }
 
-// A is 65, which is at 1, and each character is 3 wide
 function getX (c) {
   const cc = c.charCodeAt(0)
-  if (cc === 32) return 78
-  if (cc === 44) return 81
-  if (cc === 39) return 84
-  if (cc === 58) return 87
-  if (cc === 46) return 90
-  if (cc === 63) return 93
-  return (cc - 65) * 3
+  if (cc >= 44 && cc < 59) return (cc - 44) * 3
+  if (cc === 39) return 126 // '
+  if (cc === 63) return 123 // ?
+  if (cc >= 65 && cc < 91) return ((cc - 65) * 3) + 45
+  return null
 }
