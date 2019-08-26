@@ -4,7 +4,7 @@ sky.addColorStop(1, '#a3b1bd')
 
 const map1 = {
   ...parseMap([
-    '--------------------------------',
+    '--------------~~~~~~~~~~~~------',
     '-                              -',
     '- ===                          -',
     '- =#=                          -',
@@ -59,9 +59,9 @@ const map3 = generateDungeon(rng)
 
 let tombText = generateTombText(rng)
 
-setInterval(() => {
-  tombText = generateTombText(rng)
-}, 1000)
+// setInterval(() => {
+//   tombText = generateTombText(rng)
+// }, 1000)
 
 let influenceMap
 
@@ -90,6 +90,7 @@ const textureIndexByTileType = {
   '-': 0,
   '=': 1,
   '#': 2,
+  '~': 4,
 }
 
 function getMap (map, x, y) {
