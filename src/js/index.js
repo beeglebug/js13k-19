@@ -132,7 +132,7 @@ function shoot () {
     },
   })
 
-  soundpew()
+  soundShoot()
   shootCoolDown += SHOOT_DELAY
 }
 

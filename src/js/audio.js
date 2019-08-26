@@ -1,9 +1,13 @@
+// https://github.com/foumart/JS.13kGames/blob/master/lib/SoundFX.js
+
 let audioContext
 
 const oscTypes = ["square", "sawtooth", "triangle", "sine"]
 
 // start frequency HZ, frequency change, delay between changes, number of changes, volume, type
 function playSound (frequency, increment, delay, times, volume, type = 0) {
+
+  if (!audioContext) return
 
   const oscillator = audioContext.createOscillator()
   oscillator.frequency.value = frequency
@@ -37,50 +41,10 @@ function playSound (frequency, increment, delay, times, volume, type = 0) {
 
 function soundShoot () {
   playSound(620, -80, 20, 15, 0.2)
-  playSound(520, -70, 25, 20, 0.2)
+  playSound(520, -70, 15, 10, 0.1)
 }
 
 function soundImpact () {
   playSound(220, -10, 10, 35, 0.3)
   playSound(225, -5, 10, 40, 0.3, 1)
-}
-
-function soundpew () {
-  playSound(920, -80, 20, 15, 0.5)
-}
-
-function soundzap () {
-  playSound(500, -200, 40, 10, 0.25, 1)
-}
-
-function soundbounce () {
-  playSound(260, -60, 15, 15, 0.5, 2)
-}
-
-function soundstuck () {
-  playSound(100, -10, 15, 15, 1, 2)
-}
-
-function soundexplosion () {
-  playSound(100, -10, 10, 25, 0.5)
-  playSound(125, -5, 20, 45, 0.1, 1)
-  playSound(40, 2, 20, 20, 1, 2)
-  playSound(200, -4, 10, 100, 0.25, 2)
-}
-
-function soundblow () {
-  playSound(120, -6, 20, 15, 0.1, 1)
-  playSound(40, -2, 20, 25, 1, 2)
-  playSound(60, 10, 15, 15, 0.1, 1)
-  playSound(160, -5, 20, 30, 0.1, 3)
-}
-
-function soundshot () {
-  playSound(160, 10, 15, 10, 0.1)
-  playSound(250, -20, 30, 10, 0.1, 1)
-  playSound(1500, -150, 30, 10, 0.1, 1)
-}
-
-function soundjump () {
-  playSound(150, 30, 15, 20, 0.5)
 }
