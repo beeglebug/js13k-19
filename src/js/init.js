@@ -82,6 +82,9 @@ imgTextures.src = 'textures.png'
 const imgSprites = new Image()
 imgSprites.src = 'sprites.png'
 
+const imgFont = new Image()
+imgFont.src = 'font.png'
+
 let sprites = [
   { x: 3, y: 7, z: 0, scale: 1, index: 0 },
   { x: 1.5, y: 1.5, z: -0.25, scale: 0.5, index: 1 },
