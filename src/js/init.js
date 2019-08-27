@@ -1,7 +1,9 @@
 const EMPTY_TILE = ' '
+const TYPE_PLAYER = 'player'
 const TYPE_PROJECTILE = 'projectile'
 
 const player = {
+  type: TYPE_PLAYER,
   x: 1,
   y: 1,
   radius: 0.4,
@@ -15,7 +17,9 @@ const player = {
     y: 1
   },
   mapX: 0,
-  mapY: 0
+  mapY: 0,
+  health: 100,
+  mana: 100
 }
 
 const fov = 66
@@ -86,9 +90,3 @@ const imgFont = new Image()
 imgFont.src = 'font.png'
 
 const zPos = scale => 0 - (1 - scale) / 2
-
-// let sprites = [
-//   { x: 3, y: 7, z: 0, scale: 1, index: 0 },
-//   { x: 1.5, y: 1.5, z: zPos(0.5), scale: 0.5, index: 1 },
-//   { x: 4, y: 7, z: 0, scale: 1, index: 5 },
-// ]

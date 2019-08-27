@@ -46,5 +46,21 @@ function soundShoot () {
 
 function soundImpact () {
   playSound(220, -10, 10, 35, 0.3)
-  playSound(225, -5, 10, 40, 0.3, 1)
+}
+
+function soundCollect () {
+  playSound(222, -198, 5, 11, 0.5, 2)
+}
+
+const audioRng = new RNG()
+
+function soundRandom () {
+  const frequency = audioRng.randomIntBetween(20, 1500)
+  const increment = audioRng.randomIntBetween(-200, 10)
+  const delay = audioRng.randomIntBetween(0, 30)
+  const times = audioRng.randomIntBetween(5, 20)
+  const volume = 0.5
+  const type = audioRng.randomIntBetween(0, 3)
+  playSound(frequency, increment, delay, times, volume, type)
+  console.log(`playSound(${frequency}, ${increment}, ${delay}, ${times}, ${volume}, ${type})`)
 }

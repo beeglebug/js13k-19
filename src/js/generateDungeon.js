@@ -56,6 +56,10 @@ function generateDungeon (rng) {
     ceiling: '#2e2827',
     fog: '#2e2827',
     fogDistance: 20,
-    sprites: []
+    sprites: [
+      { x: 3, y: 7, z: 0, scale: 1, index: 0 },
+      { x: 1.5, y: 1.5, z: zPos(0.5), scale: 0.5, index: 1, collectible: true, radius: 0.2 },
+      { x: 4, y: 7, z: 0, scale: 1, index: 5 },
+    ]
   }
 }

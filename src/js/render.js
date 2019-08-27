@@ -137,12 +137,29 @@ function drawDebugText (ctx) {
   ctx.fillText(`mouseMove: ${mouseMove.x},${mouseMove.y}`, 5, 65)
 }
 
-function drawReticle (ctx) {
+function drawHUD (ctx) {
+
+  // reticule
   ctx.fillStyle = '#FFFFFF'
   const cx = width / 2
   const cy = height / 2
   ctx.fillRect(cx - 1, cy, 3, 1)
   ctx.fillRect(cx, cy - 1, 1, 3)
+
+  // health and mana
+
+  const barWidth = 40
+
+  ctx.fillStyle = '#ba1826'
+  ctx.fillRect(5, 160, barWidth, 5)
+
+  ctx.fillStyle = '#102746'
+  ctx.fillRect(5, 170, barWidth, 5)
+
+  const currentBarWidth = remap(player.mana, 0, 100, 0, barWidth)
+
+  ctx.fillStyle = '#2474ba'
+  ctx.fillRect(5, 170, currentBarWidth, 5)
 }
 
 function drawWeapon (ctx) {

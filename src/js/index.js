@@ -86,9 +86,9 @@ function render () {
     renderSprite(ctx, sprite)
   })
 
-  drawReticle(ctx)
-
+  drawHUD(ctx)
   drawWeapon(ctx)
+
 
   if (screenText) {
     renderText(ctx, screenText, '#5c5f5d')
@@ -97,14 +97,16 @@ function render () {
   outputCtx.drawImage(canvas, 0, 0, width * 2, height * 2)
 
   // drawDebugText(outputCtx)
-  drawMiniMap(outputCtx, map)
+  // drawMiniMap(outputCtx, map)
 }
 
 // start it high so initial click doesn't fire
 let shootCoolDown = 500
 const SHOOT_DELAY = 200
+const SHOOT_COST = 2
 
 function shoot () {
+  if (player.mana < SHOOT_COST) return
   const offset = 0.25
   const x = player.x + player.direction.x * offset
   const y = player.y + player.direction.y * offset
@@ -126,7 +128,7 @@ function shoot () {
       y: direction.y * speed,
     },
   })
-
+  player.mana -= SHOOT_COST
   soundShoot()
   shootCoolDown += SHOOT_DELAY
 }
@@ -145,7 +147,7 @@ function loop () {
 
   handleInput(delta)
 
-  update (player, delta)
+  updateEntity(player, delta)
 
   handleWeaponSway(time / 1000)
 
@@ -169,7 +171,7 @@ function loop () {
   // TODO handle transparent pixels
   screenText = null
   map.sprites.forEach(sprite => {
-    update (sprite, delta)
+    updateEntity(sprite, delta)
     projectSprite(sprite)
     if (sprite.interactive) {
       if (sprite.transformY <= 0) return
@@ -190,7 +192,7 @@ function loop () {
   }
 }
 
-function update (entity, delta) {
+function updateEntity (entity, delta) {
   if (!entity.velocity) return
   entity.x += entity.velocity.x * delta
   entity.y += entity.velocity.y * delta
