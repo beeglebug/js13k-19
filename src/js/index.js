@@ -82,13 +82,6 @@ function render () {
 
   // SPRITES ===========================================================================================================
 
-  // sort from far to close
-  sprites.sort((a, b) => {
-    const aDist = distance(player, a)
-    const bDist = distance(player, b)
-    return bDist - aDist
-  })
-
   sprites.forEach(sprite => {
     renderSprite(ctx, sprite)
   })
@@ -165,12 +158,28 @@ function loop () {
   //   weapon.y -= dy * speed
   // }
 
+  // sort from far to close
+  sprites.sort((a, b) => {
+    const aDist = distance(player, a)
+    const bDist = distance(player, b)
+    return bDist - aDist
+  })
+
+  // TODO better way to set hover subject
+  // TODO handle transparent pixels
+  screenText = null
   sprites.forEach(sprite => {
     update (sprite, delta)
     projectSprite(sprite)
+    if (sprite.interactive) {
+      if (sprite.transformY > 1) return
+      const cursorX = width / 2
+      const halfWidth = sprite.screenWidth / 2
+      const over = (cursorX > sprite.screenX - halfWidth && cursorX < sprite.screenX + halfWidth)
+      if (over) screenText = 'press f to pay respects'
+    }
   })
 
-  // TODO decide if a sprite is under the cursor
 
   render()
 
