@@ -2,7 +2,7 @@ function generateDungeon (rng) {
 
   const width = 5
   const height = 5
-  const size = 9
+  const size = 13
 
   const data = []
   for (let y = 0; y < height * size; y++) {
@@ -56,5 +56,6 @@ function generateDungeon (rng) {
     ceiling: '#2e2827',
     fog: '#2e2827',
     fogDistance: 20,
+    sprites: []
   }
 }

@@ -133,7 +133,7 @@ function drawDebugText (ctx) {
   ctx.fillText(`pos: ${player.x.toFixed(2)},${player.y.toFixed(2)}`, 5, 5)
   ctx.fillText(`dir: ${player.direction.x.toFixed(2)},${player.direction.y.toFixed(2)}`, 5, 20)
   ctx.fillText(`fps: ${parseInt(fps)}`, 5, 35)
-  ctx.fillText(`sprites: ${sprites.length}`, 5, 50)
+  ctx.fillText(`sprites: ${map.sprites.length}`, 5, 50)
   ctx.fillText(`mouseMove: ${mouseMove.x},${mouseMove.y}`, 5, 65)
 }
 

@@ -63,7 +63,7 @@ outputCanvas.addEventListener('mousedown', (e) => {
     audioContext = new window.AudioContext()
 
     // starting map
-    loadMap(map1, 17.5, 5.5, 0.23, -1)
+    loadMap(map3, 6, 6, 0.23, -1)
 
     ready = true
     setInterval(() => {
@@ -87,13 +87,8 @@ imgFont.src = 'font.png'
 
 const zPos = scale => 0 - (1 - scale) / 2
 
-let sprites = [
-  { x: 3, y: 7, z: 0, scale: 1, index: 0 },
-  { x: 1.5, y: 1.5, z: zPos(0.5), scale: 0.5, index: 1 },
-  { x: 4, y: 7, z: 0, scale: 1, index: 5 },
-  { x: 18, y: 4, z: zPos(0.8), scale: 0.8, index: 4, radius: 0.1, interactive: true },
-  { x: 20, y: 4, z: zPos(0.8), scale: 0.8, index: 4, radius: 0.1 },
-  { x: 22, y: 4, z: zPos(0.8), scale: 0.8, index: 4, radius: 0.1 },
-  { x: 24, y: 4, z: zPos(0.8), scale: 0.8, index: 4, radius: 0.1 },
-  { x: 26, y: 4, z: zPos(0.8), scale: 0.8, index: 4, radius: 0.1 },
-]
+// let sprites = [
+//   { x: 3, y: 7, z: 0, scale: 1, index: 0 },
+//   { x: 1.5, y: 1.5, z: zPos(0.5), scale: 0.5, index: 1 },
+//   { x: 4, y: 7, z: 0, scale: 1, index: 5 },
+// ]

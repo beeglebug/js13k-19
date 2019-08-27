@@ -54,8 +54,8 @@ function generateMaze (rng, width, height, x, y) {
   // pick exit
   const all = flat(graph.data)
   const ends = all.filter(isEnd)
-  ends.sort(byWeight)
-  const possible = ends.slice(-5)
+  const longest = ends.sort(byWeight)[ends.length - 1]
+  const possible = ends.filter(e => e.weight === longest.weight)
   const exitNode = rng.randomItem(possible)
   exitNode.exit = true
   graph.exit = exitNode

@@ -40,6 +40,13 @@ const map1 = {
   fog: '#A3B1BD',
   floor: '#373433',
   ceiling: sky,
+  sprites: [
+    { x: 18, y: 4, z: zPos(0.8), scale: 0.8, index: 4, radius: 0.1, interactive: true },
+    { x: 20, y: 4, z: zPos(0.8), scale: 0.8, index: 4, radius: 0.1, interactive: true },
+    { x: 22, y: 4, z: zPos(0.8), scale: 0.8, index: 4, radius: 0.1, interactive: true },
+    { x: 24, y: 4, z: zPos(0.8), scale: 0.8, index: 4, radius: 0.1, interactive: true },
+    { x: 26, y: 4, z: zPos(0.8), scale: 0.8, index: 4, radius: 0.1, interactive: true },
+  ]
 }
 
 const map2 = {
@@ -51,6 +58,7 @@ const map2 = {
   ]),
   floor: '#2e2827',
   ceiling: '#2e2827',
+  sprites: []
 }
 
 const rng = new RNG()

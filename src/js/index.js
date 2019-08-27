@@ -82,7 +82,7 @@ function render () {
 
   // SPRITES ===========================================================================================================
 
-  sprites.forEach(sprite => {
+  map.sprites.forEach(sprite => {
     renderSprite(ctx, sprite)
   })
 
@@ -97,7 +97,7 @@ function render () {
   outputCtx.drawImage(canvas, 0, 0, width * 2, height * 2)
 
   // drawDebugText(outputCtx)
-  // drawMiniMap(outputCtx, map)
+  drawMiniMap(outputCtx, map)
 }
 
 // start it high so initial click doesn't fire
@@ -110,7 +110,7 @@ function shoot () {
   const y = player.y + player.direction.y * offset
   const direction = copy(player.direction)
   const speed = 10
-  sprites.push({
+  map.sprites.push({
     type: TYPE_PROJECTILE,
     source: player,
     x,
@@ -159,7 +159,7 @@ function loop () {
   // }
 
   // sort from far to close
-  sprites.sort((a, b) => {
+  map.sprites.sort((a, b) => {
     const aDist = distance(player, a)
     const bDist = distance(player, b)
     return bDist - aDist
@@ -168,7 +168,7 @@ function loop () {
   // TODO better way to set hover subject
   // TODO handle transparent pixels
   screenText = null
-  sprites.forEach(sprite => {
+  map.sprites.forEach(sprite => {
     update (sprite, delta)
     projectSprite(sprite)
     if (sprite.interactive) {
@@ -230,7 +230,7 @@ function handleCollision (entity) {
     }
   })
 
-  sprites.forEach(sprite => {
+  map.sprites.forEach(sprite => {
     if (sprite === entity) return
     if (!sprite.radius) return
     if (sprite.type === TYPE_PROJECTILE && sprite.source === entity) return // ignore own projectiles
@@ -243,7 +243,7 @@ function handleCollision (entity) {
 }
 
 function kill (entity) {
-  sprites = sprites.filter(sprite => sprite !== entity)
+  map.sprites = map.sprites.filter(sprite => sprite !== entity)
 }
 
 function interact () {
