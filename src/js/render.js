@@ -63,23 +63,10 @@ function drawMiniMap (ctx, map) {
 
 function renderSprite (ctx, sprite) {
 
-  // translate sprite player to relative to camera
-  const spriteX = sprite.x - player.x
-  const spriteY = sprite.y - player.y
-
-  const invDet = 1 / (camera.x * player.direction.y - player.direction.x * camera.y)
-
-  const transformX = invDet * (player.direction.y * spriteX - player.direction.x * spriteY) * -1
-  const transformY = invDet * (-camera.y * spriteX + camera.x * spriteY)
+  const { transformY, spriteScreenX, spriteWidth, spriteHeight } = projectSprite(sprite)
 
   // not in front of the camera
   if (transformY <= 0) return
-
-  const spriteScreenX = Math.round((width / 2) * (1 + transformX / transformY))
-
-  // calculate size of sprite on screen
-  const spriteWidth = Math.abs(Math.round(height / transformY)) * sprite.scale
-  const spriteHeight = Math.abs(Math.round(height / transformY)) * sprite.scale
 
   const z = height / transformY * sprite.z
 

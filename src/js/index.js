@@ -227,33 +227,6 @@ function handleCollision (entity) {
 
 }
 
-on('collide_entity_entity', (entity1, entity2, collision) => {
-  entity1.x += collision.normal.x * collision.depth
-  entity1.y += collision.normal.y * collision.depth
-})
-
-on('collide_entity_wall', (entity, wall, collision) => {
-
-  // handle mtd
-  entity.x += collision.normal.x * collision.depth
-  entity.y += collision.normal.y * collision.depth
-
-  // TODO handle different projectiles
-  if (entity.type === TYPE_PROJECTILE) {
-    entity.velocity.x = 0
-    entity.velocity.y = 0
-
-    // stop further collision
-    entity.radius = 0
-
-    // change sprite
-    entity.index += 1
-
-    soundImpact()
-    setTimeout(() => kill(entity), 200)
-  }
-})
-
 function kill (entity) {
   sprites = sprites.filter(sprite => sprite !== entity)
 }
@@ -263,15 +236,15 @@ function interact () {
   // TODO always be storing this center one to use for reticle etc
   const [, euclideanRayLength, , , tile] = raycast(width / 2)
 
-  // check sprites
-  sprites.forEach(sprite => {
-    if (!sprite.interactive) return
-
-    // TODO use this to see if you can interact
-    collideSprite(sprite)
-
-    screenText = generateEpitaph(rng)
-  })
+  // // check sprites
+  // sprites.forEach(sprite => {
+  //   if (!sprite.interactive) return
+  //
+  //   // TODO use this to see if you can interact
+  //   const [] = projectSprite(sprite)
+  //
+  //   screenText = generateEpitaph(rng)
+  // })
 
   if (euclideanRayLength < 1 && tile.type === '#') {
     changeMap()
@@ -287,8 +260,7 @@ function changeMap () {
   }
 }
 
-// TODO share code with renderSprite
-function collideSprite (sprite) {
+function projectSprite (sprite) {
 
   // translate sprite player to relative to camera
   const spriteX = sprite.x - player.x
@@ -299,14 +271,11 @@ function collideSprite (sprite) {
   const transformX = invDet * (player.direction.y * spriteX - player.direction.x * spriteY) * -1
   const transformY = invDet * (-camera.y * spriteX + camera.x * spriteY)
 
-  // not in front of the camera
-  if (transformY <= 0) return
-
   const spriteScreenX = Math.round((width / 2) * (1 + transformX / transformY))
 
   // calculate size of sprite on screen
   const spriteWidth = Math.abs(Math.round(height / transformY)) * sprite.scale
+  const spriteHeight = Math.abs(Math.round(height / transformY)) * sprite.scale
 
-  console.log(spriteScreenX, spriteWidth)
-
+  return { transformX, transformY, spriteScreenX, spriteWidth, spriteHeight }
 }
