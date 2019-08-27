@@ -172,6 +172,7 @@ function loop () {
     update (sprite, delta)
     projectSprite(sprite)
     if (sprite.interactive) {
+      if (sprite.transformY <= 0) return
       if (sprite.transformY > 1) return
       const cursorX = width / 2
       const halfWidth = sprite.screenWidth / 2
