@@ -165,7 +165,12 @@ function loop () {
   //   weapon.y -= dy * speed
   // }
 
-  sprites.forEach(sprite => update (sprite, delta))
+  sprites.forEach(sprite => {
+    update (sprite, delta)
+    projectSprite(sprite)
+  })
+
+  // TODO decide if a sprite is under the cursor
 
   render()
 
@@ -268,14 +273,12 @@ function projectSprite (sprite) {
 
   const invDet = 1 / (camera.x * player.direction.y - player.direction.x * camera.y)
 
-  const transformX = invDet * (player.direction.y * spriteX - player.direction.x * spriteY) * -1
-  const transformY = invDet * (-camera.y * spriteX + camera.x * spriteY)
+  sprite.transformX = invDet * (player.direction.y * spriteX - player.direction.x * spriteY) * -1
+  sprite.transformY = invDet * (-camera.y * spriteX + camera.x * spriteY)
 
-  const spriteScreenX = Math.round((width / 2) * (1 + transformX / transformY))
+  sprite.screenX = Math.round((width / 2) * (1 + sprite.transformX / sprite.transformY))
 
   // calculate size of sprite on screen
-  const spriteWidth = Math.abs(Math.round(height / transformY)) * sprite.scale
-  const spriteHeight = Math.abs(Math.round(height / transformY)) * sprite.scale
-
-  return { transformX, transformY, spriteScreenX, spriteWidth, spriteHeight }
+  sprite.screenWidth = Math.abs(Math.round(height / sprite.transformY)) * sprite.scale
+  sprite.screenHeight = Math.abs(Math.round(height / sprite.transformY)) * sprite.scale
 }

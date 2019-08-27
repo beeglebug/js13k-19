@@ -63,29 +63,29 @@ function drawMiniMap (ctx, map) {
 
 function renderSprite (ctx, sprite) {
 
-  const { transformY, spriteScreenX, spriteWidth, spriteHeight } = projectSprite(sprite)
+  const { index, z, transformY, screenX, screenWidth, screenHeight } = sprite
 
   // not in front of the camera
   if (transformY <= 0) return
 
-  const z = height / transformY * sprite.z
+  const zOffset = height / transformY * z
 
   // calculate lowest and highest pixel to fill in current stripe
-  let drawStartY = (-spriteHeight / 2 + height / 2) - z
-  let drawEndY = (spriteHeight / 2 + height / 2) - z
+  let drawStartY = (-screenHeight / 2 + height / 2) - zOffset
+  let drawEndY = (screenHeight / 2 + height / 2) - zOffset
 
-  let drawStartX = Math.round(-spriteWidth / 2 + spriteScreenX)
+  let drawStartX = Math.round(-screenWidth / 2 + screenX)
   if (drawStartX < 0) drawStartX = 0
 
-  let drawEndX = spriteWidth / 2 + spriteScreenX
+  let drawEndX = screenWidth / 2 + screenX
   if (drawEndX >= width) drawEndX = width
 
   // TODO try and draw the entire sprite in one drawImage
 
   // loop through every vertical stripe of the sprite on screen
   for (let stripe = drawStartX; stripe < drawEndX; stripe++) {
-    const textureLocalX = Math.floor(((stripe - (-spriteWidth / 2 + spriteScreenX)) * 16) / spriteWidth)
-    const textureX = textureLocalX + sprite.index * 16
+    const textureLocalX = Math.floor(((stripe - (-screenWidth / 2 + screenX)) * 16) / screenWidth)
+    const textureX = textureLocalX + index * 16
     const textureY = 0
     const buffer = zBuffer[stripe]
 
