@@ -23,6 +23,9 @@ const player = {
   mana: 100
 }
 
+// entity under the cursor and close to the player
+let interactionTarget = null
+
 const fov = 66
 
 // camera plane
@@ -68,7 +71,7 @@ outputCanvas.addEventListener('mousedown', (e) => {
     audioContext = new window.AudioContext()
 
     // starting map
-    loadMap(map3, 6, 6, 0.23, -1)
+    loadMap(map1, 16, 6, 0.23, -1)
 
     ready = true
     setInterval(() => {

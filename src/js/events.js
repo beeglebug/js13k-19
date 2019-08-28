@@ -49,3 +49,9 @@ on('collide_entity_wall', (entity, wall, collision) => {
     setTimeout(() => killEntity(entity), 200)
   }
 })
+
+on('load_tomb', gravestone => {
+  const rng = new RNG(gravestone.seed)
+  const tomb = generateDungeon(rng)
+  loadMap(tomb, 6, 6, 1, 0)
+})

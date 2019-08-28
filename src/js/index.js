@@ -167,19 +167,20 @@ function loop () {
     return bDist - aDist
   })
 
-  // TODO better way to set hover subject
   // TODO handle transparent pixels
-  screenText = null
+  interactionTarget = null
   map.entities.forEach(entity => {
     updateEntity(entity, delta)
     projectEntity(entity)
-    if (entity.interactive) {
+    if (entity.interaction) {
       if (entity.transformY <= 0) return
       if (entity.transformY > 1) return
       const cursorX = width / 2
       const halfWidth = entity.screenWidth / 2
       const over = (cursorX > entity.screenX - halfWidth && cursorX < entity.screenX + halfWidth)
-      if (over) screenText = 'press f to pay respects'
+      if (over) {
+        interactionTarget = entity
+      }
     }
   })
 
@@ -236,22 +237,8 @@ function handleCollision (entity) {
 }
 
 function interact () {
-
-  // TODO always be storing this center one to use for reticle etc
-  const [, euclideanRayLength, , , tile] = raycast(width / 2)
-
-  // // check sprites
-  // sprites.forEach(entity => {
-  //   if (!entity.interactive) return
-  //
-  //   // TODO use this to see if you can interact
-  //   const [] = projectEntity(entity)
-  //
-  //   screenText = generateEpitaph(rng)
-  // })
-
-  if (euclideanRayLength < 1 && tile.type === '#') {
-    changeMap()
+  if (interactionTarget) {
+    emit(interactionTarget.interaction, interactionTarget)
   }
 }
 
