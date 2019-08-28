@@ -1,4 +1,5 @@
 const EMPTY_TILE = ' '
+const FLOOR_TILE = '.'
 const TYPE_PLAYER = 'player'
 const TYPE_PROJECTILE = 'projectile'
 

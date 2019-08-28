@@ -97,7 +97,7 @@ function render () {
   outputCtx.drawImage(canvas, 0, 0, width * 2, height * 2)
 
   // drawDebugText(outputCtx)
-  // drawMiniMap(outputCtx, map)
+  drawMiniMap(outputCtx, map)
 }
 
 // start it high so initial click doesn't fire
@@ -215,7 +215,7 @@ function handleCollision (entity) {
 
   const tiles = [{ x, y }, ...getNeighbours(map, x, y, true)]
 
-  tiles.forEach(({ x, y }) => {
+  tiles.filter(Boolean).forEach(({ x, y }) => {
     const tile = getMap(map, x, y)
     if (isEmpty(tile)) return
     const collision = collideCircleRect(
