@@ -11,8 +11,8 @@ function render () {
 
   fogCtx.clearRect(0,0,width, height)
 
-  drawFloor(ctx, map.floor)
-  drawCeiling(ctx, map.ceiling)
+  renderFloor(ctx, map.floor)
+  renderCeiling(ctx, map.ceiling)
 
   zBuffer = []
 
@@ -86,18 +86,18 @@ function render () {
     renderEntity(ctx, entity)
   })
 
-  drawHUD(ctx)
-  drawWeapon(ctx)
+  renderHUD(ctx)
+  renderWeapon(ctx)
 
 
-  if (screenText) {
-    renderText(ctx, screenText, '#5c5f5d')
+  if (interactionTarget && interactionTarget.tooltip) {
+    renderText(ctx, interactionTarget.tooltip, '#5c5f5d')
   }
 
   outputCtx.drawImage(canvas, 0, 0, width * 2, height * 2)
 
-  // drawDebugText(outputCtx)
-  drawMiniMap(outputCtx, map)
+  // renderDebugText(outputCtx)
+  renderMiniMap(outputCtx, map)
 }
 
 // start it high so initial click doesn't fire
@@ -236,19 +236,9 @@ function handleCollision (entity) {
 
 }
 
+// TODO handle interactive tiles (map changing)
 function interact () {
   if (interactionTarget) {
     emit(interactionTarget.interaction, interactionTarget)
   }
 }
-
-// TODO replace with proper connections
-function changeMap () {
-  if (map === map1) {
-    loadMap(map2, 2.5, 2.5, 0, -1)
-  } else if (map === map2) {
-    loadMap(map1, 3.5, 4.5, 0, 1)
-  }
-}
-
-

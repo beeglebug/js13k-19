@@ -25,6 +25,7 @@ const player = {
 
 // entity under the cursor and close to the player
 let interactionTarget = null
+let influenceMap
 
 const fov = 66
 

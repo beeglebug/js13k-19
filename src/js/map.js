@@ -31,7 +31,7 @@ const map1 = {
     '-.........-..............==....-',
     '-.........-....................-',
     '-.........-....................-',
-    '-......... ....................-',
+    '-..............................-',
     '-.........-....................-',
     '-.........-....................-',
     '-.........-....................-',
@@ -49,6 +49,12 @@ const map1 = {
   ]
 }
 
+const rng = new RNG()
+map1.entities.forEach(entity => {
+  rng.setSeed(entity.seed)
+  entity.tooltip = generateEpitaph(rng)
+})
+
 const map2 = {
   ...parseMap([
     '=====',
@@ -60,14 +66,6 @@ const map2 = {
   ceiling: '#2e2827',
   entities: []
 }
-
-const rng = new RNG()
-
-const map3 = generateDungeon(rng)
-
-let screenText
-
-let influenceMap
 
 function loadMap (newMap, x, y, dx, dy) {
   map = newMap
@@ -90,6 +88,7 @@ function parseMap (arr) {
   }
 }
 
+// TODO refactor into parse map
 const textureIndexByTileType = {
   '-': 0,
   '=': 1,

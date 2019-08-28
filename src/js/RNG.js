@@ -3,6 +3,10 @@
 class RNG {
 
   constructor (seed) {
+    this.setSeed(seed)
+  }
+
+  setSeed (seed) {
     this.m = 0x80000000
     this.a = 1103515245
     this.c = 12345

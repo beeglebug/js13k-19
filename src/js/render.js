@@ -1,16 +1,16 @@
-function drawFloor (ctx, fill) {
+function renderFloor (ctx, fill) {
   ctx.fillStyle = fill
   ctx.fillRect(0, height / 2, width, height / 2)
 }
 
-function drawCeiling (ctx, fill) {
+function renderCeiling (ctx, fill) {
   ctx.fillStyle = fill
   ctx.fillRect(0, 0, width, height / 2)
 }
 
 const MINI_MAP_TILE_SIZE = 3
 
-function drawMiniMap (ctx, map) {
+function renderMiniMap (ctx, map) {
 
   const ox = width * 2 - (map.width * MINI_MAP_TILE_SIZE) - 10
   const oy = 10
@@ -21,6 +21,7 @@ function drawMiniMap (ctx, map) {
   const colorsByTileType = {
     '.': '#6c6c6c',
     '-': '#ffffff',
+    '~': '#bbdac0',
     '=': '#555555',
     '#': '#33cec2',
   }
@@ -34,7 +35,7 @@ function drawMiniMap (ctx, map) {
     }
   }
 
-  drawInfluenceMap(ctx, influenceMap)
+  renderInfluenceMap(ctx, influenceMap)
 
   ctx.translate(0.5, 0.5)
 
@@ -103,7 +104,7 @@ function renderEntity (ctx, entity) {
 
 }
 
-function drawInfluenceMap (ctx, map) {
+function renderInfluenceMap (ctx, map) {
 
   if (!map) return
 
@@ -124,7 +125,7 @@ function drawInfluenceMap (ctx, map) {
   }
 }
 
-function drawDebugText (ctx) {
+function renderDebugText (ctx) {
   ctx.fillStyle = '#FFF'
   ctx.font = '12px Courier'
   ctx.textBaseline = 'top'
@@ -135,7 +136,8 @@ function drawDebugText (ctx) {
   ctx.fillText(`mouseMove: ${mouseMove.x},${mouseMove.y}`, 5, 65)
 }
 
-function drawHUD (ctx) {
+// TODO full overlay at of bottom screen
+function renderHUD (ctx) {
 
   // reticule
   ctx.fillStyle = '#FFFFFF'
@@ -160,7 +162,7 @@ function drawHUD (ctx) {
   ctx.fillRect(5, 170, currentBarWidth, 5)
 }
 
-function drawWeapon (ctx) {
+function renderWeapon (ctx) {
   ctx.drawImage(imgSprites, 96, 0, 16, 16, Math.floor(weapon.x), Math.floor(weapon.y), 16 * 8, 16 * 8)
   if (shootCoolDown) {
     ctx.fillStyle = '#FFFFFF'

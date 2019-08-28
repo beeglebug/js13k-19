@@ -73,7 +73,7 @@ function raycast (x) {
     tile = getMap(map, mapX, mapY)
 
     // thin walls
-    // TODO optimise and make more generic
+    // TODO get this working again
     if (tile === 3) {
       // half way down the block
       const start = { x: mapX, y: mapY + 0.5 }

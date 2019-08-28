@@ -28,7 +28,7 @@ function generateDungeon (rng) {
 
   flat(maze.data).forEach(room => {
 
-    const roomSize = rng.randomIntBetween(5, 11)
+    const roomSize = rng.randomItem([5, 7, 7, 9, 9, 9, 11, 11])
     let roomWidth = roomSize
     let roomHeight = roomSize
 

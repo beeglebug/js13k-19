@@ -1,5 +1,3 @@
-const MAX = 99999
-
 function createInfluenceMap (map) {
 
   const { height, width } = map
@@ -14,7 +12,7 @@ function createInfluenceMap (map) {
     for (let x = 0; x < width; x++) {
       const tile = map.data[y][x]
       if (tile && tile.type === FLOOR_TILE) {
-        influenceMap.data[y][x] = { x, y, weight: MAX, open: true }
+        influenceMap.data[y][x] = { x, y, weight: Infinity, open: true }
       } else {
         influenceMap.data[y][x] = null
       }
