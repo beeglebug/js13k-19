@@ -18,8 +18,6 @@ function drawMiniMap (ctx, map) {
   ctx.save()
   ctx.translate(ox, oy)
 
-  // drawInfluenceMap(ctx, influenceMap)
-
   const colorsByTileType = {
     '.': '#6c6c6c',
     '-': '#ffffff',
@@ -35,6 +33,8 @@ function drawMiniMap (ctx, map) {
       ctx.fillRect(x * MINI_MAP_TILE_SIZE, y * MINI_MAP_TILE_SIZE, MINI_MAP_TILE_SIZE, MINI_MAP_TILE_SIZE)
     }
   }
+
+  drawInfluenceMap(ctx, influenceMap)
 
   ctx.translate(0.5, 0.5)
 
@@ -62,9 +62,9 @@ function drawMiniMap (ctx, map) {
   ctx.restore()
 }
 
-function renderSprite (ctx, sprite) {
+function renderEntity (ctx, entity) {
 
-  const { index, z, transformY, screenX, screenWidth, screenHeight } = sprite
+  const { index, z, transformY, screenX, screenWidth, screenHeight } = entity
 
   // not in front of the camera
   if (transformY <= 0) return
@@ -115,13 +115,10 @@ function drawInfluenceMap (ctx, map) {
   for (let y = 0; y < map.height; y++) {
     for (let x = 0; x < map.width; x++) {
       const tile = map.data[y][x]
-      if (tile === null) {
-        ctx.fillStyle = '#ffffff'
-      } else {
-        const weight = remap(tile.weight, min, max, 0, 1)
-        const hue = (1 - weight) * 240
-        ctx.fillStyle = `hsl(${hue}, 100%, 50%)`
-      }
+      if (tile === null) continue
+      const weight = remap(tile.weight, min, max, 0, 1)
+      const hue = (1 - weight) * 240
+      ctx.fillStyle = `hsl(${hue}, 100%, 50%)`
       ctx.fillRect(x * MINI_MAP_TILE_SIZE, y * MINI_MAP_TILE_SIZE, MINI_MAP_TILE_SIZE, MINI_MAP_TILE_SIZE)
     }
   }
@@ -134,7 +131,7 @@ function drawDebugText (ctx) {
   ctx.fillText(`pos: ${player.x.toFixed(2)},${player.y.toFixed(2)}`, 5, 5)
   ctx.fillText(`dir: ${player.direction.x.toFixed(2)},${player.direction.y.toFixed(2)}`, 5, 20)
   ctx.fillText(`fps: ${parseInt(fps)}`, 5, 35)
-  ctx.fillText(`sprites: ${map.sprites.length}`, 5, 50)
+  ctx.fillText(`sprites: ${map.entities.length}`, 5, 50)
   ctx.fillText(`mouseMove: ${mouseMove.x},${mouseMove.y}`, 5, 65)
 }
 

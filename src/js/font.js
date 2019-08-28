@@ -1,4 +1,5 @@
 // TODO center text
+// TODO text color (via second canvas)
 function renderText (ctx, text, background = '#000000') {
   const lines = text.toUpperCase().split('\n').map(str => str.trim())
   const max = [...lines].sort((a, b) => (b.length - a.length))[0].length

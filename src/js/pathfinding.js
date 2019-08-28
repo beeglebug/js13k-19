@@ -13,8 +13,7 @@ function createInfluenceMap (map) {
     influenceMap.data[y] = []
     for (let x = 0; x < width; x++) {
       const tile = map.data[y][x]
-      // empty tiles only
-      if (isEmpty(tile)) {
+      if (tile && tile.type === FLOOR_TILE) {
         influenceMap.data[y][x] = { x, y, weight: MAX, open: true }
       } else {
         influenceMap.data[y][x] = null

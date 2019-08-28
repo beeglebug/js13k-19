@@ -80,10 +80,10 @@ function render () {
   ctx.drawImage(fogCanvas, 0, 0)
 
 
-  // SPRITES ===========================================================================================================
+  // ENTITIES (SPRITES) ================================================================================================
 
-  map.sprites.forEach(sprite => {
-    renderSprite(ctx, sprite)
+  map.entities.forEach(entity => {
+    renderEntity(ctx, entity)
   })
 
   drawHUD(ctx)
@@ -112,7 +112,7 @@ function shoot () {
   const y = player.y + player.direction.y * offset
   const direction = copy(player.direction)
   const speed = 10
-  map.sprites.push({
+  map.entities.push({
     type: TYPE_PROJECTILE,
     source: player,
     x,
@@ -161,7 +161,7 @@ function loop () {
   // }
 
   // sort from far to close
-  map.sprites.sort((a, b) => {
+  map.entities.sort((a, b) => {
     const aDist = distance(player, a)
     const bDist = distance(player, b)
     return bDist - aDist
@@ -170,15 +170,15 @@ function loop () {
   // TODO better way to set hover subject
   // TODO handle transparent pixels
   screenText = null
-  map.sprites.forEach(sprite => {
-    updateEntity(sprite, delta)
-    projectSprite(sprite)
-    if (sprite.interactive) {
-      if (sprite.transformY <= 0) return
-      if (sprite.transformY > 1) return
+  map.entities.forEach(entity => {
+    updateEntity(entity, delta)
+    projectEntity(entity)
+    if (entity.interactive) {
+      if (entity.transformY <= 0) return
+      if (entity.transformY > 1) return
       const cursorX = width / 2
-      const halfWidth = sprite.screenWidth / 2
-      const over = (cursorX > sprite.screenX - halfWidth && cursorX < sprite.screenX + halfWidth)
+      const halfWidth = entity.screenWidth / 2
+      const over = (cursorX > entity.screenX - halfWidth && cursorX < entity.screenX + halfWidth)
       if (over) screenText = 'press f to pay respects'
     }
   })
@@ -189,15 +189,6 @@ function loop () {
   if (shootCoolDown > 0) {
     shootCoolDown -= delta * 1000
     if (shootCoolDown < 0) shootCoolDown = 0
-  }
-}
-
-function updateEntity (entity, delta) {
-  if (!entity.velocity) return
-  entity.x += entity.velocity.x * delta
-  entity.y += entity.velocity.y * delta
-  if (entity.radius) {
-    handleCollision(entity)
   }
 }
 
@@ -232,20 +223,16 @@ function handleCollision (entity) {
     }
   })
 
-  map.sprites.forEach(sprite => {
-    if (sprite === entity) return
-    if (!sprite.radius) return
-    if (sprite.type === TYPE_PROJECTILE && sprite.source === entity) return // ignore own projectiles
-    const collision = collideCircleCircle(entity, sprite)
+  map.entities.forEach(otherEntity => {
+    if (otherEntity === entity) return
+    if (!otherEntity.radius) return
+    if (otherEntity.type === TYPE_PROJECTILE && otherEntity.source === entity) return // ignore own projectiles
+    const collision = collideCircleCircle(entity, otherEntity)
     if (collision) {
-      emit('collide_entity_entity', entity, sprite, collision)
+      emit('collide_entity_entity', entity, otherEntity, collision)
     }
   })
 
-}
-
-function kill (entity) {
-  map.sprites = map.sprites.filter(sprite => sprite !== entity)
 }
 
 function interact () {
@@ -254,11 +241,11 @@ function interact () {
   const [, euclideanRayLength, , , tile] = raycast(width / 2)
 
   // // check sprites
-  // sprites.forEach(sprite => {
-  //   if (!sprite.interactive) return
+  // sprites.forEach(entity => {
+  //   if (!entity.interactive) return
   //
   //   // TODO use this to see if you can interact
-  //   const [] = projectSprite(sprite)
+  //   const [] = projectEntity(entity)
   //
   //   screenText = generateEpitaph(rng)
   // })
@@ -277,20 +264,4 @@ function changeMap () {
   }
 }
 
-function projectSprite (sprite) {
 
-  // translate sprite player to relative to camera
-  const spriteX = sprite.x - player.x
-  const spriteY = sprite.y - player.y
-
-  const invDet = 1 / (camera.x * player.direction.y - player.direction.x * camera.y)
-
-  sprite.transformX = invDet * (player.direction.y * spriteX - player.direction.x * spriteY) * -1
-  sprite.transformY = invDet * (-camera.y * spriteX + camera.x * spriteY)
-
-  sprite.screenX = Math.round((width / 2) * (1 + sprite.transformX / sprite.transformY))
-
-  // calculate size of sprite on screen
-  sprite.screenWidth = Math.abs(Math.round(height / sprite.transformY)) * sprite.scale
-  sprite.screenHeight = Math.abs(Math.round(height / sprite.transformY)) * sprite.scale
-}

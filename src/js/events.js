@@ -2,10 +2,9 @@
 on('collide_entity_entity', (entity, entity2, collision) => {
 
   if (entity.type === TYPE_PLAYER && entity2.collectible) {
-
     // TODO handle different types of collectible
     soundCollect()
-    kill(entity2)
+    killEntity(entity2)
     player.mana = Math.min(player.mana + 100, 100)
     return
   }
@@ -25,7 +24,7 @@ on('collide_entity_entity', (entity, entity2, collision) => {
     entity.index += 1
 
     soundImpact()
-    setTimeout(() => kill(entity), 200)
+    setTimeout(() => killEntity(entity), 200)
   }
 })
 
@@ -47,6 +46,6 @@ on('collide_entity_wall', (entity, wall, collision) => {
     entity.index += 1
 
     soundImpact()
-    setTimeout(() => kill(entity), 200)
+    setTimeout(() => killEntity(entity), 200)
   }
 })
