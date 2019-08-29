@@ -117,6 +117,7 @@ function generateFromMaze () {
 
     // seed entities etc
     if (room.entrance) {
+
       entities.push({
         x: originX + offsetX + 0.5,
         y: originY + offsetY + 0.5,
@@ -125,6 +126,23 @@ function generateFromMaze () {
         onInteract: 'exit_tomb',
         seed: rng.seed,
       })
+
+      entities.push({
+        x: originX + offsetX + 4.5,
+        y: originY + offsetY + 4.5,
+        z: 0, scale: 1, index: 5,
+        radius: 0.3,
+        health: 50
+      })
+
+      entities.push({
+        x: originX + offsetX + 3.5,
+        y: originY + offsetY + 3.5,
+        z: 0, scale: 1, index: 0,
+        radius: 0.3,
+        health: 50
+      })
+
     }
   })
 

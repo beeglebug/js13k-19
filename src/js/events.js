@@ -23,6 +23,25 @@ on('collide_entity_entity', (entity, entity2, collision) => {
     // change sprite
     entity.index += 1
 
+    entity2.health -= 10
+    if (entity2.health <= 0) {
+      killEntity(entity2)
+      map.entities.push({
+        x: entity2.x,
+        y: entity2.y,
+        z: zPos(0.5),
+        scale: 0.5,
+        index: 1,
+        radius: 0.1,
+        collectible: true
+      })
+    } else {
+      entity2.opacity = 0.5
+      setTimeout(() => {
+        entity2.opacity = 1
+      }, 100)
+    }
+
     soundImpact()
     setTimeout(() => killEntity(entity), 200)
   }

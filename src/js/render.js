@@ -82,6 +82,8 @@ function renderEntity (ctx, entity) {
   let drawEndX = screenWidth / 2 + screenX
   if (drawEndX >= width) drawEndX = width
 
+  ctx.globalAlpha = entity.opacity || 1
+if (ctx.globalAlpha !== 1) console.log(ctx.globalAlpha)
   // TODO try and draw the entire sprite in one drawImage
 
   // loop through every vertical stripe of the sprite on screen
@@ -101,7 +103,7 @@ function renderEntity (ctx, entity) {
     }
   }
 
-
+  ctx.globalAlpha = 1
 }
 
 function renderInfluenceMap (ctx, map) {
