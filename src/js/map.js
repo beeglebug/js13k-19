@@ -26,17 +26,7 @@ for (let y = 0; y < 3; y++) {
   for (let x = 0; x < 3; x++) {
     let seed = rng.randomInt()
     rng.setSeed(seed)
-    overworld.entities.push({
-      x: 2.5 + 2 * x,
-      y: 2.5 + 2 * y,
-      z: zPos(0.8),
-      scale: 0.8,
-      index: 4,
-      radius: 0.1,
-      seed,
-      onInteract: 'enter_tomb',
-      tooltip: generateEpitaph(rng) + '\n\nE: Enter Tomb'
-    })
+    overworld.entities.push(new Grave(2.5 + 2 * x, 2.5 + 2 * y, seed))
   }
 }
 

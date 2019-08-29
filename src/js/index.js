@@ -110,7 +110,7 @@ function loop () {
 
   handleInput(delta)
 
-  updateEntity(player, delta)
+  player.update(delta)
 
   handleWeaponSway(time / 1000)
 
@@ -124,8 +124,8 @@ function loop () {
   // TODO handle transparent pixels
   interactionTarget = null
   map.entities.forEach(entity => {
-    updateEntity(entity, delta)
-    projectEntity(entity)
+    entity.update(delta)
+    entity.project()
     if (entity.onInteract) {
       if (entity.transformY <= 0) return
       if (entity.transformY > 1) return

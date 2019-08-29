@@ -117,33 +117,14 @@ function generateFromMaze (rng) {
 
     // seed entities etc
     if (room.entrance) {
-
-      entities.push({
-        x: originX + offsetX + 0.5,
-        y: originY + offsetY + 0.5,
-        z: 0, scale: 1, index: 7,
-        tooltip: 'E: return to surface',
-        onInteract: 'exit_tomb',
-        seed: rng.seed,
-      })
-
-      entities.push({
-        x: originX + offsetX + 4.5,
-        y: originY + offsetY + 4.5,
-        z: 0, scale: 1, index: 5,
-        radius: 0.3,
-        health: 50
-      })
-
-      entities.push({
-        x: originX + offsetX + 3.5,
-        y: originY + offsetY + 3.5,
-        z: 0, scale: 1, index: 0,
-        radius: 0.3,
-        health: 50
-      })
-
+      entities.push(new Ladder(originX + offsetX + 0.5, originY + offsetY + 0.5, rng.seed))
+    } else if (room.exit) {
+      // TODO somewhere random in the room
+      entities.push(new Ghost(centerX + 0.5, centerY + 0.5))
+    } else {
+      entities.push(new Bat(centerX + 0.5, centerY + 0.5))
     }
+
   })
 
   return map

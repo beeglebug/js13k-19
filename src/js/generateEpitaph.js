@@ -100,7 +100,9 @@ const cardinals = [
   'tenth'
 ]
 
-function generateEpitaph (rng) {
+function generateEpitaph (seed) {
+
+  const rng = new RNG(seed)
 
   // generate a name
 

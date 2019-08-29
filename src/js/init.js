@@ -3,25 +3,7 @@ const FLOOR_TILE = '.'
 const TYPE_PLAYER = 'player'
 const TYPE_PROJECTILE = 'projectile'
 
-const player = {
-  type: TYPE_PLAYER,
-  x: 1,
-  y: 1,
-  radius: 0.4,
-  velocity: {
-    x: 0,
-    y: 0,
-  },
-  speed: 4,
-  direction: {
-    x: 0,
-    y: 1
-  },
-  mapX: 0,
-  mapY: 0,
-  health: 100,
-  mana: 100
-}
+const player = new Player()
 
 // entity under the cursor and close to the player
 let interactionTarget = null

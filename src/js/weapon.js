@@ -43,22 +43,8 @@ function shoot () {
   const y = player.y + player.direction.y * offset
   const direction = copy(player.direction)
   const speed = 10
-  map.entities.push({
-    type: TYPE_PROJECTILE,
-    source: player,
-    x,
-    y,
-    z: 0,
-    radius: 0.1,
-    scale: 0.3,
-    index: 2,
-    speed,
-    direction,
-    velocity: {
-      x: direction.x * speed,
-      y: direction.y * speed,
-    },
-  })
+  const bullet = new Bullet(x, y, speed, direction)
+  map.entities.push(bullet)
   player.mana -= SHOOT_COST
   soundShoot()
   shootCoolDown += SHOOT_DELAY
