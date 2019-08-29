@@ -1,7 +1,7 @@
 // TODO combine these two functions
 on('collide_entity_entity', (entity, entity2, collision) => {
 
-  if (entity.type === TYPE_PLAYER && entity2.collectible) {
+  if (entity === player && entity2.collectible) {
     // TODO handle different types of collectible
     soundCollect()
     entity2.kill()
@@ -13,7 +13,7 @@ on('collide_entity_entity', (entity, entity2, collision) => {
   entity.y += collision.normal.y * collision.depth
 
   // TODO handle different projectiles
-  if (entity.type === TYPE_PROJECTILE) {
+  if (entity instanceof Bullet) {
     entity.velocity.x = 0
     entity.velocity.y = 0
 
@@ -52,7 +52,7 @@ on('collide_entity_wall', (entity, wall, collision) => {
   entity.y += collision.normal.y * collision.depth
 
   // TODO handle different projectiles
-  if (entity.type === TYPE_PROJECTILE) {
+  if (entity instanceof Bullet) {
     entity.velocity.x = 0
     entity.velocity.y = 0
 

@@ -52,7 +52,6 @@ class Mob extends Entity {
 class Player extends Mob {
   constructor () {
     super (0, 0, null)
-    this.type = TYPE_PLAYER
     this.x = 1
     this.y = 1
     this.radius = 0.4
@@ -112,7 +111,6 @@ class Bullet extends Mob {
   constructor (x, y, speed, direction) {
     super(x, y, 2, 0.3)
     this.z = 0
-    this.type = TYPE_PROJECTILE
     this.source = player
     this.radius = 0.1
     this.speed = speed
