@@ -4,7 +4,7 @@ class Entity {
     this.y = y
     this.index = index
     this.scale = scale
-    this.z = scale === 1 ? 0 : zPos(scale)
+    this.z = zPos(scale)
   }
 
   project () {
@@ -48,7 +48,6 @@ class Mob extends Entity {
   }
 }
 
-
 class Player extends Mob {
   constructor () {
     super (0, 0, null)
@@ -71,7 +70,6 @@ class Player extends Mob {
   }
 }
 
-
 class ManaPotion extends Entity {
   constructor (x, y) {
     super(x, y, 1, 0.5)
@@ -79,7 +77,6 @@ class ManaPotion extends Entity {
     this.collectible = true
   }
 }
-
 
 class Ladder extends Entity {
   constructor (x, y, seed) {

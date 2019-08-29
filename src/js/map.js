@@ -1,47 +1,38 @@
-const sky = ctx.createLinearGradient(0, 0, 0, height / 2)
-sky.addColorStop(0, '#7c9dbd')
-sky.addColorStop(1, '#a3b1bd')
+function generateOverworld () {
 
-const overworld = {
-  ...parseMap([
-    '--~----~~~',
-    '~........-',
-    '~........~',
-    '~........~',
-    '~........~',
-    '~........~',
-    '~........~',
-    '-........-',
-    '---~-~~---',
-  ]),
-  fog: '#A3B1BD',
-  floor: '#373433',
-  ceiling: sky,
-  entities: []
-}
+  const sky = ctx.createLinearGradient(0, 0, 0, height / 2)
+  sky.addColorStop(0, '#7c9dbd')
+  sky.addColorStop(1, '#a3b1bd')
 
-const rng = new RNG(250581)
-
-for (let y = 0; y < 3; y++) {
-  for (let x = 0; x < 3; x++) {
-    let seed = rng.randomInt()
-    rng.setSeed(seed)
-    overworld.entities.push(new Grave(2.5 + 2 * x, 2.5 + 2 * y, seed))
+  const map = {
+    ...parseMap([
+      '--~----~~~',
+      '~........-',
+      '~........~',
+      '~........~',
+      '~........~',
+      '~........~',
+      '~........~',
+      '-........-',
+      '---~-~~---',
+    ]),
+    fog: '#A3B1BD',
+    floor: '#373433',
+    ceiling: sky,
+    entities: []
   }
-}
 
+  const rng = new RNG(250581)
 
+  for (let y = 0; y < 3; y++) {
+    for (let x = 0; x < 3; x++) {
+      let seed = rng.randomInt()
+      rng.setSeed(seed)
+      map.entities.push(new Grave(2.5 + 2 * x, 2.5 + 2 * y, seed))
+    }
+  }
 
-const map2 = {
-  ...parseMap([
-    '=====',
-    '=...=',
-    '=...=',
-    '==#==',
-  ]),
-  floor: '#2e2827',
-  ceiling: '#2e2827',
-  entities: []
+  return map
 }
 
 function loadMap (newMap, x, y, dx, dy) {
@@ -77,6 +68,7 @@ function getMap (map, x, y) {
   return map.data[y] && map.data[y][x]
 }
 
+// TODO needs improving
 function isEmpty (tile) {
   if (!tile) return true
   return (tile.type === FLOOR_TILE || tile.type === EMPTY_TILE)

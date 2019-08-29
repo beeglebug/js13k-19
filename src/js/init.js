@@ -1,6 +1,12 @@
 const EMPTY_TILE = ' '
 const FLOOR_TILE = '.'
 
+const STATE_TITLE = 'title'
+const STATE_PLAY = 'play'
+const STATE_PAUSE = 'pause'
+
+let state = STATE_TITLE
+
 const player = new Player()
 
 // entity under the cursor and close to the player
@@ -52,9 +58,12 @@ outputCanvas.addEventListener('mousedown', (e) => {
     audioContext = new window.AudioContext()
 
     // starting map
-    loadMap(overworld, 1.5, 1.5, 0.23, -1)
+    loadMap(overworld, 1.5, 1.5, 0.78, 0.67)
+
+    state = STATE_PLAY
 
     ready = true
+    // TODO do this in the loop somehow
     setInterval(() => {
       influenceMap = createInfluenceMap(map)
       populateInfluenceMap(influenceMap, { x: Math.floor(player.x), y: Math.floor(player.y) })
@@ -74,4 +83,7 @@ imgSprites.src = 'sprites.png'
 const imgFont = new Image()
 imgFont.src = 'font.png'
 
-const zPos = scale => 0 - (1 - scale) / 2
+const overworld = generateOverworld()
+
+requestAnimationFrame(loop)
+

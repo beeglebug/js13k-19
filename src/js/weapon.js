@@ -37,6 +37,9 @@ function handleWeaponSway (time) {
 }
 
 function shoot () {
+  weapon.offsetX = -50
+  weapon.offsetY = -50
+  if (shootCoolDown !== 0) return
   if (player.mana < SHOOT_COST) return
   const offset = 0.25
   const x = player.x + player.direction.x * offset

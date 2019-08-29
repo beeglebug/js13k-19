@@ -66,6 +66,7 @@ const clearMouseMove = () => {
 
 function handleInput (delta) {
 
+  if (state !== STATE_PLAY) return
   if (!inputEnabled) return
 
   const dirPerp = perp(player.direction)
@@ -111,10 +112,6 @@ function handleInput (delta) {
   multiply(player.velocity, player.speed)
 
   if (mouseDown(MOUSE_LEFT)) {
-    weapon.offsetX = -50
-    weapon.offsetY = -50
-    if (shootCoolDown === 0) {
-      shoot()
-    }
+    shoot()
   }
 }

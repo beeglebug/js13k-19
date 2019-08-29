@@ -5,6 +5,20 @@ available savings:
 */
 
 function render () {
+  if (state === STATE_TITLE) renderTitle()
+  if (state === STATE_PLAY) renderPlay()
+
+  outputCtx.drawImage(canvas, 0, 0, width * 2, height * 2)
+
+  // renderDebugText(outputCtx)
+  // renderMiniMap(outputCtx, map)
+}
+
+function renderTitle () {
+  renderText(ctx, 'click to play')
+}
+
+function renderPlay () {
 
   lightingCtx.fillStyle = '#ffffff'
   lightingCtx.fillRect(0, 0, width, height)
@@ -93,58 +107,55 @@ function render () {
   if (interactionTarget && interactionTarget.tooltip) {
     renderText(ctx, interactionTarget.tooltip, '#222423')
   }
-
-  outputCtx.drawImage(canvas, 0, 0, width * 2, height * 2)
-
-  renderDebugText(outputCtx)
-  renderMiniMap(outputCtx, map)
 }
-
-requestAnimationFrame(loop)
 
 function loop () {
   requestAnimationFrame(loop)
   const delta = tick()
 
-  if (!ready) return
+  if (state === STATE_TITLE) {
 
-  handleInput(delta)
+  }
 
-  player.update(delta)
 
-  handleWeaponSway(time / 1000)
+  if (state === STATE_PLAY) {
 
-  // sort from far to close
-  map.entities.sort((a, b) => {
-    const aDist = distance(player, a)
-    const bDist = distance(player, b)
-    return bDist - aDist
-  })
+    handleInput(delta)
 
-  // TODO handle transparent pixels
-  interactionTarget = null
-  map.entities.forEach(entity => {
-    entity.update(delta)
-    entity.project()
-    if (entity.onInteract) {
-      if (entity.transformY <= 0) return
-      if (entity.transformY > 1) return
-      const cursorX = width / 2
-      const halfWidth = entity.screenWidth / 2
-      const over = (cursorX > entity.screenX - halfWidth && cursorX < entity.screenX + halfWidth)
-      if (over) {
-        interactionTarget = entity
-      }
+    player.update(delta)
+
+    handleWeaponSway(time / 1000)
+
+    // sort from far to close
+    map.entities.sort((a, b) => {
+      const aDist = distance(player, a)
+      const bDist = distance(player, b)
+      return bDist - aDist
+    })
+
+    map.entities.forEach(entity => {
+      entity.update(delta)
+      entity.project()
+    })
+
+    interactionTarget = getInteractionTarget(map.entities)
+
+    if (shootCoolDown > 0) {
+      shootCoolDown -= delta * 1000
+      if (shootCoolDown < 0) shootCoolDown = 0
     }
-  })
-
+  }
 
   render()
+}
 
-  if (shootCoolDown > 0) {
-    shootCoolDown -= delta * 1000
-    if (shootCoolDown < 0) shootCoolDown = 0
-  }
+function getInteractionTarget (entities) {
+  return entities.find(entity => {
+    if (!entity.onInteract || entity.transformY <= 0 || entity.transformY > 1) return
+    const cursorX = width / 2
+    const halfWidth = entity.screenWidth / 2
+    return cursorX > entity.screenX - halfWidth && cursorX < entity.screenX + halfWidth
+  })
 }
 
 function handleCollision (entity) {

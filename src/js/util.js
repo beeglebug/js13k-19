@@ -53,3 +53,5 @@ function tick () {
   fps = 1 / delta
   return delta
 }
+
+function zPos (scale) { return 0 - (1 - scale) / 2 }

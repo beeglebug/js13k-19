@@ -6,7 +6,7 @@ function generateDungeon (rng) {
   for (let y = 0; y < map.height; y++) {
     for (let x = 0; x < map.width; x++) {
       if (shouldBeWall(map, x, y)) {
-        map.data[y][x] = { x, y, type: '-' }
+        map.data[y][x] = { x, y, type: rng.randomChance(70) ? '-' : '~' }
       }
     }
   }

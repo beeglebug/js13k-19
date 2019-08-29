@@ -2,7 +2,7 @@
 
 let audioContext
 
-const oscTypes = ["square", "sawtooth", "triangle", "sine"]
+const oscillatorTypes = ['square', 'sawtooth', 'triangle', 'sine']
 
 // start frequency HZ, frequency change, delay between changes, number of changes, volume, type
 function playSound (frequency, increment, delay, times, volume, type = 0) {
@@ -11,15 +11,15 @@ function playSound (frequency, increment, delay, times, volume, type = 0) {
 
   const oscillator = audioContext.createOscillator()
   oscillator.frequency.value = frequency
-  oscillator.type = oscTypes[type]
+  oscillator.type = oscillatorTypes[type]
 
   // modulation for sound volume control
   const modulationGain = audioContext.createGain()
-  modulationGain.gain.value = 0;
+  modulationGain.gain.value = 0
 
-  oscillator.connect(modulationGain);
+  oscillator.connect(modulationGain)
   modulationGain.connect(audioContext.destination)
-  oscillator.start();
+  oscillator.start()
 
   let i = 0
   const interval = setInterval(playTune, delay)
@@ -52,9 +52,9 @@ function soundCollect () {
   playSound(222, -198, 5, 11, 0.5, 2)
 }
 
-const audioRng = new RNG()
 
 function soundRandom () {
+  const audioRng = new RNG()
   const frequency = audioRng.randomIntBetween(20, 1500)
   const increment = audioRng.randomIntBetween(-200, 10)
   const delay = audioRng.randomIntBetween(0, 30)
