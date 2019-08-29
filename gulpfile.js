@@ -8,6 +8,7 @@ const removeCode = require('gulp-remove-code')
 const cleanCSS = require('gulp-clean-css')
 const htmlSrc = require('./gulp/html-src')
 const imagemin = require('gulp-imagemin')
+const advzip = require('gulp-advzip');
 
 task('clean', () =>
   src(['dist/*', 'archive.zip'], { read: false, allowEmpty: true })
@@ -48,6 +49,7 @@ task('html', () =>
 
 task('zip', () => src('dist/*')
   .pipe(zip('archive.zip'))
+  .pipe(advzip())
   .pipe(dest('./')),
 )
 
