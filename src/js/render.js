@@ -82,8 +82,6 @@ function renderEntity (ctx, entity) {
   let drawEndX = screenWidth / 2 + screenX
   if (drawEndX >= width) drawEndX = width
 
-  ctx.globalAlpha = entity.opacity || 1
-
   // loop through every vertical stripe of the sprite on screen
   for (let stripe = drawStartX; stripe < drawEndX; stripe++) {
     const textureLocalX = Math.floor(((stripe - (-screenWidth / 2 + screenX)) * 16) / screenWidth)
@@ -97,11 +95,9 @@ function renderEntity (ctx, entity) {
       (buffer === null || buffer > transformY)
     ) {
       // TODO lighting based on distance
-      ctx.drawImage(imgSprites, textureX, textureY, 1, 16, stripe, drawStartY, 1, drawEndY - drawStartY)
+      ctx.drawImage(entity.sprite, textureX, textureY, 1, 16, stripe, drawStartY, 1, drawEndY - drawStartY)
     }
   }
-
-  ctx.globalAlpha = 1
 }
 
 function renderInfluenceMap (ctx, map) {

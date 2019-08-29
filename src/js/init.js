@@ -5,10 +5,21 @@ const STATE_TITLE = 'title'
 const STATE_PLAY = 'play'
 const STATE_PAUSE = 'pause'
 
-let state = STATE_TITLE
+const imgTextures = new Image()
+imgTextures.src = 'textures.png'
+
+const imgFont = new Image()
+imgFont.src = 'font.png'
+
+const imgSprites = new Image()
+imgSprites.src = 'sprites.png'
+
+const whiteSprites = tint(imgSprites, '#FFFFFF')
+const redSprites = tint(imgSprites, '#FF0000')
 
 const player = new Player()
 
+let state = STATE_TITLE
 // entity under the cursor and close to the player
 let interactionTarget = null
 let influenceMap
@@ -73,15 +84,6 @@ outputCanvas.addEventListener('mousedown', (e) => {
 document.addEventListener('pointerlockchange', handlePointerLockChange)
 
 bindKeyboard(document)
-
-const imgTextures = new Image()
-imgTextures.src = 'textures.png'
-
-const imgSprites = new Image()
-imgSprites.src = 'sprites.png'
-
-const imgFont = new Image()
-imgFont.src = 'font.png'
 
 const overworld = generateOverworld()
 

@@ -32,11 +32,7 @@ on('collide_entity_entity', (entity, entity2, collision) => {
         const drop = new ManaPotion(entity2.x, entity2.y)
         map.entities.push(drop)
       } else {
-        // flash effect
-        entity2.opacity = 0.5
-        setTimeout(() => {
-          entity2.opacity = 1
-        }, 100)
+        entity2.flash(50)
       }
     }
 

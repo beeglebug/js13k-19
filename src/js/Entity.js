@@ -5,6 +5,9 @@ class Entity {
     this.index = index
     this.scale = scale
     this.z = zPos(scale)
+
+    this.sprite = imgSprites
+    this.flashSprite = whiteSprites
   }
 
   project () {
@@ -29,6 +32,14 @@ class Entity {
 
   kill () {
     map.entities = map.entities.filter(e => e !== this)
+  }
+
+  flash (time) {
+    const sprite = this.sprite
+    this.sprite = this.flashSprite
+    setTimeout(() => {
+      this.sprite = sprite
+    }, time)
   }
 }
 
@@ -92,6 +103,7 @@ class Ghost extends Mob {
     super(x, y, 0, 0.8)
     this.radius = 0.3
     this.health = 50
+    this.flashSprite = redSprites
   }
 }
 

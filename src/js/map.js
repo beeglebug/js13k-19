@@ -104,3 +104,11 @@ function getNeighbours (map, x, y, diagonal = false) {
 
   return neighbours
 }
+
+function warpToBoss () {
+  const boss = map.entities.find(e => e instanceof Ghost)
+  if (boss) {
+    player.x = boss.x + 2
+    player.y = boss.y + 2
+  }
+}
