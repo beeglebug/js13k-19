@@ -3,7 +3,6 @@ const FLOOR_TILE = '.'
 
 const STATE_TITLE = 'title'
 const STATE_PLAY = 'play'
-const STATE_PAUSE = 'pause'
 
 const imgTextures = new Image()
 imgTextures.src = 'textures.png'
@@ -23,6 +22,8 @@ let state = STATE_TITLE
 // entity under the cursor and close to the player
 let interactionTarget = null
 let influenceMap
+
+let showMiniMap = false
 
 const fov = 66
 

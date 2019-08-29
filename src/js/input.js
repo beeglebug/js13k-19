@@ -3,6 +3,7 @@ const KEY_W = 87
 const KEY_A = 65
 const KEY_S = 83
 const KEY_D = 68
+const KEY_M = 77
 const MOUSE_LEFT = 1
 
 const mousePosition = { x: 0, y: 0 }
@@ -16,6 +17,9 @@ function handleKeydown (e) {
   const key = e.which
   if (key === KEY_E && !downKeys[key]) {
     interact()
+  }
+  if (key === KEY_M && !downKeys[key]) {
+    showMiniMap = !showMiniMap
   }
   downKeys[key] = true
 }
@@ -98,14 +102,12 @@ function handleInput (delta) {
   if (keyDown(KEY_A)) {
     player.velocity.x -= dirPerp.x
     player.velocity.y -= dirPerp.y
-    // weapon.x = weapon.restingX - 5
   }
 
   // strafe to the right
   if (keyDown(KEY_D)) {
     player.velocity.x += dirPerp.x
     player.velocity.y += dirPerp.y
-    // weapon.x = weapon.restingX + 5
   }
 
   normalize(player.velocity)

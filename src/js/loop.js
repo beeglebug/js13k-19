@@ -11,7 +11,8 @@ function render () {
   outputCtx.drawImage(canvas, 0, 0, width * 2, height * 2)
 
   // renderDebugText(outputCtx)
-  // renderMiniMap(outputCtx, map)
+
+  showMiniMap && renderMiniMap(outputCtx, map)
 }
 
 function renderTitle () {

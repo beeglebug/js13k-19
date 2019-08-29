@@ -21,7 +21,7 @@ function renderMiniMap (ctx, map) {
   const colorsByTileType = {
     '.': '#6c6c6c',
     '-': '#ffffff',
-    '~': '#bbdac0',
+    '~': '#ffffff',
     '=': '#555555',
     '#': '#33cec2',
   }
@@ -35,7 +35,7 @@ function renderMiniMap (ctx, map) {
     }
   }
 
-  renderInfluenceMap(ctx, influenceMap)
+  // renderInfluenceMap(ctx, influenceMap)
 
   ctx.translate(0.5, 0.5)
 
