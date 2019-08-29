@@ -41,11 +41,11 @@ const map1 = {
   floor: '#373433',
   ceiling: sky,
   entities: [
-    { x: 18, y: 4, z: zPos(0.8), scale: 0.8, index: 4, radius: 0.1, seed: 1, interaction: 'load_tomb' },
-    { x: 20, y: 4, z: zPos(0.8), scale: 0.8, index: 4, radius: 0.1, seed: 2, interaction: 'load_tomb' },
-    { x: 22, y: 4, z: zPos(0.8), scale: 0.8, index: 4, radius: 0.1, seed: 3, interaction: 'load_tomb' },
-    { x: 24, y: 4, z: zPos(0.8), scale: 0.8, index: 4, radius: 0.1, seed: 4, interaction: 'load_tomb' },
-    { x: 26, y: 4, z: zPos(0.8), scale: 0.8, index: 4, radius: 0.1, seed: 5, interaction: 'load_tomb' },
+    { x: 18, y: 4, z: zPos(0.8), scale: 0.8, index: 4, radius: 0.1, seed: 1, onInteract: 'enter_tomb' },
+    { x: 20, y: 4, z: zPos(0.8), scale: 0.8, index: 4, radius: 0.1, seed: 2, onInteract: 'enter_tomb' },
+    { x: 22, y: 4, z: zPos(0.8), scale: 0.8, index: 4, radius: 0.1, seed: 3, onInteract: 'enter_tomb' },
+    { x: 24, y: 4, z: zPos(0.8), scale: 0.8, index: 4, radius: 0.1, seed: 4, onInteract: 'enter_tomb' },
+    { x: 26, y: 4, z: zPos(0.8), scale: 0.8, index: 4, radius: 0.1, seed: 5, onInteract: 'enter_tomb' },
   ]
 }
 

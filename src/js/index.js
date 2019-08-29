@@ -91,12 +91,12 @@ function render () {
 
 
   if (interactionTarget && interactionTarget.tooltip) {
-    renderText(ctx, interactionTarget.tooltip, '#5c5f5d')
+    renderText(ctx, interactionTarget.tooltip, '#222423')
   }
 
   outputCtx.drawImage(canvas, 0, 0, width * 2, height * 2)
 
-  // renderDebugText(outputCtx)
+  renderDebugText(outputCtx)
   renderMiniMap(outputCtx, map)
 }
 
@@ -172,7 +172,7 @@ function loop () {
   map.entities.forEach(entity => {
     updateEntity(entity, delta)
     projectEntity(entity)
-    if (entity.interaction) {
+    if (entity.onInteract) {
       if (entity.transformY <= 0) return
       if (entity.transformY > 1) return
       const cursorX = width / 2
@@ -239,6 +239,6 @@ function handleCollision (entity) {
 // TODO handle interactive tiles (map changing)
 function interact () {
   if (interactionTarget) {
-    emit(interactionTarget.interaction, interactionTarget)
+    emit(interactionTarget.onInteract, interactionTarget)
   }
 }

@@ -50,8 +50,16 @@ on('collide_entity_wall', (entity, wall, collision) => {
   }
 })
 
-on('load_tomb', gravestone => {
+on('enter_tomb', gravestone => {
   const rng = new RNG(gravestone.seed)
   const tomb = generateDungeon(rng)
   loadMap(tomb, 6, 6, 1, 0)
+})
+
+on('exit_tomb', ladder => {
+  const seed = ladder.seed
+  // TODO calculate gravestone to spawn by
+  const x = 18
+  const y = 5
+  loadMap(map1, x, y, 0.6, -0.8)
 })
