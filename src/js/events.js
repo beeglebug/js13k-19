@@ -23,23 +23,27 @@ on('collide_entity_entity', (entity, entity2, collision) => {
     // change sprite
     entity.index += 1
 
-    entity2.health -= 10
-    if (entity2.health <= 0) {
-      killEntity(entity2)
-      map.entities.push({
-        x: entity2.x,
-        y: entity2.y,
-        z: zPos(0.5),
-        scale: 0.5,
-        index: 1,
-        radius: 0.1,
-        collectible: true
-      })
-    } else {
-      entity2.opacity = 0.5
-      setTimeout(() => {
-        entity2.opacity = 1
-      }, 100)
+    if (entity2.health) {
+      entity2.health -= 10
+      if (entity2.health <= 0) {
+        killEntity(entity2)
+        // TODO spawn loot
+        map.entities.push({
+          x: entity2.x,
+          y: entity2.y,
+          z: zPos(0.5),
+          scale: 0.5,
+          index: 1,
+          radius: 0.1,
+          collectible: true
+        })
+      } else {
+        // flash effect
+        entity2.opacity = 0.5
+        setTimeout(() => {
+          entity2.opacity = 1
+        }, 100)
+      }
     }
 
     soundImpact()
@@ -70,6 +74,7 @@ on('collide_entity_wall', (entity, wall, collision) => {
 })
 
 on('enter_tomb', gravestone => {
+  console.log('making tomb with seed', gravestone.seed)
   const rng = new RNG(gravestone.seed)
   const tomb = generateDungeon(rng)
   loadMap(tomb, 6, 6, 1, 0)
@@ -77,8 +82,9 @@ on('enter_tomb', gravestone => {
 
 on('exit_tomb', ladder => {
   const seed = ladder.seed
-  // TODO calculate gravestone to spawn by
-  const x = 18
-  const y = 5
-  loadMap(map1, x, y, 0.6, -0.8)
+  const grave = overworld.entities.find(e => e.seed === seed)
+  console.log('finding grave for seed', seed, grave)
+  const x = grave.x + 0.5
+  const y = grave.x + 0.5
+  loadMap(overworld, x, y, 1, 1)
 })

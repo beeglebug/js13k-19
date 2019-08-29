@@ -23,7 +23,7 @@ function shouldBeWall (map, x, y) {
 }
 
 
-function generateFromMaze () {
+function generateFromMaze (rng) {
 
   const width = 5
   const height = 5
@@ -122,7 +122,7 @@ function generateFromMaze () {
         x: originX + offsetX + 0.5,
         y: originY + offsetY + 0.5,
         z: 0, scale: 1, index: 7,
-        tooltip: 'return to surface',
+        tooltip: 'E: return to surface',
         onInteract: 'exit_tomb',
         seed: rng.seed,
       })

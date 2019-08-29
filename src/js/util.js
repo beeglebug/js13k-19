@@ -44,3 +44,12 @@ function debugSave () {
   const data = `${player.x.toFixed(2)}, ${player.y.toFixed(2)}, ${player.direction.x.toFixed(2)}, ${player.direction.y.toFixed(2)}`
   console.log(data)
 }
+
+function tick () {
+  // timing for input and FPS counter
+  oldTime = time
+  time = performance.now()
+  let delta = (time - oldTime) / 1000 // time the last frame took in seconds
+  fps = 1 / delta
+  return delta
+}

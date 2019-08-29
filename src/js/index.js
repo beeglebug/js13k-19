@@ -100,48 +100,11 @@ function render () {
   renderMiniMap(outputCtx, map)
 }
 
-// start it high so initial click doesn't fire
-let shootCoolDown = 500
-const SHOOT_DELAY = 200
-const SHOOT_COST = 2
-
-function shoot () {
-  if (player.mana < SHOOT_COST) return
-  const offset = 0.25
-  const x = player.x + player.direction.x * offset
-  const y = player.y + player.direction.y * offset
-  const direction = copy(player.direction)
-  const speed = 10
-  map.entities.push({
-    type: TYPE_PROJECTILE,
-    source: player,
-    x,
-    y,
-    z: 0,
-    radius: 0.1,
-    scale: 0.3,
-    index: 2,
-    speed,
-    direction,
-    velocity: {
-      x: direction.x * speed,
-      y: direction.y * speed,
-    },
-  })
-  player.mana -= SHOOT_COST
-  soundShoot()
-  shootCoolDown += SHOOT_DELAY
-}
-
 requestAnimationFrame(loop)
 
 function loop () {
   requestAnimationFrame(loop)
-  // timing for input and FPS counter
-  oldTime = time
-  time = performance.now()
-  let delta = (time - oldTime) / 1000 // time the last frame took in seconds
-  fps = 1 / delta
+  const delta = tick()
 
   if (!ready) return
 
@@ -150,15 +113,6 @@ function loop () {
   updateEntity(player, delta)
 
   handleWeaponSway(time / 1000)
-
-  // // drag towards
-  // if (weapon.y !== weapon.restingY || weapon.x !== weapon.restingX) {
-  //   const dx = Math.sign(weapon.x - weapon.restingX)
-  //   const dy = Math.sign(weapon.y - weapon.restingY)
-  //   const speed = 1
-  //   weapon.x -= dx * speed
-  //   weapon.y -= dy * speed
-  // }
 
   // sort from far to close
   map.entities.sort((a, b) => {

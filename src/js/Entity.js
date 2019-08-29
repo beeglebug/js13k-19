@@ -1,9 +1,10 @@
 // TODO entity class
 class Entity {
-  constructor (x, y) {
+  constructor (x, y, scale, index) {
     this.x = x
     this.y = y
-    // { x: 1.5, y: 1.5, z: zPos(0.5), scale: 0.5, index: 1, collectible: true, radius: 0.2 },
+    this.z = scale === 1 ? 0 : zPos(scale)
+    this.index = index
   }
 }
 
