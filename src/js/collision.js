@@ -48,6 +48,7 @@ function collideEntities (entities) {
   }
 }
 
+// TODO must be a better way to handle this?
 function collideEntityPair (entity1, entity2) {
 
   if (entity1.static && entity2.static) return
@@ -64,14 +65,8 @@ function collideEntityPair (entity1, entity2) {
     if (entity2 instanceof Projectile) return emit('collide_projectile_entity', entity2, entity1, collision)
     if (entity1 === player && entity2.collectible) return emit('collide_player_collectible', entity2)
     if (entity2 === player && entity1.collectible) return emit('collide_player_collectible', entity1)
-    if (entity1 === player) {
-      console.log(1)
-      return emit('collide_player_entity', collision)
-    }
-    if (entity2 === player) {
-      console.log(2)
-      return emit('collide_player_entity', collision)
-    }
+    if (entity1 === player) return emit('collide_player_entity', collision)
+    if (entity2 === player) return emit('collide_player_entity', collision)
   }
 }
 
