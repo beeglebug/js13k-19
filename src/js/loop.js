@@ -193,6 +193,7 @@ function handleCollision (entity) {
   map.entities.forEach(otherEntity => {
     if (otherEntity === entity) return
     if (!otherEntity.radius) return
+    if (entity instanceof Bullet && otherEntity.collectible) return //bullets cant hit collectibles
     if (otherEntity instanceof Bullet && otherEntity.source === entity) return // ignore own projectiles
     const collision = collideCircleCircle(entity, otherEntity)
     if (collision) {
