@@ -6,8 +6,12 @@ class Entity {
     this.scale = scale
     this.z = zPos(scale)
 
+    this.static = true
+
     this.sprite = imgSprites
     this.flashSprite = whiteSprites
+    this.alive = true
+    this.radius = 0.3
   }
 
   project () {
@@ -28,10 +32,15 @@ class Entity {
     this.screenHeight = Math.abs(Math.round(height / this.transformY)) * this.scale
   }
 
-  update () {}
+  update (delta) {
+    if (!this.velocity) return
+    this.x += this.velocity.x * delta
+    this.y += this.velocity.y * delta
+    collideWorld(this)
+  }
 
   kill () {
-    map.entities = map.entities.filter(e => e !== this)
+    this.alive = false
   }
 
   flash (time) {
@@ -48,18 +57,33 @@ class Mob extends Entity {
   constructor (x, y, index, scale = 1) {
     super(x, y, index, scale)
     this.velocity = { x: 0, y: 0 }
+    this.health = 50
+    this.static = false
   }
 
   update (delta) {
     this.x += this.velocity.x * delta
     this.y += this.velocity.y * delta
     if (this.radius) {
-      handleCollision(this)
+      collideWorld(this)
+    }
+  }
+
+  damage (value) {
+    this.health -= value
+    if (this.health <= 0) {
+      this.kill()
+      // TODO spawn random drop
+      // TODO spawn in mid air and gravity down
+      const drop = new ManaPotion(this.x, this.y)
+      map.entities.push(drop)
+    } else {
+      this.flash(50)
     }
   }
 }
 
-class Player extends Mob {
+class Player extends Entity {
   constructor () {
     super (0, 0, null)
     this.x = 1
@@ -78,6 +102,7 @@ class Player extends Mob {
     this.mapY = 0
     this.health = 100
     this.mana = 100
+    this.static = false
   }
 }
 
@@ -116,7 +141,7 @@ class Bat extends Mob {
 }
 
 // TODO enemy projectiles
-class Bullet extends Mob {
+class Projectile extends Entity {
   constructor (x, y, speed, direction) {
     super(x, y, 2, 0.3)
     this.z = 0
@@ -124,10 +149,18 @@ class Bullet extends Mob {
     this.radius = 0.1
     this.speed = speed
     this.direction = direction
+    this.static = false
     this.velocity = {
       x: direction.x * speed,
       y: direction.y * speed,
     }
+  }
+}
+
+class ProjectileImpact extends Entity {
+  constructor (x, y) {
+    super(x, y, 3, 0.5)
+    this.z = 0
   }
 }
 

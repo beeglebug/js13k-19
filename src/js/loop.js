@@ -139,12 +139,17 @@ function loop () {
       entity.project()
     })
 
+    collideEntities(map.entities)
+
     interactionTarget = getInteractionTarget(map.entities)
 
     if (shootCoolDown > 0) {
       shootCoolDown -= delta * 1000
       if (shootCoolDown < 0) shootCoolDown = 0
     }
+
+    // remove dead entities
+    map.entities = map.entities.filter(e => e.alive)
   }
 
   render()
@@ -157,50 +162,6 @@ function getInteractionTarget (entities) {
     const halfWidth = entity.screenWidth / 2
     return cursorX > entity.screenX - halfWidth && cursorX < entity.screenX + halfWidth
   })
-}
-
-function handleCollision (entity) {
-
-  const x = Math.floor(entity.x)
-  const y = Math.floor(entity.y)
-
-  // level bounds
-  if (entity.x - entity.radius < 0) entity.x = entity.radius
-  if (entity.x + entity.radius > map.width) entity.x = map.width - entity.radius
-
-  if (entity.y - entity.radius < 0) entity.y = entity.radius
-  if (entity.y + entity.radius > map.height) entity.y = map.height - entity.radius
-
-  const tiles = [{ x, y }, ...getNeighbours(map, x, y, true)]
-
-  tiles.filter(Boolean).forEach(({ x, y }) => {
-    const tile = getMap(map, x, y)
-    if (isEmpty(tile)) return
-    const collision = collideCircleRect(
-      entity,
-      {
-        x: tile.type === 4 ? x + 0.35 : x,
-        y: tile.type === 3 ? y + 0.35 : y,
-        width: tile.type === 4 ? 0.3 : 1,
-        height: tile.type === 3 ? 0.3 : 1,
-      },
-    )
-    if (collision) {
-      emit('collide_entity_wall', entity, tile, collision)
-    }
-  })
-
-  map.entities.forEach(otherEntity => {
-    if (otherEntity === entity) return
-    if (!otherEntity.radius) return
-    if (entity instanceof Bullet && otherEntity.collectible) return //bullets cant hit collectibles
-    if (otherEntity instanceof Bullet && otherEntity.source === entity) return // ignore own projectiles
-    const collision = collideCircleCircle(entity, otherEntity)
-    if (collision) {
-      emit('collide_entity_entity', entity, otherEntity, collision)
-    }
-  })
-
 }
 
 // TODO handle interactive tiles (map changing)

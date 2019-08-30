@@ -1,3 +1,85 @@
+function collideWorld (entity) {
+
+  const x = Math.floor(entity.x)
+  const y = Math.floor(entity.y)
+
+  // level bounds
+  if (entity.x - entity.radius < 0) entity.x = entity.radius
+  if (entity.x + entity.radius > map.width) entity.x = map.width - entity.radius
+
+  if (entity.y - entity.radius < 0) entity.y = entity.radius
+  if (entity.y + entity.radius > map.height) entity.y = map.height - entity.radius
+
+  // map tiles
+  const tiles = [{ x, y }, ...getNeighbours(map, x, y, true)]
+
+  tiles.filter(Boolean).forEach(({ x, y }) => {
+    const tile = getMap(map, x, y)
+    if (isEmpty(tile)) return
+    const collision = collideCircleRect(
+      entity,
+      {
+        x: tile.type === 4 ? x + 0.35 : x,
+        y: tile.type === 3 ? y + 0.35 : y,
+        width: tile.type === 4 ? 0.3 : 1,
+        height: tile.type === 3 ? 0.3 : 1,
+      },
+    )
+    if (collision) {
+      if (entity instanceof Projectile) return emit('collide_projectile_wall', entity, tile, collision)
+      emit('collide_entity_wall', entity, tile, collision)
+    }
+  })
+}
+
+function collideEntities (entities) {
+  // filter out things which cannot have collision
+  const entitiesToConsider = entities.filter(entity => {
+    return !(entity instanceof ProjectileImpact)
+  })
+
+  entitiesToConsider.unshift(player)
+
+  // TODO last entity in array gets handles weird :(
+  for (let i = 0; i < entitiesToConsider.length; i++) {
+    for (let j = i + 1; j < entitiesToConsider.length; j++) {
+      collideEntityPair(entitiesToConsider[i], entitiesToConsider[j])
+    }
+  }
+}
+
+function collideEntityPair (entity1, entity2) {
+
+  if (entity1.static && entity2.static) return
+
+  if (entity1 instanceof Projectile && entity2.collectible) return // bullets cant hit collectibles
+  if (entity2 instanceof Projectile && entity1.collectible) return // bullets cant hit collectibles
+
+  if (entity1.source === entity2 || entity2.source === entity1) return // projectiles ignore origin
+
+  const collision = collideCircleCircle(entity1, entity2)
+
+  if (collision) {
+    if (entity1 instanceof Projectile) return emit('collide_projectile_entity', entity1, entity2, collision)
+    if (entity2 instanceof Projectile) return emit('collide_projectile_entity', entity2, entity1, collision)
+    if (entity1 === player && entity2.collectible) return emit('collide_player_collectible', entity2)
+    if (entity2 === player && entity1.collectible) return emit('collide_player_collectible', entity1)
+    if (entity1 === player) {
+      console.log(1)
+      return emit('collide_player_entity', collision)
+    }
+    if (entity2 === player) {
+      console.log(2)
+      return emit('collide_player_entity', collision)
+    }
+  }
+}
+
+
+
+
+
+
 function closestPointRect (point, rect, output = { x: 0, y: 0 }) {
 
   if (point.x < rect.x) {

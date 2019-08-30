@@ -1,66 +1,28 @@
-// TODO combine these two functions
-on('collide_entity_entity', (entity, entity2, collision) => {
+on('collide_player_entity', collision => {
+  handleDisplace(player, collision)
+})
 
-  if (entity === player && entity2.collectible) {
-    // TODO handle different types of collectible
-    soundCollect()
-    entity2.kill()
-    player.mana = Math.min(player.mana + 100, 100)
-    return
-  }
+on('collide_player_collectible', entity => {
+  soundCollect()
+  entity.kill()
+  player.mana = Math.min(player.mana + 100, 100)
+})
 
-  entity.x += collision.normal.x * collision.depth
-  entity.y += collision.normal.y * collision.depth
 
-  // TODO handle different projectiles
-  if (entity instanceof Bullet) {
-    entity.velocity.x = 0
-    entity.velocity.y = 0
+on('collide_projectile_entity', (projectile, entity, collision) => {
 
-    // stop further collision
-    entity.radius = 0
+  handleImpact(projectile)
 
-    // change sprite
-    entity.index += 1
-
-    if (entity2.health) {
-      entity2.health -= 10
-      if (entity2.health <= 0) {
-        entity2.kill()
-        // TODO spawn random drop
-        // TODO spawn in mid air and gravity down
-        const drop = new ManaPotion(entity2.x, entity2.y)
-        map.entities.push(drop)
-      } else {
-        entity2.flash(50)
-      }
-    }
-
-    soundImpact()
-    setTimeout(() => entity.kill(), 200)
+  if (entity.health) {
+    // TODO damage from projectile
+    entity.damage(10)
   }
 })
 
+on('collide_projectile_wall', handleImpact)
+
 on('collide_entity_wall', (entity, wall, collision) => {
-
-  // handle mtd
-  entity.x += collision.normal.x * collision.depth
-  entity.y += collision.normal.y * collision.depth
-
-  // TODO handle different projectiles
-  if (entity instanceof Bullet) {
-    entity.velocity.x = 0
-    entity.velocity.y = 0
-
-    // stop further collision
-    entity.radius = 0
-
-    // change sprite
-    entity.index += 1
-
-    soundImpact()
-    setTimeout(() => entity.kill(), 200)
-  }
+  handleDisplace(entity, collision)
 })
 
 on('enter_tomb', gravestone => {
@@ -76,3 +38,29 @@ on('exit_tomb', ladder => {
   const y = grave.x + 0.5
   loadMap(overworld, x, y, 1, 1)
 })
+
+
+// misc handlers to save dupe code
+
+function handleDisplace (entity, collision) {
+  entity.x += collision.normal.x * collision.depth
+  entity.y += collision.normal.y * collision.depth
+  entity.velocity.x = 0
+  entity.velocity.y = 0
+}
+
+function handleImpact (projectile) {
+
+  soundImpact()
+  projectile.kill()
+
+  const x = projectile.x - (player.direction.x * 0.1)
+  const y = projectile.y - (player.direction.y * 0.1)
+
+  const impact = new ProjectileImpact(x, y)
+  map.entities.push(impact)
+
+  setTimeout(() => {
+    impact.kill()
+  }, 100)
+}
