@@ -10,7 +10,7 @@ function render () {
 
   outputCtx.drawImage(canvas, 0, 0, width * 2, height * 2)
 
-  // renderDebugText(outputCtx)
+  if (state === STATE_PLAY) renderDebugText(outputCtx)
 
   showMiniMap && renderMiniMap(outputCtx, map)
 }

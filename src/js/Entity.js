@@ -159,7 +159,7 @@ class Projectile extends Entity {
 
 class ProjectileImpact extends Entity {
   constructor (x, y) {
-    super(x, y, 3, 0.5)
+    super(x, y, 3, 0.4)
     this.z = 0
   }
 }

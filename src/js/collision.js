@@ -48,7 +48,7 @@ function collideEntities (entities) {
   }
 }
 
-// TODO must be a better way to handle this?
+// TODO collision handlers on entity objects
 function collideEntityPair (entity1, entity2) {
 
   if (entity1.static && entity2.static) return
