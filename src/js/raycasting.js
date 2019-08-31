@@ -126,9 +126,9 @@ function raycast (x) {
   // we only need to know the 0-1 range
   wallX -= Math.floor(wallX)
 
-  // // flip if the wall is opposite
+  // flip texture on opposite walls
   if (side === 0 && ray.direction.x < 0) wallX = 1 - wallX
   if (side === 1 && ray.direction.y > 0) wallX = 1 - wallX
 
-  return [rayLength, euclideanRayLength, side, wallX, tile]
+  return [ray, rayLength, euclideanRayLength, side, mapX, mapY, wallX, tile]
 }

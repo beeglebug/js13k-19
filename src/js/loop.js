@@ -16,6 +16,8 @@ function render () {
 }
 
 function renderTitle () {
+  ctx.fillStyle = '#000000'
+  ctx.fillRect(0, 0, width, height)
   renderText(ctx, 'click to play')
 }
 
@@ -25,6 +27,9 @@ function renderPlay () {
   lightingCtx.fillRect(0, 0, width, height)
 
   fogCtx.clearRect(0,0,width, height)
+
+  // reset
+  floorImageData = new ImageData(width, height)
 
   renderFloor(ctx, map.floor)
   renderCeiling(ctx, map.ceiling)
@@ -42,7 +47,8 @@ function renderPlay () {
 
     // RAYCASTING ======================================================================================================
 
-    const [rayLength, euclideanRayLength, side, wallX, tile] = raycast(x)
+    const [ray, rayLength, euclideanRayLength, side, mapX, mapY, wallX, tile] = raycast(x)
+
     if (!tile) {
       zBuffer.push(null)
       continue
@@ -57,6 +63,7 @@ function renderPlay () {
 
     // calculate lowest and highest pixel to fill in current stripe
     let drawStart = Math.floor((height - sliceHeight) / 2)
+    let drawEnd = drawStart + sliceHeight
 
     const textureSize = 16
     const textureIndex = textureIndexByTileType[tile.type]
@@ -84,7 +91,56 @@ function renderPlay () {
       fogCtx.fillStyle = `rgba(${r}, ${g}, ${b}, ${eased})`
       fogCtx.fillRect(x, drawStart, 1, sliceHeight)
     }
+
+    // FLOOR CASTING ===================================================================================================
+
+    // x, y position of the floor texel at the bottom of the wall
+    let floorXWall
+    let floorYWall
+
+    // 4 different wall directions possible
+    if (side === 0 && ray.direction.x > 0) {
+      floorXWall = mapX
+      floorYWall = mapY + wallX
+    } else if (side === 0 && ray.direction.x < 0) {
+      floorXWall = mapX + 1
+      floorYWall = mapY + 1 - wallX
+    } else if (side === 1 && ray.direction.y > 0) {
+      floorXWall = mapX + 1 - wallX
+      floorYWall = mapY
+    } else {
+      floorXWall = mapX + wallX
+      floorYWall = mapY + 1
+    }
+
+    // draw the floor from drawEnd to the bottom of the screen
+    for (let y = drawEnd; y < height; y++) {
+
+      let currentDist = height / (2 * y - height)
+
+      let weight = currentDist / rayLength
+
+      let currentFloorX = weight * floorXWall + (1 - weight) * ray.x
+      let currentFloorY = weight * floorYWall + (1 - weight) * ray.y
+
+      // TODO get from map
+      const textureIndex = 5
+      let floorTexX = Math.floor(currentFloorX * textureSize) % textureSize + (textureSize * textureIndex)
+      let floorTexY = Math.floor(currentFloorY * textureSize) % textureSize
+
+      const sourceIndex = ((imgTextures.width * floorTexY) + floorTexX) * 4
+      const destIndex = (width * y + x) * 4
+
+      floorImageData.data[destIndex] = textureImageData.data[sourceIndex]
+      floorImageData.data[destIndex + 1] = textureImageData.data[sourceIndex + 1]
+      floorImageData.data[destIndex + 2] = textureImageData.data[sourceIndex + 2]
+      floorImageData.data[destIndex + 3] = 255
+    }
   }
+
+  floorCtx.clearRect(0, 0, width, height)
+  floorCtx.putImageData(floorImageData, 0, 0)
+  ctx.drawImage(floorCanvas, 0, 0)
 
   // APPLY LIGHTING ====================================================================================================
 

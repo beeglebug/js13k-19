@@ -40,12 +40,15 @@ const height = 180
 const [canvas, ctx] = createCanvas(width, height)
 const [lightingCanvas, lightingCtx] = createCanvas(width, height)
 const [fogCanvas, fogCtx] = createCanvas(width, height)
+const [floorCanvas, floorCtx] = createCanvas(width, height)
 const [outputCanvas, outputCtx] = createCanvas(width * 2, height * 2)
 
 document.getElementById('container').appendChild(outputCanvas)
 
 // outputCanvas.after(lightingCanvas)
 // outputCanvas.after(fogCanvas)
+// outputCanvas.after(floorCanvas)
+// outputCanvas.after(whiteSprites)
 
 let inputEnabled = false
 
@@ -62,6 +65,12 @@ const handlePointerLockChange = () => {
 }
 
 let ready = false
+let textureImageData
+let floorImageData = new ImageData(width, height)
+
+imgTextures.addEventListener('load', () => {
+  textureImageData = getImageData(imgTextures)
+})
 
 outputCanvas.addEventListener('mousedown', (e) => {
   outputCanvas.requestPointerLock()

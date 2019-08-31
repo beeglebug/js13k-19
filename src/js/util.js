@@ -15,18 +15,6 @@ function lerp (a, b, n) {
   return (1 - n) * a + n * b
 }
 
-function createCanvas (width, height) {
-  const canvas = document.createElement('canvas')
-  const ctx = canvas.getContext('2d', { alpha: false })
-
-  canvas.width = width
-  canvas.height = height
-
-  ctx.imageSmoothingEnabled = false
-
-  return [canvas, ctx]
-}
-
 function hexToRgb (hex) {
   const num = hex.replace('#', '')
   const r = parseInt(num.substring(0,2), 16)
@@ -56,9 +44,17 @@ function tick () {
 
 function zPos (scale) { return 0 - (1 - scale) / 2 }
 
-function tint (image, color) {
+function createCanvas (width, height) {
   const canvas = document.createElement('canvas')
   const ctx = canvas.getContext('2d')
+  canvas.width = width
+  canvas.height = height
+  ctx.imageSmoothingEnabled = false
+  return [canvas, ctx]
+}
+
+function tint (image, color) {
+  const [canvas, ctx] = createCanvas(1, 1)
   image.addEventListener('load', () => {
     canvas.width = image.width
     canvas.height = image.height
@@ -69,4 +65,10 @@ function tint (image, color) {
   })
 
   return canvas
+}
+
+function getImageData (image) {
+  const [, ctx] = createCanvas(image.width, image.height)
+  ctx.drawImage(image, 0, 0)
+  return ctx.getImageData(0, 0, image.width, image.height)
 }
