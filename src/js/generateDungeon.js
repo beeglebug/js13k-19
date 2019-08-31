@@ -125,6 +125,8 @@ function generateFromMaze (rng) {
       entities.push(new Bat(centerX + 0.5, centerY + 0.5))
     }
 
+    // TODO random chance to spawn in corners
+    entities.push(new Cobweb(originX + offsetX + .2, originY + offsetY + room.height - .2))
   })
 
   return map

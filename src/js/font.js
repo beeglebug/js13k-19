@@ -21,7 +21,7 @@ function renderTextBox (ctx, text, background = '#000000') {
 
   lines.forEach((line, i) => {
     const lineY = (i * lineHeight) + padding
-    renderText(ctx, line, boxX, boxY + lineY)
+    renderText(ctx, line, boxX + padding, boxY + lineY)
   })
 }
 

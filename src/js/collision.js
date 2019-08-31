@@ -52,6 +52,7 @@ function collideEntities (entities) {
 function collideEntityPair (entity1, entity2) {
 
   if (entity1.static && entity2.static) return
+  if (!entity1.collision || !entity2.collision) return
 
   if (entity1 instanceof Projectile && entity2.collectible) return // bullets cant hit collectibles
   if (entity2 instanceof Projectile && entity1.collectible) return // bullets cant hit collectibles

@@ -7,6 +7,7 @@ class Entity {
     this.z = zPos(scale)
 
     this.static = true
+    this.collision = true
 
     this.sprite = imgSprites
     this.flashSprite = whiteSprites
@@ -120,6 +121,14 @@ class Ladder extends Entity {
     this.seed = seed
     this.tooltip = 'E: return to surface'
     this.onInteract = 'exit_tomb'
+  }
+}
+
+class Cobweb extends Entity {
+  constructor (x, y) {
+    super(x, y, 8, 0.5)
+    this.z = 0.25
+    this.collision = false
   }
 }
 

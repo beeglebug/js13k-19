@@ -34,10 +34,11 @@ function drawCircle (ctx, x, y, radius, color) {
 function renderTitle () {
   ctx.fillStyle = '#000000'
   ctx.fillRect(0, 0, width, height)
-  renderText(ctx, 'Controls', 10, 10)
-  renderText(ctx, 'WASD  : move', 20, 20)
-  renderText(ctx, 'E     : interact', 20, 30)
-  renderText(ctx, 'CLICK : shoot', 20, 40)
+  renderText(ctx, '   Controls', 20, 10)
+  renderText(ctx, ' WASD : move', 20, 25)
+  renderText(ctx, '    E : interact', 20, 35)
+  renderText(ctx, 'CLICK : shoot', 20, 45)
+  renderText(ctx, '    M : map', 20, 55)
   renderText(ctx, 'click to start', 10, 100)
 }
 
