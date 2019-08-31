@@ -41,6 +41,11 @@ const [canvas, ctx] = createCanvas(width, height)
 const [lightingCanvas, lightingCtx] = createCanvas(width, height)
 const [fogCanvas, fogCtx] = createCanvas(width, height)
 const [floorCanvas, floorCtx] = createCanvas(width, height)
+
+const [mapCanvas, mapCtx] = createCanvas(width, height)
+const [fowCanvas, fowCtx] = createCanvas(width, height)
+const [miniMapCanvas, miniMapCtx] = createCanvas(width, height)
+
 const [outputCanvas, outputCtx] = createCanvas(width * 2, height * 2)
 
 document.getElementById('container').appendChild(outputCanvas)
@@ -48,6 +53,9 @@ document.getElementById('container').appendChild(outputCanvas)
 // outputCanvas.after(lightingCanvas)
 // outputCanvas.after(fogCanvas)
 // outputCanvas.after(floorCanvas)
+// outputCanvas.after(mapCanvas)
+// outputCanvas.after(fowCanvas)
+// outputCanvas.after(miniMapCanvas)
 // outputCanvas.after(whiteSprites)
 
 let inputEnabled = false

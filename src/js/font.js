@@ -1,38 +1,44 @@
+const padding = 4
+const lineHeight = 8
+
 // TODO center text
 // TODO text color (via second canvas)
-function renderText (ctx, text, background = '#000000') {
-  const lines = text.toUpperCase().split('\n').map(str => str.trim())
+function renderTextBox (ctx, text, background = '#000000') {
+  const lines = text.split('\n').map(str => str.trim())
   const max = [...lines].sort((a, b) => (b.length - a.length))[0].length
 
-  const padding = 4
-  const lineHeight = 8
-
   // background box
-  let bw = (max * 4) + (padding * 2)
-  if (bw %2 !== 0) bw += 1
+  let boxWidth = (max * 4) + (padding * 2)
+  if (boxWidth %2 !== 0) boxWidth += 1
 
-  let bh = (lines.length * lineHeight) + (padding * 2) - 2
-  if (bh %2 !== 0) bh += 1
+  let boxHeight = (lines.length * lineHeight) + (padding * 2) - 2
+  if (boxHeight %2 !== 0) boxHeight += 1
 
-  const bx = (width - bw) / 2
-  const by = (height - bh) / 2
+  const boxX = (width - boxWidth) / 2
+  const boxY = (height - boxHeight) / 2
   ctx.fillStyle = background
-  ctx.fillRect(bx, by, bw, bh)
+  ctx.fillRect(boxX, boxY, boxWidth, boxHeight)
 
-  lines.forEach((line, y) => line.split('').forEach((c, x) => {
-    const sx = getX(c)
+  lines.forEach((line, i) => {
+    const lineY = (i * lineHeight) + padding
+    renderText(ctx, line, boxX, boxY + lineY)
+  })
+}
+
+function renderText (ctx, text, x, y) {
+  text.toUpperCase().split('').forEach((char, i) => {
+    const sx = getX(char)
     if (sx === null) return
-    const dx = x * 4 + padding
-    const dy = (y * lineHeight) + padding
+    const ox = i * 4
     ctx.drawImage(
       imgFont,
       sx, 0,
       3, 5,
-      dx + bx,
-      dy + by,
+      x + ox,
+      y,
       3, 5
     )
-  }))
+  })
 }
 
 // font currently handles chars 0-9 A-Z -,.:?

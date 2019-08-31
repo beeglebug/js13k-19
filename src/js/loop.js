@@ -11,15 +11,34 @@ function render () {
 
   outputCtx.drawImage(canvas, 0, 0, width * 2, height * 2)
 
-  if (state === STATE_PLAY) renderDebugText(outputCtx)
+  if (state === STATE_PLAY) {
+    renderDebugText(outputCtx)
+    renderFogOfWar(fowCtx)
+    showMiniMap && renderMiniMap(outputCtx, map)
+  }
 
-  showMiniMap && renderMiniMap(outputCtx, map)
+}
+
+function renderFogOfWar (ctx) {
+  drawCircle(ctx, player.x * MINI_MAP_TILE_SIZE, player.y * MINI_MAP_TILE_SIZE, 20, '#ffffff')
+}
+
+function drawCircle (ctx, x, y, radius, color) {
+  ctx.fillStyle = color
+  ctx.beginPath()
+  ctx.arc(x, y, radius, 0, Math.PI * 2)
+  ctx.fill()
+  ctx.closePath()
 }
 
 function renderTitle () {
   ctx.fillStyle = '#000000'
   ctx.fillRect(0, 0, width, height)
-  renderText(ctx, 'click to play')
+  renderText(ctx, 'Controls', 10, 10)
+  renderText(ctx, 'WASD  : move', 20, 20)
+  renderText(ctx, 'E     : interact', 20, 30)
+  renderText(ctx, 'CLICK : shoot', 20, 40)
+  renderText(ctx, 'click to start', 10, 100)
 }
 
 function renderPlay () {
@@ -168,7 +187,7 @@ function renderPlay () {
 
 
   if (interactionTarget && interactionTarget.tooltip) {
-    renderText(ctx, interactionTarget.tooltip, '#222423')
+    renderTextBox(ctx, interactionTarget.tooltip, '#222423')
   }
 }
 

@@ -134,9 +134,10 @@ class Ghost extends Mob {
 
 class Bat extends Mob {
   constructor (x, y) {
-    super (x, y, 5)
+    super (x, y, 5, 0.5)
     this.radius = 0.3
     this.health = 50
+    this.z = 0
   }
 }
 

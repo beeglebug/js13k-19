@@ -5,13 +5,25 @@ function renderSky (ctx, fill) {
 
 const MINI_MAP_TILE_SIZE = 3
 
-function renderMiniMap (ctx, map) {
+function renderMiniMap (ctx) {
 
-  const ox = width * 2 - (map.width * MINI_MAP_TILE_SIZE) - 10
-  const oy = 10
+  miniMapCtx.clearRect(0, 0, width, height)
 
-  ctx.save()
-  ctx.translate(ox, oy)
+  miniMapCtx.globalCompositeOperation = 'source-over'
+  miniMapCtx.drawImage(fowCanvas, 0, 0)
+  miniMapCtx.globalCompositeOperation = 'source-in'
+  miniMapCtx.drawImage(mapCanvas, 0, 0)
+  miniMapCtx.globalCompositeOperation = 'source-over'
+
+  drawCircle(miniMapCtx, player.x * MINI_MAP_TILE_SIZE, player.y * MINI_MAP_TILE_SIZE, 2, '#ff0011')
+
+  const ox = Math.floor(width - ((map.width * MINI_MAP_TILE_SIZE) / 2))
+  const oy = Math.floor(height - ((map.height * MINI_MAP_TILE_SIZE) / 2))
+
+  ctx.drawImage(miniMapCanvas, ox, oy)
+}
+
+function renderMap (ctx) {
 
   const colorsByTileType = {
     '.': '#6c6c6c',
@@ -31,31 +43,6 @@ function renderMiniMap (ctx, map) {
   }
 
   // renderInfluenceMap(ctx, influenceMap)
-
-  ctx.translate(0.5, 0.5)
-
-  ctx.fillStyle = '#ffffff'
-  ctx.beginPath()
-  ctx.arc(player.x * MINI_MAP_TILE_SIZE, player.y * MINI_MAP_TILE_SIZE, player.radius * MINI_MAP_TILE_SIZE, 0, Math.PI * 2)
-  ctx.fill()
-  ctx.closePath()
-
-  ctx.strokeStyle = '#ff0e00'
-  ctx.beginPath()
-  ctx.moveTo(player.x * MINI_MAP_TILE_SIZE, player.y * MINI_MAP_TILE_SIZE)
-  ctx.lineTo((player.x + player.direction.x * 2) * MINI_MAP_TILE_SIZE, (player.y + player.direction.y * 2) * MINI_MAP_TILE_SIZE)
-  ctx.stroke()
-  ctx.closePath()
-
-  // sprites.forEach(sprite => {
-  //   ctx.fillStyle = '#007eff'
-  //   ctx.beginPath()
-  //   ctx.arc(sprite.x * MINI_MAP_TILE_SIZE, sprite.y * MINI_MAP_TILE_SIZE, player.radius * MINI_MAP_TILE_SIZE, 0, Math.PI * 2)
-  //   ctx.fill()
-  //   ctx.closePath()
-  // })
-
-  ctx.restore()
 }
 
 function renderEntity (ctx, entity) {
@@ -141,16 +128,25 @@ function renderHUD (ctx) {
 
   const barWidth = 40
 
-  ctx.fillStyle = '#ba1826'
-  ctx.fillRect(5, 160, barWidth, 5)
+  renderText(ctx, 'health', 5, 160)
 
-  ctx.fillStyle = '#102746'
+  ctx.fillStyle = '#76151e'
   ctx.fillRect(5, 170, barWidth, 5)
 
-  const currentBarWidth = remap(player.mana, 0, 100, 0, barWidth)
+  const currentHealthWidth = remap(player.health, 0, 100, 0, barWidth)
+
+  ctx.fillStyle = '#ba1826'
+  ctx.fillRect(5, 170, currentHealthWidth, 5)
+
+  renderText(ctx, 'mana', 60, 160)
+
+  ctx.fillStyle = '#102746'
+  ctx.fillRect(60, 170, barWidth, 5)
+
+  const currentManaWidth = remap(player.mana, 0, 100, 0, barWidth)
 
   ctx.fillStyle = '#2474ba'
-  ctx.fillRect(5, 170, currentBarWidth, 5)
+  ctx.fillRect(60, 170, currentManaWidth, 5)
 }
 
 function renderWeapon (ctx) {
