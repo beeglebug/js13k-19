@@ -2,6 +2,7 @@
 available savings:
  - remove heatmap code
  - rename const -> let
+ - hex to rgb func
 */
 
 function render () {
@@ -31,8 +32,7 @@ function renderPlay () {
   // reset
   floorImageData = new ImageData(width, height)
 
-  renderFloor(ctx, map.floor)
-  renderCeiling(ctx, map.ceiling)
+  map.sky && renderSky(ctx, map.sky)
 
   zBuffer = []
 
@@ -79,13 +79,14 @@ function renderPlay () {
       lightingCtx.fillRect(x, drawStart, 1, sliceHeight)
     }
 
+    let eased = 1
     if (map.fog) {
       const min = 5
       const max = map.fogDistance || 30
 
       const clamped = clamp(euclideanRayLength, min, max)
       const normalised = remap(clamped, min, max, 0, 1)
-      const eased = outQuad(normalised)
+      eased = outQuad(normalised)
 
       const [r, g, b] = hexToRgb(map.fog)
       fogCtx.fillStyle = `rgba(${r}, ${g}, ${b}, ${eased})`
@@ -129,12 +130,17 @@ function renderPlay () {
       let floorTexY = Math.floor(currentFloorY * textureSize) % textureSize
 
       const sourceIndex = ((imgTextures.width * floorTexY) + floorTexX) * 4
-      const destIndex = (width * y + x) * 4
 
-      floorImageData.data[destIndex] = textureImageData.data[sourceIndex]
-      floorImageData.data[destIndex + 1] = textureImageData.data[sourceIndex + 1]
-      floorImageData.data[destIndex + 2] = textureImageData.data[sourceIndex + 2]
-      floorImageData.data[destIndex + 3] = 255
+      // TODO lighting
+
+      const destFloorIndex = (width * y + x) * 4
+      copyPixel(textureImageData, sourceIndex, floorImageData, destFloorIndex)
+
+      if (!map.sky) {
+        const flipY = height - y - 1
+        const destCeilIndex = (width * flipY + x) * 4
+        copyPixel(textureImageData, sourceIndex, floorImageData, destCeilIndex)
+      }
     }
   }
 
@@ -164,6 +170,13 @@ function renderPlay () {
   if (interactionTarget && interactionTarget.tooltip) {
     renderText(ctx, interactionTarget.tooltip, '#222423')
   }
+}
+
+function copyPixel (sourceData, sourceIndex, destData, destIndex) {
+  destData.data[destIndex] = sourceData.data[sourceIndex]
+  destData.data[destIndex + 1] = sourceData.data[sourceIndex + 1]
+  destData.data[destIndex + 2] = sourceData.data[sourceIndex + 2]
+  destData.data[destIndex + 3] = 255
 }
 
 function loop () {

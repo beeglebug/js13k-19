@@ -1,9 +1,4 @@
-function renderFloor (ctx, fill) {
-  ctx.fillStyle = fill
-  ctx.fillRect(0, height / 2, width, height / 2)
-}
-
-function renderCeiling (ctx, fill) {
+function renderSky (ctx, fill) {
   ctx.fillStyle = fill
   ctx.fillRect(0, 0, width, height / 2)
 }

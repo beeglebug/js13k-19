@@ -17,8 +17,7 @@ function generateOverworld () {
       '---~-~~---',
     ]),
     fog: '#A3B1BD',
-    floor: '#373433',
-    ceiling: sky,
+    sky,
     entities: []
   }
 
