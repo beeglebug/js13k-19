@@ -20,6 +20,8 @@ function renderMiniMap (ctx) {
   const ox = Math.floor(width - ((map.width * MINI_MAP_TILE_SIZE) / 2))
   const oy = Math.floor(height - ((map.height * MINI_MAP_TILE_SIZE) / 2))
 
+  // renderInfluenceMap(miniMapCtx, influenceMap)
+
   ctx.drawImage(miniMapCanvas, ox, oy)
 }
 
@@ -41,8 +43,6 @@ function renderMap (ctx) {
       ctx.fillRect(x * MINI_MAP_TILE_SIZE, y * MINI_MAP_TILE_SIZE, MINI_MAP_TILE_SIZE, MINI_MAP_TILE_SIZE)
     }
   }
-
-  // renderInfluenceMap(ctx, influenceMap)
 }
 
 function renderEntity (ctx, entity) {
