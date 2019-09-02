@@ -83,41 +83,42 @@ function generateFromMaze (rng) {
       for (let x = 0; x < room.width; x++) {
         const rx = x + originX + offsetX
         const ry = y + originY + offsetY
-        data[ry][rx] = { x: rx, y: ry, type: FLOOR_TILE }
+        data[ry][rx] = createTile(rx, ry, FLOOR_TILE)
       }
     }
 
     if (room.top === false) {
       const x = centerX
       for (let y = originY; y <= originY + halfSize; y++) {
-        data[y][x] = { x, y, type: FLOOR_TILE }
+        data[y][x] = createTile(x, y, FLOOR_TILE)
       }
     }
 
     if (room.bottom === false) {
       const x = centerX
       for (let y = originY + halfSize; y <= originY + size; y++) {
-        data[y][x] = { x, y, type: FLOOR_TILE }
+        data[y][x] = createTile(x, y, FLOOR_TILE)
       }
       // TODO random doors
       const tile = data[originY + offsetY + room.height][x]
       tile.type = 'D'
-      tile.offset = 0
     }
 
     if (room.left === false) {
       const y = centerY
       for (let x = originX; x <= originX + halfSize; x++) {
-        data[y][x] = { x, y, type: FLOOR_TILE }
+        data[y][x] = createTile(x, y, FLOOR_TILE)
       }
     }
 
     if (room.right === false) {
       const y = centerY
       for (let x = originX + halfSize; x <= originX + size; x++) {
-        data[y][x] = { x, y, type: FLOOR_TILE }
+        data[y][x] = createTile(x, y, FLOOR_TILE)
       }
-      // data[y][originX + offsetX + room.width].type = 'd'
+      // TODO random doors
+      const tile = data[y][originX + offsetX + room.width]
+      tile.type = 'd'
     }
 
     // seed entities etc
@@ -136,3 +137,5 @@ function generateFromMaze (rng) {
 
   return map
 }
+
+function createTile (x, y, type) { return { x, y, type, offset: 0 } }

@@ -120,20 +120,25 @@ function renderPlay () {
     let floorXWall
     let floorYWall
 
+    // TODO maybe improve?
+    let offsetX = 0
+    let offsetY = 0
+    if (tile.type === 'd') offsetX = 0.5
+    if (tile.type === 'D') offsetY = 0.5
 
     // 4 different wall directions possible
     if (side === 0 && ray.direction.x > 0) {
-      floorXWall = mapX
-      floorYWall = mapY + wallX
+      floorXWall = mapX + offsetX
+      floorYWall = mapY + wallX + offsetY
     } else if (side === 0 && ray.direction.x < 0) {
-      floorXWall = mapX + 1
-      floorYWall = mapY + 1 - wallX
+      floorXWall = mapX + 1 + offsetX
+      floorYWall = mapY + 1 - wallX + offsetY
     } else if (side === 1 && ray.direction.y > 0) {
-      floorXWall = mapX + 1 - wallX
-      floorYWall = mapY
+      floorXWall = mapX + 1 - wallX + offsetX
+      floorYWall = mapY + offsetY
     } else {
-      floorXWall = mapX + wallX
-      floorYWall = mapY + 1
+      floorXWall = mapX + wallX + offsetX
+      floorYWall = mapY + 1 + offsetY
     }
 
     // draw the floor from drawEnd to the bottom of the screen
@@ -205,10 +210,11 @@ function loop () {
   requestAnimationFrame(loop)
   const delta = tick()
 
+  TweenManager.update(delta)
+
   if (state === STATE_TITLE) {
 
   }
-
 
   if (state === STATE_PLAY) {
 
