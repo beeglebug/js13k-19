@@ -76,8 +76,14 @@ function raycast (x) {
     // TODO get this working again
     if (tile.type === 'D') {
       // half way down the block
-      const start = { x: mapX + tile.offset, y: mapY + 0.5 }
-      const end = { x: mapX + 1, y: mapY + 0.5 }
+      const start = {
+        x: mapX + tile.offset,
+        y: mapY + 0.5
+      }
+      const end = {
+        x: mapX + 1,
+        y: mapY + 0.5
+      }
       const intersects = rayLineSegmentIntersection(ray, start, end)
       if (!intersects) continue
       // the ray length is where we intersected
@@ -87,8 +93,14 @@ function raycast (x) {
       break
     } else if (tile.type === 'd') {
       // half way down the block
-      const start = { x: mapX + 0.5, y: mapY }
-      const end = { x: mapX + 0.5, y: mapY + 1 }
+      const start = {
+        x: mapX + 0.5,
+        y: mapY
+      }
+      const end = {
+        x: mapX + 0.5,
+        y: mapY + 1 - tile.offset
+      }
       const intersects = rayLineSegmentIntersection(ray, start, end)
       if (!intersects) continue
       // the ray length is where we intersected

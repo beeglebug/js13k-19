@@ -131,14 +131,14 @@ function renderPlay () {
       floorXWall = tile.x + offsetX
       floorYWall = tile.y + wallX + offsetY
     } else if (side === 0 && ray.direction.x < 0) {
-      floorXWall = tile.x + 1 + offsetX
+      floorXWall = tile.x + 1 - offsetX
       floorYWall = tile.y + 1 - wallX + offsetY
     } else if (side === 1 && ray.direction.y > 0) {
       floorXWall = tile.x + 1 - wallX + offsetX
       floorYWall = tile.y + offsetY
     } else {
       floorXWall = tile.x + wallX + offsetX
-      floorYWall = tile.y + 1 + offsetY
+      floorYWall = tile.y + 1 - offsetY
     }
 
     // draw the floor from drawEnd to the bottom of the screen

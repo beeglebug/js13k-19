@@ -17,6 +17,12 @@ function renderMiniMap (ctx) {
 
   drawCircle(miniMapCtx, player.x * MINI_MAP_TILE_SIZE, player.y * MINI_MAP_TILE_SIZE, 2, '#ff0011')
 
+  miniMapCtx.strokeStyle = '#ff0011'
+  miniMapCtx.beginPath()
+  miniMapCtx.moveTo(player.x * MINI_MAP_TILE_SIZE, player.y * MINI_MAP_TILE_SIZE)
+  miniMapCtx.lineTo((player.x + player.direction.x * 2) * MINI_MAP_TILE_SIZE, (player.y + player.direction.y * 2) * MINI_MAP_TILE_SIZE)
+  miniMapCtx.stroke()
+
   const ox = Math.floor(width - ((map.width * MINI_MAP_TILE_SIZE) / 2))
   const oy = Math.floor(height - ((map.height * MINI_MAP_TILE_SIZE) / 2))
 
@@ -34,6 +40,7 @@ function renderMap (ctx) {
     '=': '#555555',
     '#': '#33cec2',
     'D': '#07080c',
+    'd': '#07080c',
   }
 
   for (let y = 0; y < map.height; y++) {
