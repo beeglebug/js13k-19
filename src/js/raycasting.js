@@ -130,5 +130,5 @@ function raycast (x) {
   if (side === 0 && ray.direction.x < 0) wallX = 1 - wallX
   if (side === 1 && ray.direction.y > 0) wallX = 1 - wallX
 
-  return [ray, rayLength, euclideanRayLength, side, mapX, mapY, wallX, tile]
+  return [tile, ray, rayLength, euclideanRayLength, side, wallX]
 }

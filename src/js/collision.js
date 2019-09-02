@@ -16,20 +16,29 @@ function collideWorld (entity) {
   tiles.filter(Boolean).forEach(({ x, y }) => {
     const tile = getMap(map, x, y)
     if (isEmpty(tile)) return
-    const collision = collideCircleRect(
-      entity,
-      {
-        x: tile.type === 'd' ? x + 0.35 : x,
-        y: tile.type === 'D' ? y + 0.35 : y,
-        width: tile.type === 'd' ? 0.3 : 1,
-        height: tile.type === 'D' ? 0.3 : 1,
-      },
-    )
+    const collision = collideCircleRect(entity, getRect(tile))
     if (collision) {
       if (entity instanceof Projectile) return emit('collide_projectile_wall', entity, tile, collision)
       emit('collide_entity_wall', entity, tile, collision)
     }
   })
+}
+
+function getRect (tile) {
+  let { x, y } = tile
+  let width = 1
+  let height = 1
+  if (tile.type === 'd') {
+    x += 0.35
+    y += tile.offset
+    width = 0.3
+  }
+  if (tile.type === 'D') {
+    x += tile.offset
+    y += 0.35
+    height = 0.3
+  }
+  return { x, y, width, height }
 }
 
 function collideEntities (entities) {

@@ -39,6 +39,13 @@ on('exit_tomb', ladder => {
   loadMap(overworld, x, y, 1, 1)
 })
 
+on('open_door', door => {
+  TweenManager.create(door, 'offset', 1, 2000, () => {
+    door.type = '.'
+  })
+})
+
+
 
 // misc handlers to save dupe code
 

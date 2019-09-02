@@ -67,7 +67,7 @@ function renderPlay () {
 
     // RAYCASTING ======================================================================================================
 
-    const [ray, rayLength, euclideanRayLength, side, mapX, mapY, wallX, tile] = raycast(x)
+    const [tile, ray, rayLength, euclideanRayLength, side, wallX] = raycast(x)
 
     if (!tile) {
       zBuffer.push(null)
@@ -128,17 +128,17 @@ function renderPlay () {
 
     // 4 different wall directions possible
     if (side === 0 && ray.direction.x > 0) {
-      floorXWall = mapX + offsetX
-      floorYWall = mapY + wallX + offsetY
+      floorXWall = tile.x + offsetX
+      floorYWall = tile.y + wallX + offsetY
     } else if (side === 0 && ray.direction.x < 0) {
-      floorXWall = mapX + 1 + offsetX
-      floorYWall = mapY + 1 - wallX + offsetY
+      floorXWall = tile.x + 1 + offsetX
+      floorYWall = tile.y + 1 - wallX + offsetY
     } else if (side === 1 && ray.direction.y > 0) {
-      floorXWall = mapX + 1 - wallX + offsetX
-      floorYWall = mapY + offsetY
+      floorXWall = tile.x + 1 - wallX + offsetX
+      floorYWall = tile.y + offsetY
     } else {
-      floorXWall = mapX + wallX + offsetX
-      floorYWall = mapY + 1 + offsetY
+      floorXWall = tile.x + wallX + offsetX
+      floorYWall = tile.y + 1 + offsetY
     }
 
     // draw the floor from drawEnd to the bottom of the screen
@@ -253,12 +253,23 @@ function loop () {
 }
 
 function getInteractionTarget (entities) {
-  return entities.find(entity => {
-    if (!entity.onInteract || entity.transformY <= 0 || entity.transformY > 1) return
+
+  const interactionDistance = 1
+
+  const entity = entities.find(entity => {
+    if (!entity.onInteract || entity.transformY <= 0 || entity.transformY > interactionDistance) return
     const cursorX = width / 2
     const halfWidth = entity.screenWidth / 2
     return cursorX > entity.screenX - halfWidth && cursorX < entity.screenX + halfWidth
   })
+
+  if (entity) return entity
+
+  const [tile,,rayLength] = raycast(160)
+
+  if (rayLength < interactionDistance && (tile.type === 'D' || tile.type === 'd')) {
+    return tile
+  }
 }
 
 // TODO handle interactive tiles (map changing)

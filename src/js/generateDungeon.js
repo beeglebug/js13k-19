@@ -102,6 +102,8 @@ function generateFromMaze (rng) {
       // TODO random doors
       const tile = data[originY + offsetY + room.height][x]
       tile.type = 'D'
+      tile.tooltip = 'E: Open'
+      tile.onInteract = 'open_door'
     }
 
     if (room.left === false) {
@@ -119,6 +121,8 @@ function generateFromMaze (rng) {
       // TODO random doors
       const tile = data[y][originX + offsetX + room.width]
       tile.type = 'd'
+      tile.tooltip = 'E: Open'
+      tile.onInteract = 'open_door'
     }
 
     // seed entities etc
