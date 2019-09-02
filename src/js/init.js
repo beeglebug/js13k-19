@@ -87,7 +87,9 @@ outputCanvas.addEventListener('mousedown', (e) => {
     audioContext = new window.AudioContext()
 
     // starting map
-    loadMap(overworld, 3, 5.5, -1, 0)
+    const tomb = generateDungeon(new RNG(123))
+    loadMap(tomb, 7.5, 8.5, 0, 1)
+    // loadMap(overworld, 3, 5.5, -1, 0)
 
     state = STATE_PLAY
 

@@ -64,6 +64,8 @@ const textureIndexByTileType = {
   '=': 1,
   '#': 2,
   '~': 4,
+  'D': 3,
+  'd': 3,
 }
 
 function getMap (map, x, y) {

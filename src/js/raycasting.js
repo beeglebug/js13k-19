@@ -74,9 +74,9 @@ function raycast (x) {
 
     // thin walls
     // TODO get this working again
-    if (tile === 3) {
+    if (tile.type === 'D') {
       // half way down the block
-      const start = { x: mapX, y: mapY + 0.5 }
+      const start = { x: mapX + tile.offset, y: mapY + 0.5 }
       const end = { x: mapX + 1, y: mapY + 0.5 }
       const intersects = rayLineSegmentIntersection(ray, start, end)
       if (!intersects) continue
@@ -85,7 +85,7 @@ function raycast (x) {
       side = 1
       collision = true
       break
-    } else if (tile === 4) {
+    } else if (tile.type === 'd') {
       // half way down the block
       const start = { x: mapX + 0.5, y: mapY }
       const end = { x: mapX + 0.5, y: mapY + 1 }

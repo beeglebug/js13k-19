@@ -19,10 +19,10 @@ function collideWorld (entity) {
     const collision = collideCircleRect(
       entity,
       {
-        x: tile.type === 4 ? x + 0.35 : x,
-        y: tile.type === 3 ? y + 0.35 : y,
-        width: tile.type === 4 ? 0.3 : 1,
-        height: tile.type === 3 ? 0.3 : 1,
+        x: tile.type === 'd' ? x + 0.35 : x,
+        y: tile.type === 'D' ? y + 0.35 : y,
+        width: tile.type === 'd' ? 0.3 : 1,
+        height: tile.type === 'D' ? 0.3 : 1,
       },
     )
     if (collision) {

@@ -33,6 +33,7 @@ function renderMap (ctx) {
     '~': '#ffffff',
     '=': '#555555',
     '#': '#33cec2',
+    'D': '#07080c',
   }
 
   for (let y = 0; y < map.height; y++) {

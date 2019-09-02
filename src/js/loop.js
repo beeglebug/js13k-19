@@ -87,7 +87,8 @@ function renderPlay () {
 
     const textureSize = 16
     const textureIndex = textureIndexByTileType[tile.type]
-    const textureX = Math.floor(wallX * textureSize + textureIndex * textureSize)
+    const offset = tile.offset || 0
+    let textureX = Math.floor((wallX + textureIndex + offset) * textureSize)
 
     ctx.drawImage(imgTextures, textureX, 0, 1, textureSize, x, drawStart, 1, sliceHeight)
 
@@ -119,6 +120,7 @@ function renderPlay () {
     let floorXWall
     let floorYWall
 
+
     // 4 different wall directions possible
     if (side === 0 && ray.direction.x > 0) {
       floorXWall = mapX
@@ -141,8 +143,8 @@ function renderPlay () {
 
       let weight = currentDist / rayLength
 
-      let currentFloorX = weight * floorXWall + (1 - weight) * ray.x
-      let currentFloorY = weight * floorYWall + (1 - weight) * ray.y
+      let currentFloorX = (weight * floorXWall + (1 - weight) * ray.x)
+      let currentFloorY = (weight * floorYWall + (1 - weight) * ray.y)
 
       // TODO get from map
       const textureIndex = 5

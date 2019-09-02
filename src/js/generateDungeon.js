@@ -99,6 +99,10 @@ function generateFromMaze (rng) {
       for (let y = originY + halfSize; y <= originY + size; y++) {
         data[y][x] = { x, y, type: FLOOR_TILE }
       }
+      // TODO random doors
+      const tile = data[originY + offsetY + room.height][x]
+      tile.type = 'D'
+      tile.offset = 0
     }
 
     if (room.left === false) {
@@ -113,6 +117,7 @@ function generateFromMaze (rng) {
       for (let x = originX + halfSize; x <= originX + size; x++) {
         data[y][x] = { x, y, type: FLOOR_TILE }
       }
+      // data[y][originX + offsetX + room.width].type = 'd'
     }
 
     // seed entities etc
