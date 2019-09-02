@@ -120,10 +120,8 @@ function raycast (x) {
     // Calculate distance projected on camera direction (Euclidean distance will give fisheye effect!)
     if (side === 0) {
       rayLength = (mapX - ray.x + (1 - stepX) / 2) / ray.direction.x
-      euclideanRayLength = (mapX - ray.x + (1 - stepX) / 2) / normalisedRayDirection.x
     } else {
       rayLength = (mapY - ray.y + (1 - stepY) / 2) / ray.direction.y
-      euclideanRayLength = (mapY - ray.y + (1 - stepY) / 2) / normalisedRayDirection.y
     }
   }
 
@@ -133,6 +131,12 @@ function raycast (x) {
     wallX = ray.y + rayLength * ray.direction.y
   } else {
     wallX = ray.x + rayLength * ray.direction.x
+  }
+
+  if (side === 0) {
+    euclideanRayLength = (rayLength * ray.direction.x) / normalisedRayDirection.x
+  } else {
+    euclideanRayLength = (rayLength * ray.direction.y) / normalisedRayDirection.y
   }
 
   // we only need to know the 0-1 range

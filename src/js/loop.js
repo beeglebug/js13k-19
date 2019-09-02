@@ -87,7 +87,15 @@ function renderPlay () {
 
     const textureSize = 16
     const textureIndex = textureIndexByTileType[tile.type]
-    const offset = tile.offset || 0
+
+    let offset = 0
+    if (tile.offset) {
+      if (side === 0 && ray.direction.x > 0) offset = tile.offset
+      if (side === 0 && ray.direction.x < 0) offset = -tile.offset
+      if (side === 1 && ray.direction.y > 0) offset = tile.offset
+      if (side === 1 && ray.direction.y < 0) offset = -tile.offset
+    }
+
     let textureX = Math.floor((wallX + textureIndex + offset) * textureSize)
 
     ctx.drawImage(imgTextures, textureX, 0, 1, textureSize, x, drawStart, 1, sliceHeight)
@@ -127,18 +135,22 @@ function renderPlay () {
     if (tile.type === 'D') offsetY = 0.5
 
     // 4 different wall directions possible
-    if (side === 0 && ray.direction.x > 0) {
-      floorXWall = tile.x + offsetX
-      floorYWall = tile.y + wallX + offsetY
-    } else if (side === 0 && ray.direction.x < 0) {
-      floorXWall = tile.x + 1 - offsetX
-      floorYWall = tile.y + 1 - wallX + offsetY
-    } else if (side === 1 && ray.direction.y > 0) {
-      floorXWall = tile.x + 1 - wallX + offsetX
-      floorYWall = tile.y + offsetY
+    if (side === 0) {
+      if (ray.direction.x > 0) {
+        floorXWall = tile.x + offsetX
+        floorYWall = tile.y + wallX + offsetY
+      } else {
+        floorXWall = tile.x + 1 - offsetX
+        floorYWall = tile.y + 1 - wallX + offsetY
+      }
     } else {
-      floorXWall = tile.x + wallX + offsetX
-      floorYWall = tile.y + 1 - offsetY
+      if (ray.direction.y > 0) {
+        floorXWall = tile.x + 1 - wallX + offsetX
+        floorYWall = tile.y + offsetY
+      } else {
+        floorXWall = tile.x + wallX + offsetX
+        floorYWall = tile.y + 1 - offsetY
+      }
     }
 
     // draw the floor from drawEnd to the bottom of the screen
