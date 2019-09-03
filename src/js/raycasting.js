@@ -1,16 +1,10 @@
-function raycast (x) {
-
-  let rayLength
-  let euclideanRayLength
-  let side
-  let collision = false
-
-  // calculate ray player and direction
+// calculate ray player and direction
+function rayFromPlayer (x) {
 
   // -1 is left edge, 1 is right edge
   let nx = (2 * x) / width - 1
 
-  const ray = {
+  return {
     x: player.x,
     y: player.y,
     direction: {
@@ -18,6 +12,13 @@ function raycast (x) {
       y: player.direction.y + camera.y * -nx
     }
   }
+}
+
+function raycast (ray) {
+
+  let rayLength
+  let side
+  let collision = false
 
   // which map cell are we in
   let mapX = Math.floor(ray.x)
@@ -52,8 +53,6 @@ function raycast (x) {
     distanceY = (mapY + 1 - ray.y) * deltaY
   }
 
-  let normalisedRayDirection = normalize(copy(ray.direction))
-
   // DDA
   while (true) {
     if (distanceX < distanceY) {
@@ -73,7 +72,6 @@ function raycast (x) {
     tile = getMap(map, mapX, mapY)
 
     // thin walls
-    // TODO get this working again
     if (tile.type === 'D') {
       // half way down the block
       const start = {
@@ -133,6 +131,9 @@ function raycast (x) {
     wallX = ray.x + rayLength * ray.direction.x
   }
 
+  let euclideanRayLength
+  let normalisedRayDirection = normalize(copy(ray.direction))
+
   if (side === 0) {
     euclideanRayLength = (rayLength * ray.direction.x) / normalisedRayDirection.x
   } else {
@@ -146,5 +147,5 @@ function raycast (x) {
   if (side === 0 && ray.direction.x < 0) wallX = 1 - wallX
   if (side === 1 && ray.direction.y > 0) wallX = 1 - wallX
 
-  return [tile, ray, rayLength, euclideanRayLength, side, wallX]
+  return [tile, rayLength, euclideanRayLength, side, wallX]
 }

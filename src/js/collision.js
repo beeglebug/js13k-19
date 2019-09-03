@@ -42,14 +42,14 @@ function getRect (tile) {
 }
 
 function collideEntities (entities) {
+
   // filter out things which cannot have collision
   const entitiesToConsider = entities.filter(entity => {
     return !(entity instanceof ProjectileImpact)
   })
 
-  entitiesToConsider.unshift(player)
+  entitiesToConsider.push(player)
 
-  // TODO last entity in array gets handles weird :(
   for (let i = 0; i < entitiesToConsider.length; i++) {
     for (let j = i + 1; j < entitiesToConsider.length; j++) {
       collideEntityPair(entitiesToConsider[i], entitiesToConsider[j])
@@ -60,6 +60,7 @@ function collideEntities (entities) {
 
 function collideEntityPair (primary, secondary) {
 
+  // "broadphase" checks
   if (primary.static) return
   if (!primary.collision) return
   if (primary instanceof Projectile && secondary.collectible) return // bullets cant hit collectibles
@@ -67,9 +68,7 @@ function collideEntityPair (primary, secondary) {
 
   const collision = collideCircleCircle(primary, secondary)
 
-  if (collision) {
-    primary.collide(secondary, collision)
-  }
+  collision && primary.collide(secondary, collision)
 }
 
 
@@ -148,8 +147,9 @@ function collideCircleCircle (circle1, circle2) {
 
   // no need for sqrt
   const distance = (dx * dx) + (dy * dy)
+  const r2 = (dr * dr)
 
-  if (distance > (dr * dr)) return false
+  if (distance.toFixed(5) >= r2.toFixed(5)) return false
 
   const point = closestPointCircle(circle1, circle2)
 

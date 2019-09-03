@@ -39,18 +39,30 @@ const createTestMap = () => ({
     '--~-----~~~',
     '~.........-',
     '~.........-',
+    '~.........-',
+    '~-~--D--~~-',
+    '~.........-',
+    '~.........-',
     '~..-...-..~',
     '~.........~',
     '~.........~',
     '~.........~',
     '~..-...-..~',
+    '-.........-',
+    '-.........-',
+    '-.........-',
+    '-.........-',
+    '-.........-',
+    '-.........-',
+    '-.........-',
+    '-.........-',
     '-.........-',
     '-.........-',
     '---~--~~---',
   ]),
   fog: '#A3B1BD',
   entities: [
-    new Bat(2,2)
+    new Bat(5.5, 6)
   ]
 })
 
@@ -70,7 +82,13 @@ function loadMap (newMap, x, y, dx, dy) {
 function parseMap (arr) {
   const height = arr.length
   const width = arr[0].length
-  const data = arr.map((row, y) => row.split('').map((type, x) => ({ x, y, type })))
+  const data = arr.map((row, y) => row.split('').map((type, x) => {
+    const tile = { x, y, type, offset: 0 }
+    if (type === 'D') {
+      tile.onInteract = 'open_door'
+    }
+    return tile
+  }))
   return {
     height,
     width,

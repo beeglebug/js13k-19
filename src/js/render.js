@@ -94,7 +94,11 @@ function renderInfluenceMap (ctx, map) {
 
   if (!map) return
 
-  const sorted = flat(map.data).filter(Boolean).map(cell => cell.weight).sort((a,b) => a - b)
+  const sorted = flat(map.data)
+    .filter(Boolean)
+    .filter(cell => cell.weight !== Infinity)
+    .map(cell => cell.weight)
+    .sort((a,b) => a - b)
 
   const min = sorted[0]
   const max = sorted[sorted.length - 1]

@@ -87,7 +87,8 @@ outputCanvas.addEventListener('mousedown', (e) => {
 
     // starting map
 
-    loadMap(createTestMap(), 6, 6, 0, 1)
+    loadMap(createTestMap(), 5.5, 13.5, 0, -1)
+    // loadMap(generateDungeon(new RNG(123)), 6, 8, 0, -1)
 
     state = STATE_PLAY
 

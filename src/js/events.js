@@ -1,8 +1,10 @@
 on('collide_player_entity', (entity, collision) => {
-  handleDisplace(player, collision)
-  if (entity instanceof Mob) {
-    entity.state = AI_MELEE
+  if (entity.static) {
+    handleDisplace(player, collision)
   }
+  // if (entity instanceof Mob) {
+  //   entity.state = AI_MELEE
+  // }
 })
 
 on('collide_player_collectible', entity => {

@@ -61,16 +61,17 @@ class Mob extends Entity {
     this.velocity = { x: 0, y: 0 }
     this.health = 50
     this.static = false
-    this.state = AI_IDLE
+    this.speed = 2
   }
 
   update (delta) {
-
-    handleAI(this)
-
-    this.x += this.velocity.x * delta
-    this.y += this.velocity.y * delta
+    handleAI(this, delta)
     collideWorld(this)
+  }
+
+  collide (other, collision) {
+    if (other instanceof Projectile) return
+    handleDisplace(this, collision)
   }
 
   damage (value) {

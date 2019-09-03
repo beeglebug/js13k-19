@@ -75,7 +75,8 @@ function renderPlay () {
 
     // RAYCASTING ======================================================================================================
 
-    const [tile, ray, rayLength, euclideanRayLength, side, wallX] = raycast(x)
+    const ray = rayFromPlayer(x)
+    const [tile, rayLength, euclideanRayLength, side, wallX] = raycast(ray)
 
     if (!tile) {
       zBuffer.push(null)
@@ -297,7 +298,7 @@ function getInteractionTarget (entities) {
 
   if (entity) return entity
 
-  const [tile,,rayLength] = raycast(160)
+  const [tile,rayLength] = raycast(rayFromPlayer(160))
 
   if (rayLength < interactionDistance && (tile.type === 'D' || tile.type === 'd')) {
     return tile
