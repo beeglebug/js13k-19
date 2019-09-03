@@ -96,7 +96,7 @@ function generateFromMaze (rng) {
 
     if (room.bottom === false) {
       const x = centerX
-      for (let y = originY + halfSize; y <= originY + size; y++) {
+      for (let y = centerY; y <= originY + size; y++) {
         data[y][x] = createTile(x, y, FLOOR_TILE)
       }
       // TODO random doors
@@ -115,7 +115,7 @@ function generateFromMaze (rng) {
 
     if (room.right === false) {
       const y = centerY
-      for (let x = originX + halfSize; x <= originX + size; x++) {
+      for (let x = centerX; x <= originX + size; x++) {
         data[y][x] = createTile(x, y, FLOOR_TILE)
       }
       // TODO random doors
@@ -123,6 +123,14 @@ function generateFromMaze (rng) {
       tile.type = 'd'
       tile.tooltip = 'E: Open'
       tile.onInteract = 'open_door'
+    }
+
+    // add features
+
+    // center pillar
+    if (rng.randomChance(20)) {
+      // TODO move bats!
+      // data[centerY][centerX].type = '-'
     }
 
     // seed entities etc
