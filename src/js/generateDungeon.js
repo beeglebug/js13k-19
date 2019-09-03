@@ -129,18 +129,30 @@ function generateFromMaze (rng) {
 
     // center pillar
     if (rng.randomChance(20)) {
-      // TODO move bats!
-      // data[centerY][centerX].type = '-'
+      data[centerY][centerX].type = '-'
     }
 
     // seed entities etc
     if (room.entrance) {
       entities.push(new Ladder(originX + offsetX + 0.5, originY + offsetY + 0.5, rng.seed))
     } else if (room.exit) {
-      // TODO somewhere random in the room
       entities.push(new Ghost(centerX + 0.5, centerY + 0.5))
     } else {
-      entities.push(new Bat(centerX + 0.5, centerY + 0.5))
+      // TODO which rooms get enemies?
+      // small chance in corridors?
+      const open = []
+      for (let y = 0; y < room.height; y++) {
+        for (let x = 0; x < room.width; x++) {
+          const rx = x + originX + offsetX
+          const ry = y + originY + offsetY
+          const tile = data[ry][rx]
+          if (!tile) continue
+          if (isEmpty(tile)) open.push(tile)
+        }
+      }
+      console.log(open)
+      const spot = rng.randomItem(open)
+      entities.push(new Bat(spot.x + 0.5, spot.y + 0.5))
     }
 
     // TODO random chance to spawn in corners
