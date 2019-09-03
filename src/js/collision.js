@@ -131,7 +131,7 @@ function collideCircleRect (circle, rect) {
 
   if (!pointInCircle(point, circle)) return false
 
-  const distance = distanceBetween(point, circle)
+  const distance = distanceTo(point, circle)
   const depth = circle.radius - distance
 
   const normal = normalize({

@@ -72,12 +72,15 @@ function getMap (map, x, y) {
   return map.data[y] && map.data[y][x]
 }
 
+const getMapWorld = (map, { x, y }) => getMap(map, Math.floor(x), Math.floor(y))
+
 // TODO needs improving
 function isEmpty (tile) {
   if (!tile) return true
   return (tile.type === FLOOR_TILE || tile.type === EMPTY_TILE)
 }
 
+// TODO don't return null?
 function getNeighbours (map, x, y, diagonal = false) {
 
   const neighbours = []

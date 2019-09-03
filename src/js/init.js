@@ -88,7 +88,7 @@ outputCanvas.addEventListener('mousedown', (e) => {
 
     // starting map
     const tomb = generateDungeon(new RNG(123))
-    loadMap(tomb, 7.5, 8.5, 0, 1)
+    loadMap(tomb, 7.5, 12.5, 0, 1)
     // loadMap(overworld, 3, 5.5, -1, 0)
 
     state = STATE_PLAY
