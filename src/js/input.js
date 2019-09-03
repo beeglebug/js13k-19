@@ -15,6 +15,7 @@ let mouseTimeout
 
 function handleKeydown (e) {
   const key = e.which
+  // TODO better way to do single key strokes
   if (key === KEY_E && !downKeys[key]) {
     interact()
   }
@@ -71,7 +72,6 @@ const clearMouseMove = () => {
 function handleInput (delta) {
 
   if (state !== STATE_PLAY) return
-  if (!inputEnabled) return
 
   const dirPerp = perp(player.direction)
 

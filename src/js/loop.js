@@ -7,6 +7,7 @@ available savings:
 
 function render () {
   if (state === STATE_TITLE) renderTitle()
+  if (state === STATE_PAUSE) renderPause()
   if (state === STATE_PLAY) renderPlay()
 
   outputCtx.drawImage(canvas, 0, 0, width * 2, height * 2)
@@ -29,6 +30,13 @@ function drawCircle (ctx, x, y, radius, color) {
   ctx.arc(x, y, radius, 0, Math.PI * 2)
   ctx.fill()
   ctx.closePath()
+}
+
+function renderPause () {
+  ctx.fillStyle = '#000000'
+  ctx.fillRect(0, 0, width, height)
+  renderText(ctx, 'paused', 140, 70)
+  renderText(ctx, 'click to resume', 122, 90)
 }
 
 function renderTitle () {
@@ -234,6 +242,17 @@ function loop () {
 
     player.update(delta)
 
+    const mapX = Math.floor(player.x)
+    const mapY = Math.floor(player.y)
+
+    if (mapX !== player.mapX || mapY !== player.mapY) {
+      influenceMap = createInfluenceMap(map)
+      populateInfluenceMap(influenceMap, { x: mapX, y: mapY })
+    }
+
+    player.mapX = mapX
+    player.mapY = mapY
+
     handleWeaponSway(time / 1000)
 
     // sort from far to close
@@ -252,6 +271,7 @@ function loop () {
 
     interactionTarget = getInteractionTarget(map.entities)
 
+    // TODO more generic cooldowns for enemies too
     if (shootCoolDown > 0) {
       shootCoolDown -= delta * 1000
       if (shootCoolDown < 0) shootCoolDown = 0

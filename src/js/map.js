@@ -34,6 +34,26 @@ function generateOverworld () {
   return map
 }
 
+const createTestMap = () => ({
+  ...parseMap([
+    '--~-----~~~',
+    '~.........-',
+    '~.........-',
+    '~..-...-..~',
+    '~.........~',
+    '~.........~',
+    '~.........~',
+    '~..-...-..~',
+    '-.........-',
+    '-.........-',
+    '---~--~~---',
+  ]),
+  fog: '#A3B1BD',
+  entities: [
+    new Bat(2,2)
+  ]
+})
+
 function loadMap (newMap, x, y, dx, dy) {
   map = newMap
   player.x = x

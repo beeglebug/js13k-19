@@ -53,35 +53,24 @@ function collideEntities (entities) {
   for (let i = 0; i < entitiesToConsider.length; i++) {
     for (let j = i + 1; j < entitiesToConsider.length; j++) {
       collideEntityPair(entitiesToConsider[i], entitiesToConsider[j])
+      collideEntityPair(entitiesToConsider[j], entitiesToConsider[i])
     }
   }
 }
 
-// TODO collision handlers on entity objects
-function collideEntityPair (entity1, entity2) {
+function collideEntityPair (primary, secondary) {
 
-  if (entity1.static && entity2.static) return
-  if (!entity1.collision || !entity2.collision) return
+  if (primary.static) return
+  if (!primary.collision) return
+  if (primary instanceof Projectile && secondary.collectible) return // bullets cant hit collectibles
+  if (primary.source === secondary) return // projectiles ignore origin
 
-  if (entity1 instanceof Projectile && entity2.collectible) return // bullets cant hit collectibles
-  if (entity2 instanceof Projectile && entity1.collectible) return // bullets cant hit collectibles
-
-  if (entity1.source === entity2 || entity2.source === entity1) return // projectiles ignore origin
-
-  const collision = collideCircleCircle(entity1, entity2)
+  const collision = collideCircleCircle(primary, secondary)
 
   if (collision) {
-    if (entity1 instanceof Projectile) return emit('collide_projectile_entity', entity1, entity2, collision)
-    if (entity2 instanceof Projectile) return emit('collide_projectile_entity', entity2, entity1, collision)
-    if (entity1 === player && entity2.collectible) return emit('collide_player_collectible', entity2)
-    if (entity2 === player && entity1.collectible) return emit('collide_player_collectible', entity1)
-    if (entity1 === player) return emit('collide_player_entity', entity2, collision)
-    if (entity2 === player) return emit('collide_player_entity', entity1, collision)
+    primary.collide(secondary, collision)
   }
 }
-
-
-
 
 
 

@@ -55,7 +55,7 @@ function handleAI (entity) {
     case AI_MELEE:
       console.log('attack!')
       zero(entity.velocity)
-      entity.state = 0
+      entity.state = AI_IDLE
       return
   }
 }

@@ -40,6 +40,8 @@ class Entity {
     collideWorld(this)
   }
 
+  collide () {}
+
   kill () {
     this.alive = false
   }
@@ -106,6 +108,11 @@ class Player extends Entity {
     this.mana = 100
     this.static = false
   }
+
+  collide (other, collision) {
+    if (other.collectible) return emit('collide_player_collectible', other)
+    return emit('collide_player_entity', other, collision)
+  }
 }
 
 class ManaPotion extends Entity {
@@ -165,6 +172,9 @@ class Projectile extends Entity {
       x: direction.x * speed,
       y: direction.y * speed,
     }
+  }
+  collide (other, collision) {
+    return emit('collide_projectile_entity', this, other, collision)
   }
 }
 

@@ -11,6 +11,7 @@ function createInfluenceMap (map) {
     influenceMap.data[y] = []
     for (let x = 0; x < width; x++) {
       const tile = map.data[y][x]
+      // TODO door tiles
       if (tile && tile.type === FLOOR_TILE) {
         influenceMap.data[y][x] = { x, y, weight: Infinity, open: true }
       } else {

@@ -1,8 +1,9 @@
 const EMPTY_TILE = ' '
 const FLOOR_TILE = '.'
 
-const STATE_TITLE = 'title'
-const STATE_PLAY = 'play'
+const STATE_TITLE = 0
+const STATE_PAUSE = 1
+const STATE_PLAY = 2
 
 const imgTextures = new Image()
 imgTextures.src = 'textures.png'
@@ -58,16 +59,14 @@ document.getElementById('container').appendChild(outputCanvas)
 // outputCanvas.after(miniMapCanvas)
 // outputCanvas.after(whiteSprites)
 
-let inputEnabled = false
-
 let zBuffer = []
 
 const handlePointerLockChange = () => {
   if (document.pointerLockElement === outputCanvas) {
-    inputEnabled = true
+    state = STATE_PLAY
     outputCanvas.classList.add('active')
   } else {
-    inputEnabled = false
+    state = STATE_PAUSE
     outputCanvas.classList.remove('active')
   }
 }
@@ -87,18 +86,12 @@ outputCanvas.addEventListener('mousedown', (e) => {
     audioContext = new window.AudioContext()
 
     // starting map
-    const tomb = generateDungeon(new RNG(123))
-    loadMap(tomb, 7.5, 12.5, 0, 1)
-    // loadMap(overworld, 3, 5.5, -1, 0)
+
+    loadMap(createTestMap(), 6, 6, 0, 1)
 
     state = STATE_PLAY
 
     ready = true
-    // TODO do this in the loop somehow
-    setInterval(() => {
-      influenceMap = createInfluenceMap(map)
-      populateInfluenceMap(influenceMap, { x: Math.floor(player.x), y: Math.floor(player.y) })
-    }, 1000)
   }
 })
 document.addEventListener('pointerlockchange', handlePointerLockChange)
