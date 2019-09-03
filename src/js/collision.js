@@ -75,8 +75,8 @@ function collideEntityPair (entity1, entity2) {
     if (entity2 instanceof Projectile) return emit('collide_projectile_entity', entity2, entity1, collision)
     if (entity1 === player && entity2.collectible) return emit('collide_player_collectible', entity2)
     if (entity2 === player && entity1.collectible) return emit('collide_player_collectible', entity1)
-    if (entity1 === player) return emit('collide_player_entity', collision)
-    if (entity2 === player) return emit('collide_player_entity', collision)
+    if (entity1 === player) return emit('collide_player_entity', entity2, collision)
+    if (entity2 === player) return emit('collide_player_entity', entity1, collision)
   }
 }
 

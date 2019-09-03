@@ -24,6 +24,11 @@ function isZero (v) {
   return v.x === 0 && v.y === 0
 }
 
+function zero (v) {
+  v.x = 0
+  v.y = 0
+}
+
 function magnitude (v) {
   return Math.sqrt((v.x * v.x) + (v.y * v.y))
 }
