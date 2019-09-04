@@ -72,3 +72,9 @@ function getImageData (image) {
   ctx.drawImage(image, 0, 0)
   return ctx.getImageData(0, 0, image.width, image.height)
 }
+
+function times (count, fn) {
+  for (let i = 0; i < count; i++) {
+    fn(i)
+  }
+}

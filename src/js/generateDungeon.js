@@ -79,10 +79,13 @@ function generateFromMaze (rng) {
     const offsetX = Math.floor((size - room.width) / 2)
     const offsetY = Math.floor((size - room.height) / 2)
 
+    room.mapX = originX + offsetX
+    room.mapY = originY + offsetY
+
     for (let y = 0; y < room.height; y++) {
       for (let x = 0; x < room.width; x++) {
-        const rx = x + originX + offsetX
-        const ry = y + originY + offsetY
+        const rx = x + room.mapX
+        const ry = y + room.mapY
         data[ry][rx] = createTile(rx, ry, FLOOR_TILE)
       }
     }
@@ -119,7 +122,7 @@ function generateFromMaze (rng) {
         data[y][x] = createTile(x, y, FLOOR_TILE)
       }
       // TODO random doors
-      const tile = data[y][originX + offsetX + room.width]
+      const tile = data[y][room.mapX + room.width]
       tile.type = 'd'
       tile.tooltip = 'E: Open'
       tile.onInteract = 'open_door'
@@ -134,32 +137,45 @@ function generateFromMaze (rng) {
 
     // seed entities etc
     if (room.entrance) {
-      entities.push(new Ladder(originX + offsetX + 0.5, originY + offsetY + 0.5, rng.seed))
+      entities.push(new Ladder(room.mapX + 0.5, room.mapY + 0.5, rng.seed))
     } else if (room.exit) {
       entities.push(new Ghost(centerX + 0.5, centerY + 0.5))
     } else {
+
       // TODO which rooms get enemies?
-      // small chance in corridors?
-      const open = []
-      for (let y = 0; y < room.height; y++) {
-        for (let x = 0; x < room.width; x++) {
-          const rx = x + originX + offsetX
-          const ry = y + originY + offsetY
-          const tile = data[ry][rx]
-          if (!tile) continue
-          if (isEmpty(tile)) open.push(tile)
-        }
+      const hasEnemies = rng.randomChance(80)
+
+      if (hasEnemies) {
+        const enemyCount = rng.randomIntBetween(1, 3)
+        const open = getOpenRoomTiles(room, data)
+        times(enemyCount, () => {
+          const spot = rng.randomItem(open)
+          entities.push(new Bat(spot.x + 0.5, spot.y + 0.5))
+        })
       }
-      console.log(open)
-      const spot = rng.randomItem(open)
-      entities.push(new Bat(spot.x + 0.5, spot.y + 0.5))
     }
 
-    // TODO random chance to spawn in corners
-    entities.push(new Cobweb(originX + offsetX + .2, originY + offsetY + room.height - .2))
+
+      entities.push(new Cobweb(room.mapX + .2, room.mapY + room.height - .2))
+      entities.push(new Cobweb(room.mapX + room.width - .2, room.mapY + .2))
+
   })
 
   return map
+}
+
+function getOpenRoomTiles (room, data) {
+  const open = []
+  for (let y = 0; y < room.height; y++) {
+    for (let x = 0; x < room.width; x++) {
+      const rx = x + room.mapX
+      const ry = y + room.mapY
+      const tile = data[ry][rx]
+      if (!tile) continue
+      if (isEmpty(tile)) open.push(tile)
+    }
+  }
+  return open
 }
 
 function createTile (x, y, type) { return { x, y, type, offset: 0 } }
