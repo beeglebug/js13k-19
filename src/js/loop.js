@@ -3,6 +3,7 @@ available savings:
  - remove heatmap code
  - rename const -> let
  - hex to rgb func
+ - 800b of epitaph code
 */
 
 function render () {
@@ -257,11 +258,7 @@ function loop () {
     handleWeaponSway(time / 1000)
 
     // sort from far to close
-    map.entities.sort((a, b) => {
-      const aDist = distance(player, a)
-      const bDist = distance(player, b)
-      return bDist - aDist
-    })
+    map.entities.sort(byDistanceToPlayer).reverse()
 
     map.entities.forEach(entity => {
       entity.update(delta)

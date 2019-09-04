@@ -23,14 +23,14 @@ function hexToRgb (hex) {
   return [r, g, b]
 }
 
-function flat (arr2d) {
-  return [].concat(...arr2d)
+const byDistanceToPlayer = (a, b) => {
+  const aDist = distanceTo(player, a)
+  const bDist = distanceTo(player, b)
+  return aDist - bDist
 }
 
-// get player data for quick replace
-function debugSave () {
-  const data = `${player.x.toFixed(2)}, ${player.y.toFixed(2)}, ${player.direction.x.toFixed(2)}, ${player.direction.y.toFixed(2)}`
-  console.log(data)
+function flat (arr2d) {
+  return [].concat(...arr2d)
 }
 
 function tick () {
@@ -53,17 +53,12 @@ function createCanvas (width, height) {
   return [canvas, ctx]
 }
 
-function tint (image, color) {
-  const [canvas, ctx] = createCanvas(1, 1)
-  image.addEventListener('load', () => {
-    canvas.width = image.width
-    canvas.height = image.height
-    ctx.drawImage(image, 0, 0)
-    ctx.globalCompositeOperation = 'source-atop'
-    ctx.fillStyle = color
-    ctx.fillRect(0, 0, image.width, image.height)
-  })
-
+function tint (image, fill, operation = 'source-atop') {
+  const [canvas, ctx] = createCanvas(image.width, image.height)
+  ctx.drawImage(image, 0, 0)
+  ctx.globalCompositeOperation = operation
+  ctx.fillStyle = fill
+  ctx.fillRect(0, 0, image.width, image.height)
   return canvas
 }
 

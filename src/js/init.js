@@ -14,8 +14,9 @@ imgFont.src = 'font.png'
 const imgSprites = new Image()
 imgSprites.src = 'sprites.png'
 
-const whiteSprites = tint(imgSprites, '#FFFFFF')
-const redSprites = tint(imgSprites, '#FF0000')
+const sprites = []
+const whiteSprites = []
+const redSprites = []
 
 const player = new Player()
 
@@ -25,6 +26,8 @@ let interactionTarget = null
 let influenceMap
 
 let showMiniMap = false
+
+const sharedRng = new RNG()
 
 const fov = 66
 
@@ -42,11 +45,9 @@ const [canvas, ctx] = createCanvas(width, height)
 const [lightingCanvas, lightingCtx] = createCanvas(width, height)
 const [fogCanvas, fogCtx] = createCanvas(width, height)
 const [floorCanvas, floorCtx] = createCanvas(width, height)
-
 const [mapCanvas, mapCtx] = createCanvas(width, height)
 const [fowCanvas, fowCtx] = createCanvas(width, height)
 const [miniMapCanvas, miniMapCtx] = createCanvas(width, height)
-
 const [outputCanvas, outputCtx] = createCanvas(width * 2, height * 2)
 
 document.getElementById('container').appendChild(outputCanvas)
@@ -79,6 +80,17 @@ imgTextures.addEventListener('load', () => {
   textureImageData = getImageData(imgTextures)
 })
 
+imgSprites.addEventListener('load', () => {
+  // TODO smaller than 16px sprites
+  for (let x = 0; x < imgSprites.width; x += 16) {
+    const [canvas, ctx] = createCanvas(16, 16)
+    ctx.drawImage(imgSprites, x, 0, 16, 16, 0, 0, 16, 16)
+    sprites.push(canvas)
+    whiteSprites.push(tint(canvas, '#FFFFFF'))
+    redSprites.push(tint(canvas, '#FF0000'))
+  }
+})
+
 outputCanvas.addEventListener('mousedown', (e) => {
   outputCanvas.requestPointerLock()
 
@@ -87,6 +99,7 @@ outputCanvas.addEventListener('mousedown', (e) => {
 
     // starting map
 
+    // loadMap(overworld, 5.5, 13.5, 0, -1)
     // loadMap(createTestMap(), 5.5, 13.5, 0, -1)
     loadMap(generateDungeon(new RNG(123)), 6, 8, 0, -1)
 

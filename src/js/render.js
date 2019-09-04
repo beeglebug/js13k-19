@@ -55,7 +55,7 @@ function renderMap (ctx) {
 
 function renderEntity (ctx, entity) {
 
-  const { index, z, transformY, screenX, screenWidth, screenHeight } = entity
+  const { sprite, z, transformY, screenX, screenWidth, screenHeight } = entity
 
   // not in front of the camera
   if (transformY <= 0) return
@@ -75,7 +75,7 @@ function renderEntity (ctx, entity) {
   // loop through every vertical stripe of the sprite on screen
   for (let stripe = drawStartX; stripe < drawEndX; stripe++) {
     const textureLocalX = Math.floor(((stripe - (-screenWidth / 2 + screenX)) * 16) / screenWidth)
-    const textureX = textureLocalX + index * 16
+    const textureX = textureLocalX
     const textureY = 0
     const buffer = zBuffer[stripe]
 
@@ -85,7 +85,7 @@ function renderEntity (ctx, entity) {
       (buffer === null || buffer > transformY)
     ) {
       // TODO lighting based on distance
-      ctx.drawImage(entity.sprite, textureX, textureY, 1, 16, stripe, drawStartY, 1, drawEndY - drawStartY)
+      ctx.drawImage(sprite, textureX, textureY, 1, 16, stripe, drawStartY, 1, drawEndY - drawStartY)
     }
   }
 }

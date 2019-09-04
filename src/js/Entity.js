@@ -2,15 +2,16 @@ class Entity {
   constructor (x, y, index, scale = 1) {
     this.x = x
     this.y = y
-    this.index = index
+
+    this.sprite = sprites[index]
+    this.flashSprite = whiteSprites[index]
+
     this.scale = scale
     this.z = zPos(scale)
 
     this.static = true
     this.collision = true
 
-    this.sprite = imgSprites
-    this.flashSprite = whiteSprites
     this.alive = true
     this.radius = 0.3
   }
@@ -78,10 +79,12 @@ class Mob extends Entity {
     this.health -= value
     if (this.health <= 0) {
       this.kill()
-      // TODO spawn random drop
-      // TODO spawn in mid air and gravity down
-      const drop = new ManaPotion(this.x, this.y)
-      map.entities.push(drop)
+      // TODO spawn random loot drop
+      if (sharedRng.randomChance(50)) {
+        // TODO spawn in mid air and gravity down
+        const drop = new ManaPotion(this.x, this.y)
+        map.entities.push(drop)
+      }
     } else {
       this.flash(50)
     }

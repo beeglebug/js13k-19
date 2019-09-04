@@ -45,16 +45,11 @@ function pathfind (entity) {
   const near = getNeighbours(influenceMap, current.x, current.y).filter(Boolean)
   const lowest = near.sort(byWeight)[0]
   const others = near.filter(cell => cell.weight === lowest.weight)
-  console.log('pathfinding')
   let cell
   if (others.length === 0) {
     cell = others[0]
   } else {
-    cell = others.sort((a, b) => {
-      const adist = distanceTo(player, a)
-      const bdist = distanceTo(player, b)
-      return adist - bdist
-    })[0]
+    cell = others.sort(byDistanceToPlayer)[0]
   }
   // center of target
   return {

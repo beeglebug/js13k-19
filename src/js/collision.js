@@ -43,6 +43,7 @@ function getRect (tile) {
 
 function collideEntities (entities) {
 
+  // TODO split entities into projectiles / mobs / statics etc
   // filter out things which cannot have collision
   const entitiesToConsider = entities.filter(entity => {
     return !(entity instanceof ProjectileImpact)
