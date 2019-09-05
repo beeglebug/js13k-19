@@ -27,10 +27,45 @@ function render () {
 }
 
 function renderAiDebug (ctx) {
-  renderMiniMap(ctx, map)
+
+  miniMapCtx.clearRect(0, 0, width, height)
+  miniMapCtx.drawImage(mapCanvas, 0, 0)
+
+  miniMapCtx.save()
+  miniMapCtx.scale(MINI_MAP_TILE_SIZE, MINI_MAP_TILE_SIZE)
+
+  drawCircle(miniMapCtx, player.x, player.y, 1, '#ff0011')
+
+  miniMapCtx.strokeStyle = '#ff0011'
+  drawLine(
+    miniMapCtx,
+    player.x,
+    player.y,
+    (player.x + player.direction.x * 2),
+    (player.y + player.direction.y * 2)
+  )
+
   map.entities.forEach(entity => {
-    drawCircle(ctx, entity.x * MINI_MAP_TILE_SIZE, entity.y * MINI_MAP_TILE_SIZE, 5, '#ff9f00')
+    drawCircle(miniMapCtx, entity.x, entity.y, 1, '#ff9f00')
+    miniMapCtx.strokeStyle = '#ff9f00'
+    drawLine(
+      miniMapCtx,
+      entity.x,
+      entity.y,
+      (entity.x + entity.direction.x * 2),
+      (entity.y + entity.direction.y * 2)
+    )
+    if (entity.target) {
+      drawCircle(miniMapCtx, entity.target.x, entity.target.y, 1, '#baffad')
+    }
   })
+
+  miniMapCtx.restore()
+
+  const ox = Math.floor(width - map.width / 2)
+  const oy = Math.floor(height - map.height / 2)
+
+  ctx.drawImage(miniMapCanvas, ox, oy)
 }
 
 function renderFogOfWar (ctx) {

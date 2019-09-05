@@ -60,6 +60,7 @@ class Mob extends Entity {
   constructor (x, y, index, scale = 1) {
     super(x, y, index, scale)
     this.velocity = { x: 0, y: 0 }
+    this.direction = { x: 0, y: 0 }
     this.health = 50
     this.static = false
     this.speed = 2
