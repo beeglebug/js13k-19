@@ -2,8 +2,8 @@
 available savings:
  - remove heatmap code
  - rename const -> let
- - hex to rgb func
  - 800b of epitaph code
+ - fix terser properties
 */
 
 function render () {
@@ -134,7 +134,7 @@ function renderPlay () {
       const normalised = remap(clamped, min, max, 0, 1)
       eased = outQuad(normalised)
 
-      const [r, g, b] = hexToRgb(map.fog)
+      const [r, g, b] = map.fog
       fogCtx.fillStyle = `rgba(${r}, ${g}, ${b}, ${eased})`
       fogCtx.fillRect(x, drawStart, 1, sliceHeight)
     }

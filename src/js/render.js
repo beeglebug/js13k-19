@@ -74,8 +74,7 @@ function renderEntity (ctx, entity) {
 
   // loop through every vertical stripe of the sprite on screen
   for (let stripe = drawStartX; stripe < drawEndX; stripe++) {
-    const textureLocalX = Math.floor(((stripe - (-screenWidth / 2 + screenX)) * 16) / screenWidth)
-    const textureX = textureLocalX
+    const textureX = Math.floor(((stripe - (-screenWidth / 2 + screenX)) * 16) / screenWidth)
     const textureY = 0
     const buffer = zBuffer[stripe]
 

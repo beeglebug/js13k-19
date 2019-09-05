@@ -15,14 +15,6 @@ function lerp (a, b, n) {
   return (1 - n) * a + n * b
 }
 
-function hexToRgb (hex) {
-  const num = hex.replace('#', '')
-  const r = parseInt(num.substring(0,2), 16)
-  const g = parseInt(num.substring(2,4), 16)
-  const b = parseInt(num.substring(4,6), 16)
-  return [r, g, b]
-}
-
 const byDistanceToPlayer = (a, b) => {
   const aDist = distanceTo(player, a)
   const bDist = distanceTo(player, b)

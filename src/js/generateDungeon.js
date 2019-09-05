@@ -44,7 +44,7 @@ function generateFromMaze (rng) {
     data,
     floor: '#2e2827',
     ceiling: '#2e2827',
-    fog: '#2e2827',
+    fog: [46,40,39],
     fogDistance: 20,
     entities
   }
