@@ -9,24 +9,25 @@ function renderMiniMap (ctx) {
 
   miniMapCtx.clearRect(0, 0, width, height)
 
-  miniMapCtx.globalCompositeOperation = 'source-over'
-  miniMapCtx.drawImage(fowCanvas, 0, 0)
-  miniMapCtx.globalCompositeOperation = 'source-in'
+  // miniMapCtx.globalCompositeOperation = 'source-over'
+  // miniMapCtx.drawImage(fowCanvas, 0, 0)
+  // miniMapCtx.globalCompositeOperation = 'source-in'
   miniMapCtx.drawImage(mapCanvas, 0, 0)
-  miniMapCtx.globalCompositeOperation = 'source-over'
+  // miniMapCtx.globalCompositeOperation = 'source-over'
 
   drawCircle(miniMapCtx, player.x * MINI_MAP_TILE_SIZE, player.y * MINI_MAP_TILE_SIZE, 2, '#ff0011')
 
   miniMapCtx.strokeStyle = '#ff0011'
-  miniMapCtx.beginPath()
-  miniMapCtx.moveTo(player.x * MINI_MAP_TILE_SIZE, player.y * MINI_MAP_TILE_SIZE)
-  miniMapCtx.lineTo((player.x + player.direction.x * 2) * MINI_MAP_TILE_SIZE, (player.y + player.direction.y * 2) * MINI_MAP_TILE_SIZE)
-  miniMapCtx.stroke()
+  drawLine(
+    ctx,
+    player.x * MINI_MAP_TILE_SIZE,
+    player.y * MINI_MAP_TILE_SIZE,
+    (player.x + player.direction.x * 2) * MINI_MAP_TILE_SIZE,
+    (player.y + player.direction.y * 2) * MINI_MAP_TILE_SIZE
+  )
 
   const ox = Math.floor(width - ((map.width * MINI_MAP_TILE_SIZE) / 2))
   const oy = Math.floor(height - ((map.height * MINI_MAP_TILE_SIZE) / 2))
-
-  renderInfluenceMap(miniMapCtx, influenceMap)
 
   ctx.drawImage(miniMapCanvas, ox, oy)
 }
@@ -197,33 +198,10 @@ function renderGraph (ctx, graph) {
 
       ctx.translate(0.5, 0.5)
 
-      if (node.top) {
-        ctx.beginPath()
-        ctx.moveTo(xs, ys)
-        ctx.lineTo(xs + size, ys)
-        ctx.stroke()
-      }
-
-      if (node.left) {
-        ctx.beginPath()
-        ctx.moveTo(xs, ys)
-        ctx.lineTo(xs, ys + size)
-        ctx.stroke()
-      }
-
-      if (node.bottom) {
-        ctx.beginPath()
-        ctx.moveTo(xs, ys + size)
-        ctx.lineTo(xs + size, ys + size)
-        ctx.stroke()
-      }
-
-      if (node.right) {
-        ctx.beginPath()
-        ctx.moveTo(xs + size, ys)
-        ctx.lineTo(xs + size, ys + size)
-        ctx.stroke()
-      }
+      if (node.top) drawLine(ctx, xs, ys, xs + size, ys)
+      if (node.left) drawLine(ctx, xs, ys, xs, ys + size)
+      if (node.bottom) drawLine(ctx, xs, ys + size, xs + size, ys + size)
+      if (node.right) drawLine(ctx, xs + size, ys, xs + size, ys + size)
 
       ctx.translate(-0.5, -0.5)
 

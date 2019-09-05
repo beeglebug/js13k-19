@@ -15,15 +15,33 @@ function render () {
   outputCtx.drawImage(canvas, 0, 0, width * 2, height * 2)
 
   if (state === STATE_PLAY) {
+    renderAiDebug(outputCtx)
     renderDebugText(outputCtx)
     renderFogOfWar(fowCtx)
-    showMiniMap && renderMiniMap(outputCtx, map)
+    if (showMiniMap) {
+      renderMiniMap(outputCtx, map)
+      renderInfluenceMap(miniMapCtx, influenceMap)
+    }
   }
 
 }
 
+function renderAiDebug (ctx) {
+  renderMiniMap(ctx, map)
+  map.entities.forEach(entity => {
+    drawCircle(ctx, entity.x * MINI_MAP_TILE_SIZE, entity.y * MINI_MAP_TILE_SIZE, 5, '#ff9f00')
+  })
+}
+
 function renderFogOfWar (ctx) {
   drawCircle(ctx, player.x * MINI_MAP_TILE_SIZE, player.y * MINI_MAP_TILE_SIZE, 20, '#ffffff')
+}
+
+function drawLine (ctx, fromX, fromY, toX, toY) {
+  ctx.beginPath()
+  ctx.moveTo(fromX, fromY)
+  ctx.lineTo(toX, toY)
+  ctx.stroke()
 }
 
 function drawCircle (ctx, x, y, radius, color) {

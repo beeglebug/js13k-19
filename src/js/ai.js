@@ -16,7 +16,7 @@ function handleAI (entity, delta) {
       moveTowards(entity, entity.target, delta)
 
       if (canAttack(entity)) {
-        attack(entity)
+        // attack(entity)
       }
 
       if (atTarget(entity)) {
