@@ -5,8 +5,10 @@ const TweenManager = {
   update: delta => {
     _tweens.forEach(tween => {
       const { obj, prop, to, increment, callback } = tween
-      const value = obj[prop] + (increment * delta * 1000)
-      if (value >= to) {
+      const step = (increment * delta * 1000)
+      const value = obj[prop] + step
+      const dist = Math.abs(value - to)
+      if (dist < Math.abs(step)) {
         obj[prop] = to
         tween.dead = true
         return callback && callback()
