@@ -7,6 +7,8 @@ function handleAI (entity, delta) {
 
   if (entity.target) {
 
+    entity.direction = normalize(sub(entity.target, entity))
+
     const canSeeTarget = hasLineOfSight(entity, entity.target)
 
     if (canSeeTarget) {
@@ -40,7 +42,6 @@ function handleAI (entity, delta) {
   } else {
     entity.target = pathfind(entity)
   }
-
 }
 
 function canAttack (entity) {
@@ -49,7 +50,7 @@ function canAttack (entity) {
 
 // always attacks player
 function attack (entity) {
-  spawnProjectile(entity, normalize(entity.velocity), EnemyProjectile, 1000)
+  spawnProjectile(entity, EnemyProjectile, 1000)
 }
 
 function idle (entity) {

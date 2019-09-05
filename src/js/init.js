@@ -9,15 +9,20 @@ const STATE_DEAD = 3
 const imgTextures = new Image()
 imgTextures.src = 'textures.png'
 
-const imgFont = new Image()
-imgFont.src = 'font.png'
+const whiteFont = new Image()
+whiteFont.src = 'font.png'
 
 const imgSprites = new Image()
 imgSprites.src = 'sprites.png'
 
-const sprites = []
-const whiteSprites = []
-const redSprites = []
+let sprites = []
+let whiteSprites = []
+let redSprites = []
+let redFont
+
+whiteFont.addEventListener('load', () => {
+  redFont = tint(whiteFont, '#FF0000')
+})
 
 const player = new Player()
 
@@ -63,17 +68,7 @@ document.getElementById('container').appendChild(outputCanvas)
 
 let zBuffer = []
 
-const handlePointerLockChange = () => {
-  if (document.pointerLockElement === outputCanvas) {
-    state = STATE_PLAY
-    outputCanvas.classList.add('active')
-  } else {
-    state = STATE_PAUSE
-    outputCanvas.classList.remove('active')
-  }
-}
-
-let ready = false
+let booted = false
 let textureImageData
 let floorImageData = new ImageData(width, height)
 
@@ -92,26 +87,43 @@ imgSprites.addEventListener('load', () => {
   }
 })
 
-outputCanvas.addEventListener('mousedown', (e) => {
-  outputCanvas.requestPointerLock()
+outputCanvas.addEventListener('mousedown', e => {
 
-  if (!ready) {
-    audioContext = new window.AudioContext()
+  if (state !== STATE_PLAY) e.stopPropagation()
 
-    // starting map
-
-    // loadMap(overworld, 5.5, 13.5, 0, -1)
-    loadMap(createTestMap(), 5.5, 13.5, 0, -1)
-    // loadMap(generateDungeon(new RNG(123)), 6, 8, 0, -1)
-
+  if (state === STATE_PAUSE) {
     state = STATE_PLAY
+  }
 
-    ready = true
+  if (!hasPointerLock()) {
+    outputCanvas.requestPointerLock()
+  }
+
+  if (!booted) boot()
+})
+
+function boot () {
+  audioContext = new window.AudioContext()
+  // loadMap(overworld, 5.5, 13.5, 0, -1)
+  loadMap(createTestMap(), 5.5, 13.5, 0, -1)
+  // loadMap(generateDungeon(new RNG(123)), 6, 8, 0, -1)
+  state = STATE_PLAY
+  booted = true
+}
+
+const hasPointerLock = () => document.pointerLockElement === outputCanvas
+
+document.addEventListener('pointerlockchange', () => {
+  if (hasPointerLock()) {
+    state = STATE_PLAY
+    outputCanvas.classList.add('active')
+  } else {
+    state = STATE_PAUSE
+    outputCanvas.classList.remove('active')
   }
 })
-document.addEventListener('pointerlockchange', handlePointerLockChange)
 
-bindKeyboard(document)
+bindInput(document)
 
 const overworld = generateOverworld()
 

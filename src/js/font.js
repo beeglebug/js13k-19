@@ -31,7 +31,7 @@ function renderText (ctx, text, x, y) {
     if (sx === null) return
     const ox = i * 4
     ctx.drawImage(
-      imgFont,
+      whiteFont,
       sx, 0,
       3, 5,
       x + ox,

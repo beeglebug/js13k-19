@@ -60,7 +60,8 @@ const createTestMap = () => ({
     '-.........-',
     '---~--~~---',
   ]),
-  fog: '#A3B1BD',
+  fog: '#2e2827',
+  fogDistance: 20,
   entities: [
     new Bat(5.5, 6)
   ]

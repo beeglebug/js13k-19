@@ -163,10 +163,7 @@ function renderHUD (ctx) {
 
 function renderWeapon (ctx) {
   ctx.drawImage(imgSprites, 96, 0, 16, 16, Math.floor(onScreenWeapon.x), Math.floor(onScreenWeapon.y), 16 * 8, 16 * 8)
-  if (player.attackCoolDown > 0) {
-    ctx.fillStyle = '#FFFFFF'
-    ctx.fillRect(Math.floor(onScreenWeapon.x + 24), Math.floor(onScreenWeapon.y + 40), 16, 16)
-  }
+  // TODO muzzle flash
 }
 
 function renderGraph (ctx, graph) {
