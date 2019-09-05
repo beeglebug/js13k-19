@@ -79,14 +79,7 @@ class Mob extends Entity {
     this.health -= value
     if (this.health <= 0) {
       this.kill()
-      // TODO spawn random loot drop
-      if (sharedRng.randomChance(50)) {
-        const drop = new ManaPotion(this.x, this.y)
-        const targetZ = drop.z
-        drop.z = 0.2
-        TweenManager.create(drop, 'z', targetZ, 200)
-        map.entities.push(drop)
-      }
+      dropLoot(this)
     } else {
       this.flash(50)
     }
@@ -110,8 +103,10 @@ class Player extends Entity {
     }
     this.mapX = 0
     this.mapY = 0
-    this.health = 100
-    this.mana = 100
+    this.health = 50
+    this.maxHealth = 100
+    this.mana = 50
+    this.maxMana = 100
     this.static = false
   }
 
@@ -126,6 +121,20 @@ class ManaPotion extends Entity {
     super(x, y, 1, 0.5)
     this.radius = 0.1
     this.collectible = true
+  }
+  collect (entity) {
+    entity.mana = Math.min(entity.mana + 20, entity.maxMana)
+  }
+}
+
+class HealthPotion extends Entity {
+  constructor (x, y) {
+    super(x, y, 9, 0.5)
+    this.radius = 0.1
+    this.collectible = true
+  }
+  collect (entity) {
+    entity.health = Math.min(entity.health + 20, entity.maxHealth)
   }
 }
 
@@ -151,7 +160,7 @@ class Ghost extends Mob {
     super(x, y, 0, 0.8)
     this.radius = 0.3
     this.health = 50
-    this.flashSprite = redSprites
+    this.flashSprite = redSprites[0]
   }
 }
 
@@ -166,8 +175,8 @@ class Bat extends Mob {
 
 // TODO enemy projectiles
 class Projectile extends Entity {
-  constructor (x, y, speed, direction) {
-    super(x, y, 2, 0.3)
+  constructor (x, y, index, speed, direction) {
+    super(x, y, index, 0.3)
     this.z = 0
     this.source = player
     this.radius = 0.1
@@ -181,6 +190,18 @@ class Projectile extends Entity {
   }
   collide (other, collision) {
     return emit('collide_projectile_entity', this, other, collision)
+  }
+}
+
+class PlayerProjectile extends Projectile {
+  constructor (x, y, speed, direction) {
+    super(x, y, 2, speed, direction)
+  }
+}
+
+class EnemyProjectile extends Projectile {
+  constructor (x, y, speed, direction) {
+    super(x, y, 10, speed, direction)
   }
 }
 
@@ -199,4 +220,14 @@ class Grave extends Entity {
     this.onInteract = 'enter_tomb'
     this.tooltip = generateEpitaph(seed) + '\n\nE: Enter Tomb'
   }
+}
+
+function dropLoot (entity) {
+  if (!sharedRng.randomChance(100)) return
+  const dropType = sharedRng.randomItem([ManaPotion, HealthPotion])
+  const drop = new dropType(entity.x, entity.y)
+  const targetZ = drop.z
+  drop.z = 0.2
+  TweenManager.create(drop, 'z', targetZ, 200)
+  map.entities.push(drop)
 }

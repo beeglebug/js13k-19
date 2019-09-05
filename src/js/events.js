@@ -9,8 +9,8 @@ on('collide_player_entity', (entity, collision) => {
 
 on('collide_player_collectible', entity => {
   soundCollect()
+  entity.collect(player)
   entity.kill()
-  player.mana = Math.min(player.mana + 100, 100)
 })
 
 

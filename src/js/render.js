@@ -142,10 +142,10 @@ function renderHUD (ctx) {
 
   renderText(ctx, 'health', 5, 160)
 
-  ctx.fillStyle = '#76151e'
+  ctx.fillStyle = '#57161c'
   ctx.fillRect(5, 170, barWidth, 5)
 
-  const currentHealthWidth = remap(player.health, 0, 100, 0, barWidth)
+  const currentHealthWidth = remap(player.health, 0, player.maxHealth, 0, barWidth)
 
   ctx.fillStyle = '#ba1826'
   ctx.fillRect(5, 170, currentHealthWidth, 5)
@@ -155,7 +155,7 @@ function renderHUD (ctx) {
   ctx.fillStyle = '#102746'
   ctx.fillRect(60, 170, barWidth, 5)
 
-  const currentManaWidth = remap(player.mana, 0, 100, 0, barWidth)
+  const currentManaWidth = remap(player.mana, 0, player.maxMana, 0, barWidth)
 
   ctx.fillStyle = '#2474ba'
   ctx.fillRect(60, 170, currentManaWidth, 5)
