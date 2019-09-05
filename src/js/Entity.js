@@ -81,8 +81,10 @@ class Mob extends Entity {
       this.kill()
       // TODO spawn random loot drop
       if (sharedRng.randomChance(50)) {
-        // TODO spawn in mid air and gravity down
         const drop = new ManaPotion(this.x, this.y)
+        const targetZ = drop.z
+        drop.z = 0.2
+        TweenManager.create(drop, 'z', targetZ, 200)
         map.entities.push(drop)
       }
     } else {
