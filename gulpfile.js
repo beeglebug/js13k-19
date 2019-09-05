@@ -28,7 +28,12 @@ const compile = () => src('src/index.html')
   .pipe(concat('app.js'))
   .pipe(removeCode({ production: true }))
   .pipe(terser({
-    mangle: true,
+    mangle: {
+      // TODO work out the word which needs reserving to fix textures
+      // properties: {
+      //   reserved: ['movementX', 'movementY', 'imageSmoothingEnabled']
+      // }
+    },
     toplevel: true,
   }))
 
