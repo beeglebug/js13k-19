@@ -29,7 +29,10 @@ function handleAI (entity, delta) {
   const canSeePlayer = hasLineOfSight(entity, player)
 
   if (canSeePlayer) {
-    entity.target = player
+    // stay a bit away from player
+    const distance = 2
+    const offset = multiply(normalize(sub(player, entity)), distance)
+    entity.target = sub(player, offset)
   } else {
     entity.target = pathfind(entity)
   }
