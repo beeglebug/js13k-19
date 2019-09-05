@@ -4,7 +4,6 @@ const KEY_A = 65
 const KEY_S = 83
 const KEY_D = 68
 const KEY_M = 77
-const KEY_ESC = 27
 const MOUSE_LEFT = 1
 
 const mousePosition = { x: 0, y: 0 }
@@ -22,9 +21,6 @@ function handleKeydown (e) {
   }
   if (key === KEY_M && !downKeys[key]) {
     showMiniMap = !showMiniMap
-  }
-  if (key === KEY_ESC && !downKeys[key]) {
-    state = STATE_PAUSE
   }
   downKeys[key] = true
 }

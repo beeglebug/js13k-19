@@ -140,7 +140,7 @@ function renderHUD (ctx) {
 
   const barWidth = 40
 
-  renderText(ctx, 'health', 5, 160)
+  renderText(ctx, whiteFont, 'health', 5, 160)
 
   ctx.fillStyle = '#57161c'
   ctx.fillRect(5, 170, barWidth, 5)
@@ -150,7 +150,7 @@ function renderHUD (ctx) {
   ctx.fillStyle = '#ba1826'
   ctx.fillRect(5, 170, currentHealthWidth, 5)
 
-  renderText(ctx, 'mana', 60, 160)
+  renderText(ctx, whiteFont, 'mana', 60, 160)
 
   ctx.fillStyle = '#102746'
   ctx.fillRect(60, 170, barWidth, 5)

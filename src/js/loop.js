@@ -87,25 +87,27 @@ function drawCircle (ctx, x, y, radius, color) {
 function renderDead () {
   ctx.fillStyle = '#000000'
   ctx.fillRect(0, 0, width, height)
-  renderCenteredText(ctx, 'YOU ARE DEAD', 140, 70)
+  renderCenteredText(ctx, redFont, 'YOU DIED', 80)
 }
 
 function renderPause () {
   ctx.fillStyle = '#000000'
   ctx.fillRect(0, 0, width, height)
-  renderCenteredText(ctx, 'paused', 70)
-  renderCenteredText(ctx, 'click to resume', 90)
+  renderCenteredText(ctx, whiteFont, 'paused', 70)
+  renderCenteredText(ctx, whiteFont, 'click to resume', 90)
 }
 
 function renderTitle () {
   ctx.fillStyle = '#000000'
   ctx.fillRect(0, 0, width, height)
-  renderText(ctx, '   Controls', 20, 10)
-  renderText(ctx, ' WASD : move', 20, 25)
-  renderText(ctx, '    E : interact', 20, 35)
-  renderText(ctx, 'CLICK : shoot', 20, 45)
-  renderText(ctx, '    M : map', 20, 55)
-  renderText(ctx, 'click to start', 10, 100)
+  renderCenteredText(ctx, redFont, 'TITLE GOES HERE', 50)
+  renderCenteredText(ctx, whiteFont, 'click to start', 85)
+  renderCenteredText(ctx, whiteFont, 'Controls', 120)
+  // padded to center the colon
+  renderCenteredText(ctx, whiteFont, '   WASD : move    ', 130)
+  renderCenteredText(ctx, whiteFont, '      E : interact', 140)
+  renderCenteredText(ctx, whiteFont, '  CLICK : shoot   ', 150)
+  renderCenteredText(ctx, whiteFont, '      M : map     ', 160)
 }
 
 function renderPlay () {

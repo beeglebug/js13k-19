@@ -1,8 +1,6 @@
 const padding = 4
 const lineHeight = 8
 
-// TODO center text
-// TODO text color (via second canvas)
 function renderTextBox (ctx, text, background = '#000000') {
   const lines = text.split('\n').map(str => str.trim())
   const max = [...lines].sort((a, b) => (b.length - a.length))[0].length
@@ -21,23 +19,23 @@ function renderTextBox (ctx, text, background = '#000000') {
 
   lines.forEach((line, i) => {
     const lineY = (i * lineHeight) + padding
-    renderText(ctx, line, boxX + padding, boxY + lineY)
+    renderCenteredText(ctx, whiteFont, line, boxY + lineY)
   })
 }
 
-function renderCenteredText (ctx, text, y) {
+function renderCenteredText (ctx, font, text, y) {
   const textWidth = text.length * 4
   const x = width / 2 - textWidth / 2
-  return renderText(ctx, text, x, y)
+  return renderText(ctx, font, text, x, y)
 }
 
-function renderText (ctx, text, x, y) {
+function renderText (ctx, font, text, x, y) {
   text.toUpperCase().split('').forEach((char, i) => {
     const sourceX = getX(char)
     if (sourceX === null) return
     const offsetX = i * 4
     ctx.drawImage(
-      whiteFont,
+      font,
       sourceX, 0,
       3, 5,
       x + offsetX,
