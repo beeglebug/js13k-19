@@ -63,9 +63,11 @@ class Mob extends Entity {
     this.health = 50
     this.static = false
     this.speed = 2
+    this.attackCooldown = 1000
   }
 
   update (delta) {
+    handleCooldown(this, delta)
     handleAI(this, delta)
     collideWorld(this)
   }
@@ -108,6 +110,19 @@ class Player extends Entity {
     this.mana = 50
     this.maxMana = 100
     this.static = false
+    this.attackCooldown = 200
+  }
+
+  update (delta) {
+    super.update(delta)
+    handleCooldown(this, delta)
+  }
+
+  damage (value) {
+    this.health -= value
+    if (this.health <= 0) {
+      state = STATE_DEAD
+    }
   }
 
   collide (other, collision) {
@@ -178,7 +193,6 @@ class Projectile extends Entity {
   constructor (x, y, index, speed, direction) {
     super(x, y, index, 0.3)
     this.z = 0
-    this.source = player
     this.radius = 0.1
     this.speed = speed
     this.direction = direction
@@ -230,4 +244,11 @@ function dropLoot (entity) {
   drop.z = 0.2
   TweenManager.create(drop, 'z', targetZ, 200)
   map.entities.push(drop)
+}
+
+function handleCooldown (entity, delta) {
+  if (entity.attackCooldown > 0) {
+    entity.attackCooldown -= delta * 1000
+    if (entity.attackCooldown < 0) entity.attackCooldown = 0
+  }
 }

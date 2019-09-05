@@ -10,6 +10,7 @@ function render () {
   if (state === STATE_TITLE) renderTitle()
   if (state === STATE_PAUSE) renderPause()
   if (state === STATE_PLAY) renderPlay()
+  if (state === STATE_DEAD) renderDead()
 
   outputCtx.drawImage(canvas, 0, 0, width * 2, height * 2)
 
@@ -31,6 +32,12 @@ function drawCircle (ctx, x, y, radius, color) {
   ctx.arc(x, y, radius, 0, Math.PI * 2)
   ctx.fill()
   ctx.closePath()
+}
+
+function renderDead () {
+  ctx.fillStyle = '#000000'
+  ctx.fillRect(0, 0, width, height)
+  renderText(ctx, 'YOU ARE DEAD', 140, 70)
 }
 
 function renderPause () {
@@ -268,12 +275,6 @@ function loop () {
     collideEntities(map.entities)
 
     interactionTarget = getInteractionTarget(map.entities)
-
-    // TODO more generic cooldowns for enemies too
-    if (shootCoolDown > 0) {
-      shootCoolDown -= delta * 1000
-      if (shootCoolDown < 0) shootCoolDown = 0
-    }
 
     // remove dead entities
     map.entities = map.entities.filter(e => e.alive)

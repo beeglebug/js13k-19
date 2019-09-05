@@ -4,6 +4,7 @@ const FLOOR_TILE = '.'
 const STATE_TITLE = 0
 const STATE_PAUSE = 1
 const STATE_PLAY = 2
+const STATE_DEAD = 3
 
 const imgTextures = new Image()
 imgTextures.src = 'textures.png'
@@ -17,7 +18,6 @@ imgSprites.src = 'sprites.png'
 const sprites = []
 const whiteSprites = []
 const redSprites = []
-const redishSprites = []
 
 const player = new Player()
 

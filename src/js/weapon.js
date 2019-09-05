@@ -1,4 +1,4 @@
-let weapon = {
+let onScreenWeapon = {
   x: 170,
   y: 70,
   originX: 170,
@@ -7,8 +7,6 @@ let weapon = {
   offsetY: 0,
 }
 
-// start it high so initial click doesn't fire
-let shootCoolDown = 500
 const SHOOT_DELAY = 200
 const SHOOT_COST = 2
 
@@ -29,28 +27,31 @@ function handleWeaponSway (time) {
   let y = verticalSwayAmount * Math.sin((swaySpeed * 2) * time)
   let x = horizontalSwayAmount * Math.sin(swaySpeed * time)
 
-  weapon.offsetX = lerp(0, weapon.offsetX, 0.1)
-  weapon.offsetY = lerp(0, weapon.offsetY, 0.1)
+  onScreenWeapon.offsetX = lerp(0, onScreenWeapon.offsetX, 0.1)
+  onScreenWeapon.offsetY = lerp(0, onScreenWeapon.offsetY, 0.1)
 
-  weapon.x = weapon.originX + x + weapon.offsetX
-  weapon.y = weapon.originY + y + weapon.offsetY
+  onScreenWeapon.x = onScreenWeapon.originX + x + onScreenWeapon.offsetX
+  onScreenWeapon.y = onScreenWeapon.originY + y + onScreenWeapon.offsetY
 }
 
+// player shooting
 function shoot () {
-  weapon.offsetX = -50
-  weapon.offsetY = -50
-  if (shootCoolDown !== 0) return
+  onScreenWeapon.offsetX = -50
+  onScreenWeapon.offsetY = -50
+  if (player.attackCooldown > 0) return
   if (player.mana < SHOOT_COST) return
-  const offset = 0.25
-  const x = player.x + player.direction.x * offset
-  const y = player.y + player.direction.y * offset
-  const direction = copy(player.direction)
-  const speed = 10
-  const bullet = new PlayerProjectile(x, y, speed, direction)
-  map.entities.push(bullet)
-
   player.mana -= SHOOT_COST
+  spawnProjectile(player, player.direction, PlayerProjectile, SHOOT_DELAY)
   soundShoot()
-  shootCoolDown += SHOOT_DELAY
+}
 
+function spawnProjectile (entity, direction, ProjectileClass, delay) {
+  const offset = 0.25
+  const x = entity.x + direction.x * offset
+  const y = entity.y + direction.y * offset
+  const speed = 10
+  const bullet = new ProjectileClass(x, y, speed, copy(direction))
+  bullet.source = entity
+  map.entities.push(bullet)
+  entity.attackCooldown += delay
 }

@@ -13,6 +13,10 @@ function handleAI (entity, delta) {
 
       moveTowards(entity, entity.target, delta)
 
+      if (canAttack(entity)) {
+        attack(entity)
+      }
+
       if (atTarget(entity)) {
         entity.x = entity.target.x
         entity.y = entity.target.y
@@ -30,13 +34,22 @@ function handleAI (entity, delta) {
 
   if (canSeePlayer) {
     // stay a bit away from player
-    const distance = 2
+    const distance = 1
     const offset = multiply(normalize(sub(player, entity)), distance)
     entity.target = sub(player, offset)
   } else {
     entity.target = pathfind(entity)
   }
 
+}
+
+function canAttack (entity) {
+  return entity.attackCooldown === 0
+}
+
+// always attacks player
+function attack (entity) {
+  spawnProjectile(entity, normalize(entity.velocity), EnemyProjectile, 1000)
 }
 
 function idle (entity) {
