@@ -15,21 +15,16 @@ function renderMiniMap (ctx) {
   miniMapCtx.drawImage(mapCanvas, 0, 0)
   miniMapCtx.globalCompositeOperation = 'source-over'
 
-  miniMapCtx.save()
-  miniMapCtx.scale(2, 2)
-
-  drawCircle(miniMapCtx, player.x, player.y, 2, '#ff0011')
+  drawCircle(miniMapCtx, player.x * MINI_MAP_TILE_SIZE, player.y * MINI_MAP_TILE_SIZE, 2, '#ff0011')
 
   miniMapCtx.strokeStyle = '#ff0011'
   drawLine(
     miniMapCtx,
-    player.x,
-    player.y,
-    (player.x + player.direction.x * 2),
-    (player.y + player.direction.y * 2)
+    player.x * MINI_MAP_TILE_SIZE,
+    player.y * MINI_MAP_TILE_SIZE,
+    (player.x + player.direction.x * 2) * MINI_MAP_TILE_SIZE,
+    (player.y + player.direction.y * 2) * MINI_MAP_TILE_SIZE
   )
-
-  miniMapCtx.restore()
 
   const ox = Math.floor(width - ((map.width * MINI_MAP_TILE_SIZE) / 2))
   const oy = Math.floor(height - ((map.height * MINI_MAP_TILE_SIZE) / 2))

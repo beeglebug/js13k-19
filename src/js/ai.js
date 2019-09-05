@@ -5,6 +5,15 @@ function handleAI (entity, delta) {
 
   if (!nearPlayer) return idle(entity)
 
+  const canSeePlayer = hasLineOfSight(entity, player)
+
+  if (canSeePlayer) {
+    // stay a bit away from player
+    const distance = 1
+    const offset = multiply(normalize(sub(player, entity)), distance)
+    entity.target = sub(player, offset)
+  }
+
   if (entity.target) {
 
     entity.direction = normalize(sub(entity.target, entity))
@@ -16,7 +25,7 @@ function handleAI (entity, delta) {
       moveTowards(entity, entity.target, delta)
 
       if (canAttack(entity)) {
-        // attack(entity)
+        attack(entity)
       }
 
       if (atTarget(entity)) {
@@ -29,18 +38,6 @@ function handleAI (entity, delta) {
       entity.target = pathfind(entity)
     }
 
-    return
-  }
-
-  const canSeePlayer = hasLineOfSight(entity, player)
-
-  if (canSeePlayer) {
-    // stay a bit away from player
-    const distance = 1
-    const offset = multiply(normalize(sub(player, entity)), distance)
-    entity.target = sub(player, offset)
-  } else {
-    entity.target = pathfind(entity)
   }
 }
 
@@ -50,7 +47,8 @@ function canAttack (entity) {
 
 // always attacks player
 function attack (entity) {
-  spawnProjectile(entity, EnemyProjectile, 1000)
+  console.log('pew')
+  spawnProjectile(entity, EnemyProjectile, 5, 1000)
 }
 
 function idle (entity) {

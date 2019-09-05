@@ -64,6 +64,7 @@ function collideEntityPair (primary, secondary) {
   // "broadphase" checks
   if (primary.static) return
   if (!primary.collision) return
+  if (primary instanceof Projectile && secondary instanceof Projectile) return // bullets cant hit each other
   if (primary instanceof Projectile && secondary.collectible) return // bullets cant hit collectibles
   if (primary.source === secondary) return // projectiles ignore origin
 

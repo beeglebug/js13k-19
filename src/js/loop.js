@@ -15,7 +15,7 @@ function render () {
   outputCtx.drawImage(canvas, 0, 0, width * 2, height * 2)
 
   if (state === STATE_PLAY) {
-    renderAiDebug(outputCtx)
+    // renderAiDebug(outputCtx)
     renderDebugText(outputCtx)
     renderFogOfWar(fowCtx)
     if (showMiniMap) {
@@ -31,32 +31,29 @@ function renderAiDebug (ctx) {
   miniMapCtx.clearRect(0, 0, width, height)
   miniMapCtx.drawImage(mapCanvas, 0, 0)
 
-  miniMapCtx.save()
-  miniMapCtx.scale(MINI_MAP_TILE_SIZE, MINI_MAP_TILE_SIZE)
-
-  drawCircle(miniMapCtx, player.x, player.y, 1, '#ff0011')
+  drawCircle(miniMapCtx, player.x * MINI_MAP_TILE_SIZE, player.y * MINI_MAP_TILE_SIZE, 1.5, '#ff0011')
 
   miniMapCtx.strokeStyle = '#ff0011'
   drawLine(
     miniMapCtx,
-    player.x,
-    player.y,
-    (player.x + player.direction.x * 2),
-    (player.y + player.direction.y * 2)
+    player.x * MINI_MAP_TILE_SIZE,
+    player.y * MINI_MAP_TILE_SIZE,
+    (player.x + player.direction.x * 2) * MINI_MAP_TILE_SIZE,
+    (player.y + player.direction.y * 2) * MINI_MAP_TILE_SIZE
   )
 
   map.entities.forEach(entity => {
-    drawCircle(miniMapCtx, entity.x, entity.y, 1, '#ff9f00')
+    drawCircle(miniMapCtx, entity.x, entity.y, 1.5, '#ff9f00')
     miniMapCtx.strokeStyle = '#ff9f00'
     drawLine(
       miniMapCtx,
-      entity.x,
-      entity.y,
-      (entity.x + entity.direction.x * 2),
-      (entity.y + entity.direction.y * 2)
+      entity.x * MINI_MAP_TILE_SIZE,
+      entity.y * MINI_MAP_TILE_SIZE,
+      (entity.x + entity.direction.x * 2) * MINI_MAP_TILE_SIZE,
+      (entity.y + entity.direction.y * 2) * MINI_MAP_TILE_SIZE
     )
     if (entity.target) {
-      drawCircle(miniMapCtx, entity.target.x, entity.target.y, 1, '#baffad')
+      drawCircle(miniMapCtx, entity.target.x * MINI_MAP_TILE_SIZE, entity.target.y * MINI_MAP_TILE_SIZE, 1.5, '#baffad')
     }
   })
 
