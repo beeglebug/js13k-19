@@ -25,16 +25,22 @@ function renderTextBox (ctx, text, background = '#000000') {
   })
 }
 
+function renderCenteredText (ctx, text, y) {
+  const textWidth = text.length * 4
+  const x = width / 2 - textWidth / 2
+  return renderText(ctx, text, x, y)
+}
+
 function renderText (ctx, text, x, y) {
   text.toUpperCase().split('').forEach((char, i) => {
-    const sx = getX(char)
-    if (sx === null) return
-    const ox = i * 4
+    const sourceX = getX(char)
+    if (sourceX === null) return
+    const offsetX = i * 4
     ctx.drawImage(
       whiteFont,
-      sx, 0,
+      sourceX, 0,
       3, 5,
-      x + ox,
+      x + offsetX,
       y,
       3, 5
     )

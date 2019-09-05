@@ -87,14 +87,14 @@ function drawCircle (ctx, x, y, radius, color) {
 function renderDead () {
   ctx.fillStyle = '#000000'
   ctx.fillRect(0, 0, width, height)
-  renderText(ctx, 'YOU ARE DEAD', 140, 70)
+  renderCenteredText(ctx, 'YOU ARE DEAD', 140, 70)
 }
 
 function renderPause () {
   ctx.fillStyle = '#000000'
   ctx.fillRect(0, 0, width, height)
-  renderText(ctx, 'paused', 140, 70)
-  renderText(ctx, 'click to resume', 122, 90)
+  renderCenteredText(ctx, 'paused', 70)
+  renderCenteredText(ctx, 'click to resume', 90)
 }
 
 function renderTitle () {
