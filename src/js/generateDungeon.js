@@ -22,16 +22,28 @@ function shouldBeWall (map, x, y) {
   return near.filter(tile => tile && tile.type === FLOOR_TILE).length > 0
 }
 
+let miniMapWidth = 0
+let miniMapHeight = 0
 
 function generateFromMaze (rng) {
 
   const width = 5
   const height = 5
-  const size = 15
+  const cellSize = 15
+
+  miniMapWidth = cellSize * width * MINI_MAP_TILE_SIZE
+  miniMapHeight = cellSize * height * MINI_MAP_TILE_SIZE
+
+  miniMapCanvas.width = miniMapWidth
+  miniMapCanvas.height = miniMapHeight
+  mapCanvas.width = miniMapWidth
+  mapCanvas.height = miniMapHeight
+  fowCanvas.width = miniMapWidth
+  fowCanvas.height = miniMapHeight
 
   const data = []
-  for (let y = 0; y < height * size; y++) {
-    data[y] = Array.from(new Array(width * size), () => null)
+  for (let y = 0; y < height * cellSize; y++) {
+    data[y] = Array.from(new Array(width * cellSize), () => null)
   }
 
   const maze = generateMaze(rng, width, height, 0, 0)
@@ -39,8 +51,8 @@ function generateFromMaze (rng) {
   const entities = []
 
   const map = {
-    width: width * size,
-    height: height * size,
+    width: width * cellSize,
+    height: height * cellSize,
     data,
     floor: '#2e2827',
     ceiling: '#2e2827',
@@ -66,18 +78,18 @@ function generateFromMaze (rng) {
       room.height = 3
     }
 
-    const halfSize = Math.floor(size / 2)
+    const halfSize = Math.floor(cellSize / 2)
 
     // TODO randomise offset slightly (without breaking doors)
 
-    const originX = room.x * size
-    const originY = room.y * size
+    const originX = room.x * cellSize
+    const originY = room.y * cellSize
 
     const centerX = originX + halfSize
     const centerY = originY + halfSize
 
-    const offsetX = Math.floor((size - room.width) / 2)
-    const offsetY = Math.floor((size - room.height) / 2)
+    const offsetX = Math.floor((cellSize - room.width) / 2)
+    const offsetY = Math.floor((cellSize - room.height) / 2)
 
     room.mapX = originX + offsetX
     room.mapY = originY + offsetY
@@ -99,7 +111,7 @@ function generateFromMaze (rng) {
 
     if (room.bottom === false) {
       const x = centerX
-      for (let y = centerY; y <= originY + size; y++) {
+      for (let y = centerY; y <= originY + cellSize; y++) {
         data[y][x] = createTile(x, y, FLOOR_TILE)
       }
       // TODO random doors
@@ -118,7 +130,7 @@ function generateFromMaze (rng) {
 
     if (room.right === false) {
       const y = centerY
-      for (let x = centerX; x <= originX + size; x++) {
+      for (let x = centerX; x <= originX + cellSize; x++) {
         data[y][x] = createTile(x, y, FLOOR_TILE)
       }
       // TODO random doors

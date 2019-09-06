@@ -274,7 +274,6 @@ function renderPlay () {
   renderHUD(ctx)
   renderWeapon(ctx)
 
-
   if (interactionTarget && interactionTarget.tooltip) {
     renderTextBox(ctx, interactionTarget.tooltip, '#222423')
   }

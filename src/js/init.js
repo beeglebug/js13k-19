@@ -95,6 +95,11 @@ outputCanvas.addEventListener('mousedown', e => {
     state = STATE_PLAY
   }
 
+  if (state === STATE_DEAD) {
+    state = STATE_TITLE
+    reset()
+  }
+
   if (!hasPointerLock()) {
     outputCanvas.requestPointerLock()
   }
@@ -102,9 +107,13 @@ outputCanvas.addEventListener('mousedown', e => {
   if (!booted) boot()
 })
 
+function reset () {
+
+}
+
 function boot () {
   audioContext = new window.AudioContext()
-  // loadMap(overworld, 5.5, 13.5, 0, -1)
+  // loadMap(overworld, 5.5, 5.5, 0, -1)
   // loadMap(createTestMap(), 5.5, 13.5, 0, -1)
   loadMap(generateDungeon(new RNG()), 6, 8, 0, -1)
   state = STATE_PLAY

@@ -73,8 +73,8 @@ function loadMap (newMap, x, y, dx, dy) {
   player.y = y
   player.direction.x = dx
   player.direction.y = dy
-  fowCtx.clearRect(0, 0, width, height)
-  mapCtx.clearRect(0, 0, width, height)
+  fowCtx.clearRect(0, 0, miniMapWidth, miniMapHeight)
+  mapCtx.clearRect(0, 0, miniMapWidth, miniMapHeight)
   renderMap(mapCtx)
   influenceMap = createInfluenceMap(map)
   populateInfluenceMap(influenceMap, { x: Math.floor(player.x), y: Math.floor(player.y) })

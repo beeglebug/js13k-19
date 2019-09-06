@@ -106,9 +106,9 @@ class Player extends Entity {
     }
     this.mapX = 0
     this.mapY = 0
-    this.health = 50
+    this.health = 100
     this.maxHealth = 100
-    this.mana = 50
+    this.mana = 100
     this.maxMana = 100
     this.static = false
     this.attackCooldown = 200
@@ -175,7 +175,7 @@ class Ghost extends Mob {
   constructor (x, y) {
     super(x, y, 0, 0.8)
     this.radius = 0.3
-    this.health = 50
+    this.health = 100
     this.flashSprite = redSprites[0]
   }
 }
@@ -238,7 +238,7 @@ class Grave extends Entity {
 }
 
 function dropLoot (entity) {
-  if (!sharedRng.randomChance(100)) return
+  if (!sharedRng.randomChance(50)) return
   const dropType = sharedRng.randomItem([ManaPotion, HealthPotion])
   const drop = new dropType(entity.x, entity.y)
   const targetZ = drop.z

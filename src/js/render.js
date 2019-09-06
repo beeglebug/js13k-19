@@ -7,7 +7,7 @@ const MINI_MAP_TILE_SIZE = 3
 
 function renderMiniMap (ctx) {
 
-  miniMapCtx.clearRect(0, 0, width, height)
+  miniMapCtx.clearRect(0, 0, miniMapWidth, miniMapHeight)
 
   miniMapCtx.globalCompositeOperation = 'source-over'
   miniMapCtx.drawImage(fowCanvas, 0, 0)
@@ -29,7 +29,9 @@ function renderMiniMap (ctx) {
   const ox = Math.floor(width - ((map.width * MINI_MAP_TILE_SIZE) / 2))
   const oy = Math.floor(height - ((map.height * MINI_MAP_TILE_SIZE) / 2))
 
+  ctx.globalAlpha = 0.5
   ctx.drawImage(miniMapCanvas, ox, oy)
+  ctx.globalAlpha = 1
 }
 
 function renderMap (ctx) {
