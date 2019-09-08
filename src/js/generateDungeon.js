@@ -26,7 +26,7 @@ function generateFromMaze (rng) {
 
   const width = 5
   const height = 5
-  const cellSize = 15
+  const cellSize = 11
 
   const data = []
   for (let y = 0; y < height * cellSize; y++) {
@@ -53,26 +53,27 @@ function generateFromMaze (rng) {
 
   flat(maze.data).forEach(room => {
 
-    let roomSize = rng.randomItem([5, 7, 7, 9, 9, 9, 11, 11])
+    let roomSize = rng.randomItem([5, 7, 7, 9, 9, 9])
 
     if (room.entrance) roomSize = 5
 
     room.width = roomSize
     room.height = roomSize
 
-    if (room.top === false && room.bottom === false && rng.randomChance(33)) {
+    // turn some rooms with opposite doors into corridors
+    if (room.top === false && room.bottom === false && rng.randomChance(30)) {
       room.width = 3
-      room.height = 11
+      room.height = 9
+      room.corridoor = true
     }
 
-    if (room.left === false && room.right === false && rng.randomChance(33)) {
-      room.width = 11
+    if (room.left === false && room.right === false && rng.randomChance(30)) {
+      room.width = 9
       room.height = 3
+      room.corridoor = true
     }
 
     const halfSize = Math.floor(cellSize / 2)
-
-    // TODO randomise offset slightly (without breaking doors)
 
     const originX = room.x * cellSize
     const originY = room.y * cellSize
@@ -80,8 +81,8 @@ function generateFromMaze (rng) {
     const centerX = originX + halfSize
     const centerY = originY + halfSize
 
-    const offsetX = Math.floor((cellSize - room.width) / 2)
-    const offsetY = Math.floor((cellSize - room.height) / 2)
+    let offsetX = Math.floor((cellSize - room.width) / 2)
+    let offsetY = Math.floor((cellSize - room.height) / 2)
 
     room.mapX = originX + offsetX
     room.mapY = originY + offsetY
@@ -107,7 +108,7 @@ function generateFromMaze (rng) {
         data[y][x] = createTile(x, y, FLOOR_TILE)
       }
       // TODO random doors
-      const tile = data[originY + offsetY + room.height][x]
+      const tile = data[originY + cellSize - 1][x]
       tile.type = 'D'
       tile.tooltip = 'E: Open'
       tile.onInteract = 'open_door'
@@ -126,7 +127,7 @@ function generateFromMaze (rng) {
         data[y][x] = createTile(x, y, FLOOR_TILE)
       }
       // TODO random doors
-      const tile = data[y][room.mapX + room.width]
+      const tile = data[y][originX + cellSize - 1]
       tile.type = 'd'
       tile.tooltip = 'E: Open'
       tile.onInteract = 'open_door'
