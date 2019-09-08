@@ -174,3 +174,9 @@ function warpToBoss () {
   player.x = exit.mapX + 1
   player.y = exit.mapY + 1
 }
+
+function warpToPreSecret () {
+  const exit = flat(map.maze.data).find(room => room.preSecret)
+  player.x = exit.mapX + 1
+  player.y = exit.mapY + 1
+}

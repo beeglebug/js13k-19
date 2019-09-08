@@ -209,13 +209,21 @@ function generateFromMaze (rng) {
     } else if (room.preSecret) {
 
       if (secretRoom.top === false) {
-        data[room.mapY + room.height][centerX].type = 'X'
+        let tile = data[room.mapY + room.height][centerX]
+        tile.type = 'X'
+        tile.damage = 0
       } else if (secretRoom.bottom === false) {
-        data[room.mapY - 1][centerX].type = 'X'
+        let tile = data[room.mapY - 1][centerX]
+        tile.type = 'X'
+        tile.damage = 0
       } else if (secretRoom.left === false) {
-        data[centerY][room.mapX + room.width].type = 'X'
+        let tile = data[centerY][room.mapX + room.width]
+        tile.type = 'X'
+        tile.damage = 0
       } else if (secretRoom.right === false) {
-        data[centerY][room.mapX - 1].type = 'X'
+        let tile = data[centerY][room.mapX - 1]
+        tile.type = 'X'
+        tile.damage = 0
       }
 
     } else {

@@ -44,6 +44,7 @@ let showMiniMap = false
 
 const sharedRng = new RNG()
 
+const textureSize = 16
 const fov = 66
 
 // camera plane

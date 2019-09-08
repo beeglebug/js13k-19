@@ -159,20 +159,27 @@ function renderPlay () {
     let drawStart = Math.floor((height - sliceHeight) / 2)
     let drawEnd = drawStart + sliceHeight
 
-    const textureSize = 16
-    const textureIndex = textureIndexByTileType[tile.type]
+    if (tile.flashing) {
 
-    let offset = 0
-    if (tile.offset) {
-      if (side === 0 && ray.direction.x > 0) offset = tile.offset
-      if (side === 0 && ray.direction.x < 0) offset = -tile.offset
-      if (side === 1 && ray.direction.y > 0) offset = tile.offset
-      if (side === 1 && ray.direction.y < 0) offset = -tile.offset
+      ctx.fillStyle = '#ffffff'
+      ctx.fillRect(x, drawStart, 1, sliceHeight)
+
+    } else {
+
+      const textureIndex = textureIndexByTileType[tile.type]
+
+      let offset = 0
+      if (tile.offset) {
+        if (side === 0 && ray.direction.x > 0) offset = tile.offset
+        if (side === 0 && ray.direction.x < 0) offset = -tile.offset
+        if (side === 1 && ray.direction.y > 0) offset = tile.offset
+        if (side === 1 && ray.direction.y < 0) offset = -tile.offset
+      }
+
+      let textureX = Math.floor((wallX + textureIndex + offset) * textureSize)
+
+      ctx.drawImage(imgTextures, textureX, 0, 1, textureSize, x, drawStart, 1, sliceHeight)
     }
-
-    let textureX = Math.floor((wallX + textureIndex + offset) * textureSize)
-
-    ctx.drawImage(imgTextures, textureX, 0, 1, textureSize, x, drawStart, 1, sliceHeight)
 
     // LIGHTING ========================================================================================================
 

@@ -2,9 +2,6 @@ on('collide_player_entity', (entity, collision) => {
   if (entity.static) {
     handleDisplace(player, collision)
   }
-  // if (entity instanceof Mob) {
-  //   entity.state = AI_MELEE
-  // }
 })
 
 on('collide_player_collectible', entity => {
@@ -26,7 +23,21 @@ on('collide_projectile_entity', (projectile, entity, collision) => {
   entity.damage(10)
 })
 
-on('collide_projectile_wall', handleImpact)
+on('collide_projectile_wall', (projectile, tile) => {
+  handleImpact(projectile)
+  if (tile.type === 'X') {
+    tile.damage += 1
+    if (tile.damage >= 3) {
+      tile.type = FLOOR_TILE
+    } else {
+      tile.flashing = true
+      setTimeout(() => {
+        tile.flashing = false
+      }, 50)
+    }
+    console.log(tile)
+  }
+})
 
 on('collide_entity_wall', (entity, wall, collision) => {
   handleDisplace(entity, collision)
