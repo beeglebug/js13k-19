@@ -43,18 +43,9 @@ on('collide_entity_wall', (entity, wall, collision) => {
   handleDisplace(entity, collision)
 })
 
-on('enter_tomb', gravestone => {
-  const rng = new RNG(gravestone.seed)
-  const tomb = generateDungeon(rng)
-  loadMap(tomb, 6, 6, 1, 0)
-})
-
-on('exit_tomb', ladder => {
-  const seed = ladder.seed
-  const grave = overworld.entities.find(e => e.seed === seed)
-  const x = grave.x + 0.5
-  const y = grave.x + 0.5
-  loadMap(overworld, x, y, 1, 1)
+on('exit_level', ladder => {
+  const level = generateDungeon(map.rng)
+  loadMap(level)
 })
 
 on('open_door', door => {

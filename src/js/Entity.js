@@ -176,9 +176,8 @@ class Key extends Entity {
 }
 
 class Ladder extends Entity {
-  constructor (x, y, seed) {
+  constructor (x, y) {
     super(x, y, 7)
-    this.seed = seed
     this.tooltip = 'E: climb'
     this.onInteract = 'exit_level'
   }

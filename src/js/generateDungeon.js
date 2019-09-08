@@ -13,6 +13,8 @@ function generateDungeon (rng) {
 
   // TODO type = FLOOR_TILE needs a better system (type = FLOOR/WALL, and texture index?)
 
+  map.rng = rng
+
   return map
 }
 
@@ -192,7 +194,7 @@ function generateFromMaze (rng) {
       if (room.left === false) oppositeX += 4
       if (room.right === false) oppositeX -= 4
 
-      entities.push(new Ladder(oppositeX + 0.5, oppositeY + 0.5, rng.seed))
+      entities.push(new Ladder(oppositeX + 0.5, oppositeY + 0.5))
       entities.push(new Ghost(centerX + 0.5, centerY + 0.5))
 
       enemyCount = rng.randomIntBetween(2, 3)
