@@ -12,7 +12,7 @@ function render () {
   if (state === STATE_DEAD) renderDead()
   if (state === STATE_PLAY) renderPlay()
 
-  outputCtx.drawImage(canvas, 0, 0, width * 2, height * 2)
+  outputCtx.drawImage(canvas, 0, 0, width * upscale, height * upscale)
 
   renderDebugText(outputCtx)
 
@@ -272,8 +272,8 @@ function renderPlay () {
     renderEntity(ctx, entity)
   })
 
-  renderHUD(ctx)
   renderWeapon(ctx)
+  renderHUD(ctx)
 
   if (interactionTarget && interactionTarget.tooltip) {
     renderTextBox(ctx, interactionTarget.tooltip, '#222423')

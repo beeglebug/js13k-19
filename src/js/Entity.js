@@ -113,6 +113,7 @@ class Player extends Entity {
     this.maxMana = 100
     this.static = false
     this.attackCooldown = 200
+    this.hasKey = false
   }
 
   update (delta) {
@@ -152,6 +153,17 @@ class HealthPotion extends Entity {
   }
   collect (entity) {
     entity.health = Math.min(entity.health + 20, entity.maxHealth)
+  }
+}
+
+class Key extends Entity {
+  constructor (x, y) {
+    super(x, y, 11, 0.3)
+    this.radius = 0.1
+    this.collectible = true
+  }
+  collect () {
+    player.hasKey = true
   }
 }
 

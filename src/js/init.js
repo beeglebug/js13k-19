@@ -26,6 +26,7 @@ imgSprites.src = 'sprites.png'
 let sprites = []
 let whiteSprites = []
 let redSprites = []
+let greySprites = []
 let redFont
 
 whiteFont.addEventListener('load', () => {
@@ -53,7 +54,8 @@ let oldTime = 0 // time of previous frame
 let fps = 0
 
 const width = 320
-const height = 180
+const height = 200
+const upscale = 3
 
 let audioContext
 
@@ -67,7 +69,7 @@ const [floorCanvas, floorCtx] = createCanvas(width, height)
 const [mapCanvas, mapCtx] = createCanvas(width, height)
 const [fowCanvas, fowCtx] = createCanvas(width, height)
 const [miniMapCanvas, miniMapCtx] = createCanvas(width, height)
-const [outputCanvas, outputCtx] = createCanvas(width * 2, height * 2)
+const [outputCanvas, outputCtx] = createCanvas(width * upscale, height * upscale)
 
 document.getElementById('container').appendChild(outputCanvas)
 
@@ -80,8 +82,6 @@ document.getElementById('container').appendChild(outputCanvas)
 // outputCanvas.after(whiteSprites)
 
 let zBuffer = []
-
-let booted = false
 let textureImageData
 let floorImageData = new ImageData(width, height)
 
@@ -104,6 +104,7 @@ imgSprites.addEventListener('load', () => {
     sprites.push(canvas)
     whiteSprites.push(tint(canvas, '#FFFFFF'))
     redSprites.push(tint(canvas, '#FF0000'))
+    greySprites.push(tint(canvas, '#4a4a4a'))
   }
   imgLoaded()
 })

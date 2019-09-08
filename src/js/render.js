@@ -129,8 +129,13 @@ function renderDebugText (ctx) {
 
 }
 
+const hudHeight = 13
+
 // TODO full overlay at of bottom screen
 function renderHUD (ctx) {
+
+  ctx.fillStyle = '#777777'
+  ctx.fillRect(0, height - hudHeight, width, hudHeight)
 
   // reticule
   ctx.fillStyle = '#FFFFFF'
@@ -141,27 +146,50 @@ function renderHUD (ctx) {
 
   // health and mana
 
-  const barWidth = 40
+  ctx.save()
+  ctx.translate(0, height - hudHeight)
 
-  renderText(ctx, whiteFont, 'health', 5, 160)
+  const barWidth = 50
+
+  ctx.fillStyle = '#5c5c5c'
+  ctx.fillRect(2, 2, 86, 9)
+
+  renderText(ctx, whiteFont, 'health', 6, 4)
 
   ctx.fillStyle = '#57161c'
-  ctx.fillRect(5, 170, barWidth, 5)
+  ctx.fillRect(34, 4, barWidth, 5)
 
   const currentHealthWidth = remap(player.health, 0, player.maxHealth, 0, barWidth)
 
   ctx.fillStyle = '#ba1826'
-  ctx.fillRect(5, 170, currentHealthWidth, 5)
+  ctx.fillRect(34, 4, currentHealthWidth, 5)
 
-  renderText(ctx, whiteFont, 'mana', 60, 160)
+  ctx.fillStyle = '#5c5c5c'
+  ctx.fillRect(92, 2, 80, 9)
+
+  renderText(ctx, whiteFont, 'mana', 96, 4)
 
   ctx.fillStyle = '#102746'
-  ctx.fillRect(60, 170, barWidth, 5)
+  ctx.fillRect(118, 4, barWidth, 5)
 
   const currentManaWidth = remap(player.mana, 0, player.maxMana, 0, barWidth)
 
   ctx.fillStyle = '#2474ba'
-  ctx.fillRect(60, 170, currentManaWidth, 5)
+  ctx.fillRect(118, 4, currentManaWidth, 5)
+
+  ctx.fillStyle = '#5c5c5c'
+  ctx.fillRect(294, 2, 24, 9)
+  ctx.drawImage(greySprites[11], 298, -6)
+
+  if (player.hasKey) {
+    ctx.drawImage(sprites[11], 298, -6)
+  }
+
+  ctx.fillStyle = '#5c5c5c'
+  ctx.fillRect(176, 2, 114, 9)
+  renderText(ctx, whiteFont, map.name, 180, 4)
+
+  ctx.restore()
 }
 
 function renderWeapon (ctx) {

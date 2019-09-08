@@ -64,7 +64,6 @@ function calcVolume (base, pos) {
   const d2 = distanceSq(player, pos)
   const max = 10 * 10
   const falloff = remap(clamp(d2, 0, max), 0, max, 1, 0.1)
-  console.log(base * falloff)
   return base * falloff
 }
 
