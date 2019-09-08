@@ -137,14 +137,26 @@ function generateFromMaze (rng) {
       }
     }
 
+    let enemyCount
+
     // seed entities etc
     if (room.entrance) {
+
       map.spawn = [
         room.mapX + 0.5,
         room.mapY + 0.5,
         0.7071067811865475,
         0.7071067811865475
       ]
+
+      enemyCount = 0
+
+    } else if (room.key) {
+
+      enemyCount = rng.randomIntBetween(3, 5)
+
+      entities.push(new Key(centerX + 0.5, centerY + 0.5))
+
     } else if (room.exit) {
 
       let oppositeX = centerX
@@ -157,14 +169,14 @@ function generateFromMaze (rng) {
       entities.push(new Ladder(oppositeX + 0.5, oppositeY + 0.5, rng.seed))
       entities.push(new Ghost(centerX + 0.5, centerY + 0.5))
 
+      enemyCount = rng.randomIntBetween(2, 3)
+
       data[centerY - 2][centerX - 2].type = '-'
       data[centerY + 2][centerX + 2].type = '-'
       data[centerY - 2][centerX + 2].type = '-'
       data[centerY + 2][centerX - 2].type = '-'
 
     } else {
-
-      // add features
 
       // center pillar
       if (!room.corridoor && (roomSize === 5 || roomSize === 7) && rng.randomChance(20)) {
@@ -179,22 +191,22 @@ function generateFromMaze (rng) {
         data[centerY + 2][centerX - 2].type = '-'
       }
 
-      // TODO which rooms get enemies?
-      const hasEnemies = rng.randomChance(80)
+      enemyCount = rng.randomIntBetween(0, 3)
 
-      if (hasEnemies) {
-        const enemyCount = rng.randomIntBetween(1, 3)
-        const open = getOpenRoomTiles(room, data)
-        times(enemyCount, () => {
-          const spot = rng.randomItem(open)
-          entities.push(new Bat(spot.x + 0.5, spot.y + 0.5))
-        })
-      }
     }
 
+    if (enemyCount) {
+      const open = getOpenRoomTiles(room, data)
+      times(enemyCount, () => {
+        const spot = rng.randomItem(open)
+        entities.push(new Bat(spot.x + 0.5, spot.y + 0.5))
+      })
+    }
 
-      entities.push(new Cobweb(room.mapX + .2, room.mapY + room.height - .2))
-      entities.push(new Cobweb(room.mapX + room.width - .2, room.mapY + .2))
+    rng.randomChance(30) && entities.push(new Cobweb(room.mapX + .2, room.mapY + room.height - .2))
+    rng.randomChance(30) && entities.push(new Cobweb(room.mapX + .2, room.mapY + .2))
+    rng.randomChance(30) && entities.push(new Cobweb(room.mapX + room.width - .2, room.mapY + .2))
+    rng.randomChance(30) && entities.push(new Cobweb(room.mapX + room.width - .2, room.mapY + room.height - .2))
 
   })
 
