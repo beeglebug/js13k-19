@@ -9,14 +9,15 @@ available savings:
 function render () {
   if (state === STATE_TITLE) renderTitle()
   if (state === STATE_PAUSE) renderPause()
-  if (state === STATE_PLAY) renderPlay()
   if (state === STATE_DEAD) renderDead()
+  if (state === STATE_PLAY) renderPlay()
 
   outputCtx.drawImage(canvas, 0, 0, width * 2, height * 2)
 
+  renderDebugText(outputCtx)
+
   if (state === STATE_PLAY) {
     // renderAiDebug(outputCtx)
-    renderDebugText(outputCtx)
     renderFogOfWar(fowCtx)
     if (showMiniMap) {
       renderMiniMap(outputCtx, map)

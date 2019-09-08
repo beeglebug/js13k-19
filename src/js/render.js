@@ -124,8 +124,9 @@ function renderDebugText (ctx) {
   ctx.fillText(`pos: ${player.x.toFixed(2)},${player.y.toFixed(2)}`, 5, 5)
   ctx.fillText(`dir: ${player.direction.x.toFixed(2)},${player.direction.y.toFixed(2)}`, 5, 20)
   ctx.fillText(`fps: ${parseInt(fps)}`, 5, 35)
-  ctx.fillText(`sprites: ${map.entities.length}`, 5, 50)
-  ctx.fillText(`mouseMove: ${mouseMove.x},${mouseMove.y}`, 5, 65)
+  ctx.fillText(`state: ${state} (${prevState})`, 5, 50)
+  if (map) ctx.fillText(`sprites: ${map.entities.length}`, 5, 65)
+
 }
 
 // TODO full overlay at of bottom screen

@@ -7,7 +7,6 @@ const KEY_M = 77
 const MOUSE_LEFT = 1
 
 const mousePosition = { x: 0, y: 0 }
-const mouseMove = { x: 0, y: 0 }
 const downButtons = {}
 const downKeys = {}
 

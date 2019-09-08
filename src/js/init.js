@@ -6,6 +6,14 @@ const STATE_PAUSE = 1
 const STATE_PLAY = 2
 const STATE_DEAD = 3
 
+let prevState = null
+let state = STATE_TITLE
+
+const setState = newState => {
+  prevState = state
+  state = newState
+}
+
 const imgTextures = new Image()
 imgTextures.src = 'textures.png'
 
@@ -25,8 +33,8 @@ whiteFont.addEventListener('load', () => {
 })
 
 const player = new Player()
+let map
 
-let state = STATE_TITLE
 // entity under the cursor and close to the player
 let interactionTarget = null
 let influenceMap
@@ -108,25 +116,19 @@ outputCanvas.addEventListener('mousedown', e => {
 
   if (!hasPointerLock()) outputCanvas.requestPointerLock()
 
-  if (state === STATE_PAUSE) {
-    state = STATE_PLAY
-    return
-  }
-
-  if (state === STATE_DEAD) {
-    state = STATE_TITLE
-    return
-  }
+  if (state === STATE_PAUSE) return setState(prevState)
+  if (state === STATE_DEAD) return setState(STATE_TITLE)
 
   if (state === STATE_TITLE) {
     reset()
-    state = STATE_PLAY
-    return
+    return setState(STATE_PLAY)
   }
 })
 
 function reset () {
   audioContext = new window.AudioContext()
+  player.health = player.maxHealth
+  player.mana = player.maxMana
   // loadMap(overworld, 5.5, 5.5, 0, -1)
   loadMap(createTestMap())
   // loadMap(generateDungeon(new RNG()), 6, 8, 0, -1)
@@ -140,10 +142,9 @@ const hasPointerLock = () => document.pointerLockElement === outputCanvas
 
 document.addEventListener('pointerlockchange', () => {
   if (hasPointerLock()) {
-    state = STATE_PLAY
     outputCanvas.classList.add('active')
   } else {
-    state = STATE_PAUSE
+    setState(STATE_PAUSE)
     outputCanvas.classList.remove('active')
   }
 })

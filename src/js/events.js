@@ -18,10 +18,8 @@ on('collide_projectile_entity', (projectile, entity, collision) => {
 
   handleImpact(projectile)
 
-  if (entity.health) {
-    // TODO damage from projectile
-    entity.damage(10)
-  }
+  // TODO damage from projectile
+  entity.damage(10)
 })
 
 on('collide_projectile_wall', handleImpact)

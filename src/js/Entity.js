@@ -44,6 +44,7 @@ class Entity {
   }
 
   collide () {}
+  damage () {}
 
   kill () {
     this.alive = false
@@ -122,7 +123,7 @@ class Player extends Entity {
   damage (value) {
     this.health -= value
     if (this.health <= 0) {
-      state = STATE_DEAD
+      setState(STATE_DEAD)
     }
   }
 
@@ -186,6 +187,12 @@ class Bat extends Mob {
     this.radius = 0.3
     this.health = 50
     this.z = 0
+  }
+  // always attacks player
+  attack () {
+    const direction = normalize(sub(player, this))
+    soundBatAttack()
+    spawnProjectile(this, direction, EnemyProjectile, 5, 1000)
   }
 }
 

@@ -23,7 +23,7 @@ function handleAI (entity, delta) {
       moveTowards(entity, entity.target, delta)
 
       if (canAttack(entity)) {
-        attack(entity)
+        entity.attack()
       }
 
       if (atTarget(entity)) {
@@ -41,12 +41,6 @@ function handleAI (entity, delta) {
 
 function canAttack (entity) {
   return entity.attackCooldown === 0
-}
-
-// always attacks player
-function attack (entity) {
-  const direction = normalize(sub(player, entity))
-  spawnProjectile(entity, direction, EnemyProjectile, 5, 1000)
 }
 
 function idle (entity) {
