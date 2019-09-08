@@ -179,8 +179,8 @@ class Ladder extends Entity {
   constructor (x, y, seed) {
     super(x, y, 7)
     this.seed = seed
-    this.tooltip = 'E: return to surface'
-    this.onInteract = 'exit_tomb'
+    this.tooltip = 'E: climb'
+    this.onInteract = 'exit_level'
   }
 }
 
@@ -196,8 +196,9 @@ class Ghost extends Mob {
   constructor (x, y) {
     super(x, y, 0, 0.8)
     this.radius = 0.3
-    this.health = 100
+    this.health = 200
     this.flashSprite = redSprites[0]
+    this.attackDistance = 3
   }
   // always attacks player
   attack () {
@@ -213,6 +214,7 @@ class Bat extends Mob {
     this.radius = 0.3
     this.health = 30
     this.z = 0
+    this.attackDistance = 2
   }
   // always attacks player
   attack () {

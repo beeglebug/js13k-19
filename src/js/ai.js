@@ -9,8 +9,7 @@ function handleAI (entity, delta) {
 
   if (canSeePlayer) {
     // stay a bit away from player
-    const distance = 1
-    const offset = multiply(normalize(sub(player, entity)), distance)
+    const offset = multiply(normalize(sub(player, entity)), entity.attackDistance)
     entity.target = sub(player, offset)
   }
 
