@@ -41,15 +41,15 @@ function shoot () {
   if (player.attackCooldown > 0) return
   if (player.mana < SHOOT_COST) return
   player.mana -= SHOOT_COST
-  spawnProjectile(player, PlayerProjectile, 10, SHOOT_DELAY)
+  spawnProjectile(player, player.direction, PlayerProjectile, 10, SHOOT_DELAY)
   soundShoot()
 }
 
-function spawnProjectile (entity, ProjectileClass, speed, delay) {
+function spawnProjectile (entity, direction, ProjectileClass, speed, delay) {
   const offset = 0.2
-  const x = entity.x + entity.direction.x * offset
-  const y = entity.y + entity.direction.y * offset
-  const bullet = new ProjectileClass(x, y, speed, copy(entity.direction))
+  const x = entity.x + direction.x * offset
+  const y = entity.y + direction.y * offset
+  const bullet = new ProjectileClass(x, y, speed, copy(direction))
   bullet.source = entity
   map.entities.push(bullet)
   entity.attackCooldown += delay

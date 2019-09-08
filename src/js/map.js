@@ -65,7 +65,7 @@ const createTestMap = () => ({
   fogDistance: 20,
   entities: [
     new Bat(3.5, 8.5),
-    new Bat(7.5, 8.5),
+    // new Bat(7.5, 8.5),
   ]
 })
 

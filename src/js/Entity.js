@@ -2,6 +2,8 @@ class Entity {
   constructor (x, y, index, scale = 1) {
     this.x = x
     this.y = y
+    this.velocity = { x: 0, y: 0 }
+    this.direction = { x: 0, y: 0 }
 
     this.sprite = sprites[index]
     this.flashSprite = whiteSprites[index]
@@ -59,8 +61,6 @@ class Entity {
 class Mob extends Entity {
   constructor (x, y, index, scale = 1) {
     super(x, y, index, scale)
-    this.velocity = { x: 0, y: 0 }
-    this.direction = { x: 0, y: 0 }
     this.health = 50
     this.static = false
     this.speed = 2
