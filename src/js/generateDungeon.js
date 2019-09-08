@@ -55,7 +55,9 @@ function generateFromMaze (rng) {
 
     let roomSize = rng.randomItem([5, 7, 7, 9, 9, 9])
 
+    // fixed room sizes
     if (room.entrance) roomSize = 5
+    if (room.exit) roomSize = 9
 
     room.width = roomSize
     room.height = roomSize
@@ -107,11 +109,12 @@ function generateFromMaze (rng) {
       for (let y = centerY; y <= originY + cellSize; y++) {
         data[y][x] = createTile(x, y, FLOOR_TILE)
       }
-      // TODO random doors
-      const tile = data[originY + cellSize - 1][x]
-      tile.type = 'D'
-      tile.tooltip = 'E: Open'
-      tile.onInteract = 'open_door'
+      if (rng.randomChance(50)) {
+        const tile = data[originY + cellSize - 1][x]
+        tile.type = 'D'
+        tile.tooltip = 'E: Open'
+        tile.onInteract = 'open_door'
+      }
     }
 
     if (room.left === false) {
@@ -126,11 +129,12 @@ function generateFromMaze (rng) {
       for (let x = centerX; x <= originX + cellSize; x++) {
         data[y][x] = createTile(x, y, FLOOR_TILE)
       }
-      // TODO random doors
-      const tile = data[y][originX + cellSize - 1]
-      tile.type = 'd'
-      tile.tooltip = 'E: Open'
-      tile.onInteract = 'open_door'
+      if (rng.randomChance(50)) {
+        const tile = data[y][originX + cellSize - 1]
+        tile.type = 'd'
+        tile.tooltip = 'E: Open'
+        tile.onInteract = 'open_door'
+      }
     }
 
     // seed entities etc
@@ -143,18 +147,36 @@ function generateFromMaze (rng) {
       ]
     } else if (room.exit) {
 
+      let oppositeX = centerX
+      let oppositeY = centerY
+      if (room.top === false) oppositeY += 4
+      if (room.bottom === false) oppositeY -= 4
+      if (room.left === false) oppositeX += 4
+      if (room.right === false) oppositeX -= 4
+
+      entities.push(new Ladder(oppositeX + 0.5, oppositeY + 0.5, rng.seed))
       entities.push(new Ghost(centerX + 0.5, centerY + 0.5))
 
-      // TODO put opposite door
-      entities.push(new Ladder(room.mapX + 0.5, room.mapY + 0.5, rng.seed))
+      data[centerY - 2][centerX - 2].type = '-'
+      data[centerY + 2][centerX + 2].type = '-'
+      data[centerY - 2][centerX + 2].type = '-'
+      data[centerY + 2][centerX - 2].type = '-'
 
     } else {
 
       // add features
 
       // center pillar
-      if (rng.randomChance(20)) {
+      if (!room.corridoor && (roomSize === 5 || roomSize === 7) && rng.randomChance(20)) {
         data[centerY][centerX].type = '-'
+      }
+
+      // 4 corner pillars
+      if (!room.corridoor && roomSize === 9 && rng.randomChance(50)) {
+        data[centerY - 2][centerX - 2].type = '-'
+        data[centerY + 2][centerX + 2].type = '-'
+        data[centerY - 2][centerX + 2].type = '-'
+        data[centerY + 2][centerX - 2].type = '-'
       }
 
       // TODO which rooms get enemies?

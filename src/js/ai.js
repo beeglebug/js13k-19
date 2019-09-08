@@ -1,7 +1,7 @@
 
 function handleAI (entity, delta) {
 
-  const nearPlayer = distanceTo(entity, player) < 10
+  const nearPlayer = distanceTo(entity, player) < 9
 
   if (!nearPlayer) return idle(entity)
 
@@ -51,12 +51,8 @@ function pathfind (entity) {
   const near = getNeighbours(influenceMap, current.x, current.y).filter(Boolean)
   const lowest = near.sort(byWeight)[0]
   const others = near.filter(cell => cell.weight === lowest.weight)
-  let cell
-  if (others.length === 0) {
-    cell = others[0]
-  } else {
-    cell = others.sort(byDistanceToPlayer)[0]
-  }
+  let cell = others.sort(byDistanceToPlayer)[0]
+
   // center of target
   return {
     x: cell.x + 0.5,

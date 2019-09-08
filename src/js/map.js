@@ -170,9 +170,7 @@ function getNeighbours (map, x, y, diagonal = false) {
 }
 
 function warpToBoss () {
-  const boss = map.entities.find(e => e instanceof Ghost)
-  if (boss) {
-    player.x = boss.x + 2
-    player.y = boss.y + 2
-  }
+  const exit = flat(map.maze.data).find(room => room.exit)
+  player.x = exit.mapX + 1
+  player.y = exit.mapY + 1
 }
