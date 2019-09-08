@@ -48,6 +48,7 @@ function generateFromMaze (rng) {
   const entities = []
 
   const map = {
+    name: 'map',
     width: width * cellSize,
     height: height * cellSize,
     data,
@@ -146,9 +147,15 @@ function generateFromMaze (rng) {
 
     // seed entities etc
     if (room.entrance) {
-      entities.push(new Ladder(room.mapX + 0.5, room.mapY + 0.5, rng.seed))
+      map.spawn = [
+        room.mapX + 0.5,
+        room.mapY + 0.5,
+        // TODO pick direction
+        0.7071067811865475, 0.7071067811865475
+      ]
     } else if (room.exit) {
       entities.push(new Ghost(centerX + 0.5, centerY + 0.5))
+      entities.push(new Ladder(room.mapX + 0.5, room.mapY + 0.5, rng.seed))
     } else {
 
       // TODO which rooms get enemies?
