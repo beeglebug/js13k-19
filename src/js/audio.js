@@ -37,18 +37,43 @@ function playSound (frequency, increment, delay, times, volume, type = 0) {
   }
 }
 
-function soundShoot () {
-  playSound(620, -80, 20, 15, 0.2)
-  playSound(520, -70, 15, 10, 0.1)
+function soundPlayerAttack () {
+  playSound(620, -80, 20, 15, 0.05)
+  playSound(520, -70, 15, 10, 0.05)
 }
 
-function soundImpact () {
-  playSound(220, -10, 10, 35, 0.3)
+function soundImpact (pos) {
+  const volume = calcVolume(0.1, pos)
+  playSound(220, -10, 10, 35, volume)
+}
+
+function soundBatAttack (pos) {
+  const volume = calcVolume(0.2, pos)
+  playSound(1426, -87, 17, 8, volume, 1)
 }
 
 function soundCollect () {
-  playSound(222, -198, 5, 11, 0.5, 2)
+  playSound(222, -198, 5, 11, 0.3, 2)
 }
+
+function soundDoor () {
+  playSound(20, 3, 75, 30, 0.05, 1)
+}
+
+function calcVolume (base, pos) {
+  const d2 = distanceSq(player, pos)
+  const max = 10 * 10
+  const falloff = remap(clamp(d2, 0, max), 0, max, 1, 0.1)
+  console.log(base * falloff)
+  return base * falloff
+}
+
+/**
+ interesting noises
+
+ playSound(1426, -87, 17, 8, 0.5, 1)
+
+*/
 
 
 function soundRandom () {

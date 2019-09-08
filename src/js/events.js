@@ -8,7 +8,7 @@ on('collide_player_entity', (entity, collision) => {
 })
 
 on('collide_player_collectible', entity => {
-  soundCollect()
+  soundCollect(entity)
   entity.collect(player)
   entity.kill()
 })
@@ -43,6 +43,7 @@ on('exit_tomb', ladder => {
 })
 
 on('open_door', door => {
+  soundDoor()
   TweenManager.create(door, 'offset', 1, 2000, () => {
     door.type = '.'
   })
@@ -61,13 +62,15 @@ function handleDisplace (entity, collision) {
 
 function handleImpact (projectile) {
 
-  soundImpact()
   projectile.kill()
 
   const x = projectile.x - (player.direction.x * 0.1)
   const y = projectile.y - (player.direction.y * 0.1)
 
   const impact = new ProjectileImpact(x, y)
+
+  soundImpact(impact)
+
   map.entities.push(impact)
 
   setTimeout(() => {

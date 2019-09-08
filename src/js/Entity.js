@@ -191,7 +191,7 @@ class Bat extends Mob {
   // always attacks player
   attack () {
     const direction = normalize(sub(player, this))
-    soundBatAttack()
+    soundBatAttack(this)
     spawnProjectile(this, direction, EnemyProjectile, 5, 1000)
   }
 }

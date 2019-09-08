@@ -89,6 +89,7 @@ function parseMap (arr) {
   const data = arr.map((row, y) => row.split('').map((type, x) => {
     const tile = { x, y, type, offset: 0 }
     if (type === 'D') {
+      tile.tooltip = 'E: open'
       tile.onInteract = 'open_door'
     }
     return tile

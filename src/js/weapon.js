@@ -42,7 +42,7 @@ function shoot () {
   if (player.mana < SHOOT_COST) return
   player.mana -= SHOOT_COST
   spawnProjectile(player, player.direction, PlayerProjectile, 10, SHOOT_DELAY)
-  soundShoot()
+  soundPlayerAttack()
 }
 
 function spawnProjectile (entity, direction, ProjectileClass, speed, delay) {
