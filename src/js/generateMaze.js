@@ -62,9 +62,26 @@ function generateMaze (rng, width, height, x, y) {
 
   let exitNode = ends[ends.length - 1]
   let keyNode = ends[ends.length - 2]
+  let secretNode = ends[Math.floor(ends.length / 2)]
+
+  // pre-secret room
+  if (secretNode.top === false) {
+    let connected = getMap(graph, secretNode.x, secretNode.y - 1)
+    connected.preSecret = true
+  } else if (secretNode.bottom === false) {
+    let connected = getMap(graph, secretNode.x, secretNode.y + 1)
+    connected.preSecret = true
+  } else if (secretNode.left === false) {
+    let connected = getMap(graph, secretNode.x - 1, secretNode.y)
+    connected.preSecret = true
+  } else if (secretNode.right === false) {
+    let connected = getMap(graph, secretNode.x + 1, secretNode.y)
+    connected.preSecret = true
+  }
 
   exitNode.exit = true
   keyNode.key = true
+  secretNode.secret = true
 
   graph.exit = exitNode
 

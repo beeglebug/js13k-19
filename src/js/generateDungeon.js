@@ -27,6 +27,7 @@ function generateFromMaze (rng) {
   const width = 5
   const height = 5
   const cellSize = 11
+  const halfSize = Math.floor(cellSize / 2)
 
   const data = []
   for (let y = 0; y < height * cellSize; y++) {
@@ -51,16 +52,19 @@ function generateFromMaze (rng) {
     entities
   }
 
-  flat(maze.data).forEach(room => {
+  const flatData = flat(maze.data)
 
-    let roomSize = rng.randomItem([5, 7, 7, 9, 9, 9])
+  flatData.forEach(room => {
+
+    room.size = rng.randomItem([5, 7, 7, 9, 9, 9])
 
     // fixed room sizes
-    if (room.entrance) roomSize = 5
-    if (room.exit) roomSize = 9
+    if (room.entrance) room.size = 5
+    if (room.exit) room.size = 9
+    if (room.secret) room.size = 7
 
-    room.width = roomSize
-    room.height = roomSize
+    room.width = room.size
+    room.height = room.size
 
     // turn some rooms with opposite doors into corridors
     if (room.top === false && room.bottom === false && rng.randomChance(30)) {
@@ -74,8 +78,6 @@ function generateFromMaze (rng) {
       room.height = 3
       room.corridoor = true
     }
-
-    const halfSize = Math.floor(cellSize / 2)
 
     const originX = room.x * cellSize
     const originY = room.y * cellSize
@@ -97,6 +99,8 @@ function generateFromMaze (rng) {
       }
     }
 
+    // add some doors
+
     if (room.top === false) {
       const x = centerX
       for (let y = originY; y <= originY + halfSize; y++) {
@@ -109,11 +113,16 @@ function generateFromMaze (rng) {
       for (let y = centerY; y <= originY + cellSize; y++) {
         data[y][x] = createTile(x, y, FLOOR_TILE)
       }
-      if (rng.randomChance(50)) {
+      if (!room.preSecret && rng.randomChance(50)) {
         const tile = data[originY + cellSize - 1][x]
-        tile.type = 'D'
-        tile.tooltip = 'E: Open'
-        tile.onInteract = 'open_door'
+        if (room.secret) {
+          tile.type = FLOOR_TILE
+        } else {
+          tile.type = 'D'
+          tile.tooltip = 'E: Open'
+          tile.onInteract = 'open_door'
+          room.bottomDoor = tile
+        }
       }
     }
 
@@ -129,13 +138,30 @@ function generateFromMaze (rng) {
       for (let x = centerX; x <= originX + cellSize; x++) {
         data[y][x] = createTile(x, y, FLOOR_TILE)
       }
-      if (rng.randomChance(50)) {
+      if (!room.preSecret && rng.randomChance(50)) {
         const tile = data[y][originX + cellSize - 1]
-        tile.type = 'd'
-        tile.tooltip = 'E: Open'
-        tile.onInteract = 'open_door'
+        if (room.secret) {
+          tile.type = FLOOR_TILE
+        } else {
+          tile.type = 'd'
+          tile.tooltip = 'E: Open'
+          tile.onInteract = 'open_door'
+          room.rightDoor = tile
+        }
       }
     }
+  })
+
+  const secretRoom = flatData.find(room => room.secret)
+
+  // loop again so the structure is all done
+  flatData.forEach(room => {
+
+    const originX = room.x * cellSize
+    const originY = room.y * cellSize
+
+    const centerX = originX + halfSize
+    const centerY = originY + halfSize
 
     let enemyCount
 
@@ -176,15 +202,31 @@ function generateFromMaze (rng) {
       data[centerY - 2][centerX + 2].type = '-'
       data[centerY + 2][centerX - 2].type = '-'
 
+    } else if (room.secret) {
+
+      enemyCount = 0
+
+    } else if (room.preSecret) {
+
+      if (secretRoom.top === false) {
+        data[room.mapY + room.height][centerX].type = 'X'
+      } else if (secretRoom.bottom === false) {
+        data[room.mapY - 1][centerX].type = 'X'
+      } else if (secretRoom.left === false) {
+        data[centerY][room.mapX + room.width].type = 'X'
+      } else if (secretRoom.right === false) {
+        data[centerY][room.mapX - 1].type = 'X'
+      }
+
     } else {
 
       // center pillar
-      if (!room.corridoor && (roomSize === 5 || roomSize === 7) && rng.randomChance(20)) {
+      if (!room.corridoor && (room.size === 5 || room.size === 7) && rng.randomChance(20)) {
         data[centerY][centerX].type = '-'
       }
 
       // 4 corner pillars
-      if (!room.corridoor && roomSize === 9 && rng.randomChance(50)) {
+      if (!room.corridoor && room.size === 9 && rng.randomChance(50)) {
         data[centerY - 2][centerX - 2].type = '-'
         data[centerY + 2][centerX + 2].type = '-'
         data[centerY - 2][centerX + 2].type = '-'

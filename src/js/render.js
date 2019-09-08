@@ -51,10 +51,12 @@ function renderMiniMap (ctx) {
 
 function renderMap (ctx) {
 
+  // TODO switch?
   const colorsByTileType = {
     '.': '#6c6c6c',
     '-': '#ffffff',
     '~': '#ffffff',
+    'X': '#ffffff',
     '=': '#555555',
     '#': '#33cec2',
     'D': '#07080c',
@@ -233,13 +235,16 @@ function renderGraph (ctx, map) {
       const ys = y * size
 
       if (node.entrance) {
-        ctx.fillStyle = 'rgba(32,73,90,0.5)'
+        ctx.fillStyle = 'rgba(0,45,104,0.6)'
+        ctx.fillRect(x * size, y * size, size, size)
+      } else if (node.secret) {
+        ctx.fillStyle = 'rgba(7,122,0,0.6)'
         ctx.fillRect(x * size, y * size, size, size)
       } else if (node.exit) {
-        ctx.fillStyle = 'rgba(129,22,23,0.5)'
+        ctx.fillStyle = 'rgba(129,22,23,0.6)'
         ctx.fillRect(x * size, y * size, size, size)
       } else if (node.key) {
-        ctx.fillStyle = 'rgba(129,86,15,0.5)'
+        ctx.fillStyle = 'rgba(129,86,15,0.6)'
         ctx.fillRect(x * size, y * size, size, size)
       }
 
