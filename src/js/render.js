@@ -3,7 +3,7 @@ function renderSky (ctx, fill) {
   ctx.fillRect(0, 0, width, height / 2)
 }
 
-const MINI_MAP_TILE_SIZE = 3
+const MINI_MAP_TILE_SIZE = 2
 
 function renderMiniMap (ctx) {
 
@@ -15,23 +15,36 @@ function renderMiniMap (ctx) {
   miniMapCtx.drawImage(mapCanvas, 0, 0)
   miniMapCtx.globalCompositeOperation = 'source-over'
 
-  drawCircle(miniMapCtx, player.x * MINI_MAP_TILE_SIZE, player.y * MINI_MAP_TILE_SIZE, 2, '#ff0011')
+  const px = Math.floor(player.x) * MINI_MAP_TILE_SIZE
+  const py = Math.floor(player.y) * MINI_MAP_TILE_SIZE
 
-  miniMapCtx.strokeStyle = '#ff0011'
-  drawLine(
-    miniMapCtx,
-    player.x * MINI_MAP_TILE_SIZE,
-    player.y * MINI_MAP_TILE_SIZE,
-    (player.x + player.direction.x * 2) * MINI_MAP_TILE_SIZE,
-    (player.y + player.direction.y * 2) * MINI_MAP_TILE_SIZE
+  miniMapCtx.fillStyle = '#ff0011'
+  miniMapCtx.fillRect(
+    px, py,
+    MINI_MAP_TILE_SIZE,
+    MINI_MAP_TILE_SIZE)
+
+  // miniMapCtx.strokeStyle = '#ff0011'
+  // drawLine(
+  //   miniMapCtx,
+  //   px,
+  //   py,
+  //   (player.x + player.direction.x * 2) * MINI_MAP_TILE_SIZE,
+  //   (player.y + player.direction.y * 2) * MINI_MAP_TILE_SIZE
+  // )
+
+  // renderInfluenceMap(miniMapCtx, influenceMap)
+
+  ctx.save()
+  ctx.translate(
+    (width / 2) - miniMapWidth / 2,
+    (height / 2) - miniMapHeight / 2
   )
-
-  const ox = Math.floor(width - ((map.width * MINI_MAP_TILE_SIZE) / 2))
-  const oy = Math.floor(height - ((map.height * MINI_MAP_TILE_SIZE) / 2))
-
-  ctx.globalAlpha = 0.5
-  ctx.drawImage(miniMapCanvas, ox, oy)
-  ctx.globalAlpha = 1
+  ctx.globalAlpha = 0.3
+  ctx.fillStyle = '#000000'
+  ctx.fillRect(0, 0, miniMapWidth, miniMapHeight)
+  ctx.drawImage(miniMapCanvas, 0, 0)
+  ctx.restore()
 }
 
 function renderMap (ctx) {
@@ -124,8 +137,7 @@ function renderDebugText (ctx) {
   ctx.fillText(`pos: ${player.x.toFixed(2)},${player.y.toFixed(2)}`, 5, 5)
   ctx.fillText(`dir: ${player.direction.x.toFixed(2)},${player.direction.y.toFixed(2)}`, 5, 20)
   ctx.fillText(`fps: ${parseInt(fps)}`, 5, 35)
-  ctx.fillText(`state: ${state} (${prevState})`, 5, 50)
-  if (map) ctx.fillText(`sprites: ${map.entities.length}`, 5, 65)
+  if (map) ctx.fillText(`sprites: ${map.entities.length}`, 5, 50)
 
 }
 
@@ -138,11 +150,13 @@ function renderHUD (ctx) {
   ctx.fillRect(0, height - hudHeight, width, hudHeight)
 
   // reticule
-  ctx.fillStyle = '#FFFFFF'
-  const cx = width / 2
-  const cy = height / 2
-  ctx.fillRect(cx - 1, cy, 3, 1)
-  ctx.fillRect(cx, cy - 1, 1, 3)
+  if (!showMiniMap) {
+    ctx.fillStyle = '#FFFFFF'
+    const cx = width / 2
+    const cy = height / 2
+    ctx.fillRect(cx - 1, cy, 3, 1)
+    ctx.fillRect(cx, cy - 1, 1, 3)
+  }
 
   // health and mana
 

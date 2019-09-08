@@ -8,9 +8,7 @@ on('collide_player_entity', (entity, collision) => {
 })
 
 on('collide_player_collectible', entity => {
-  soundCollect(entity)
   entity.collect(player)
-  entity.kill()
 })
 
 

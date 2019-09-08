@@ -48,7 +48,7 @@ function generateFromMaze (rng) {
   const entities = []
 
   const map = {
-    name: 'map',
+    name: 'floor 3',
     width: width * cellSize,
     height: height * cellSize,
     data,
@@ -61,7 +61,9 @@ function generateFromMaze (rng) {
 
   flat(maze.data).forEach(room => {
 
-    const roomSize = rng.randomItem([5, 7, 7, 9, 9, 9, 11, 11])
+    let roomSize = rng.randomItem([5, 7, 7, 9, 9, 9, 11, 11])
+
+    if (room.entrance) roomSize = 5
 
     room.width = roomSize
     room.height = roomSize
@@ -138,25 +140,29 @@ function generateFromMaze (rng) {
       tile.onInteract = 'open_door'
     }
 
-    // add features
-
-    // center pillar
-    if (rng.randomChance(20)) {
-      data[centerY][centerX].type = '-'
-    }
-
     // seed entities etc
     if (room.entrance) {
       map.spawn = [
         room.mapX + 0.5,
         room.mapY + 0.5,
-        // TODO pick direction
-        0.7071067811865475, 0.7071067811865475
+        0.7071067811865475,
+        0.7071067811865475
       ]
     } else if (room.exit) {
+
       entities.push(new Ghost(centerX + 0.5, centerY + 0.5))
+
+      // TODO put opposite door
       entities.push(new Ladder(room.mapX + 0.5, room.mapY + 0.5, rng.seed))
+
     } else {
+
+      // add features
+
+      // center pillar
+      if (rng.randomChance(20)) {
+        data[centerY][centerX].type = '-'
+      }
 
       // TODO which rooms get enemies?
       const hasEnemies = rng.randomChance(80)

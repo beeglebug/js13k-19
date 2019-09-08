@@ -141,6 +141,9 @@ class ManaPotion extends Entity {
     this.collectible = true
   }
   collect (entity) {
+    if (entity.mana === entity.maxMana) return
+    soundCollect(this)
+    this.kill()
     entity.mana = Math.min(entity.mana + 20, entity.maxMana)
   }
 }
@@ -152,6 +155,9 @@ class HealthPotion extends Entity {
     this.collectible = true
   }
   collect (entity) {
+    if (entity.health === entity.maxHealth) return
+    soundCollect(this)
+    this.kill()
     entity.health = Math.min(entity.health + 20, entity.maxHealth)
   }
 }
@@ -163,6 +169,8 @@ class Key extends Entity {
     this.collectible = true
   }
   collect () {
+    soundCollect(this)
+    this.kill()
     player.hasKey = true
   }
 }
@@ -191,13 +199,19 @@ class Ghost extends Mob {
     this.health = 100
     this.flashSprite = redSprites[0]
   }
+  // always attacks player
+  attack () {
+    const direction = normalize(sub(player, this))
+    soundBatAttack(this)
+    spawnProjectile(this, direction, EnemyProjectile, 5, 1000)
+  }
 }
 
 class Bat extends Mob {
   constructor (x, y) {
     super (x, y, 5, 0.5)
     this.radius = 0.3
-    this.health = 50
+    this.health = 30
     this.z = 0
   }
   // always attacks player

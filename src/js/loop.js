@@ -12,19 +12,17 @@ function render () {
   if (state === STATE_DEAD) renderDead()
   if (state === STATE_PLAY) renderPlay()
 
-  outputCtx.drawImage(canvas, 0, 0, width * upscale, height * upscale)
-
-  renderDebugText(outputCtx)
-
   if (state === STATE_PLAY) {
     // renderAiDebug(outputCtx)
     renderFogOfWar(fowCtx)
     if (showMiniMap) {
-      renderMiniMap(outputCtx, map)
-      renderInfluenceMap(miniMapCtx, influenceMap)
+      renderMiniMap(ctx, map)
     }
   }
 
+  outputCtx.drawImage(canvas, 0, 0, width * upscale, height * upscale)
+
+  renderDebugText(outputCtx)
 }
 
 function renderAiDebug (ctx) {
@@ -110,6 +108,8 @@ function renderTitle () {
   renderCenteredText(ctx, whiteFont, '  CLICK : shoot   ', 150)
   renderCenteredText(ctx, whiteFont, '      M : map     ', 160)
 }
+
+let debug = false
 
 function renderPlay () {
 
@@ -287,15 +287,38 @@ function copyPixel (sourceData, sourceIndex, destData, destIndex) {
   destData.data[destIndex + 3] = 255
 }
 
+function getInteractionTarget (entities) {
+
+  const interactionDistance = 1.5
+
+  const entity = entities.find(entity => {
+    if (!entity.onInteract || entity.transformY <= 0 || entity.transformY > interactionDistance) return
+    const cursorX = width / 2
+    const halfWidth = entity.screenWidth / 2
+    return cursorX > entity.screenX - halfWidth && cursorX < entity.screenX + halfWidth
+  })
+
+  if (entity) return entity
+
+  const [tile,rayLength] = raycast(rayFromPlayer(160))
+
+  if (rayLength < interactionDistance && (tile.type === 'D' || tile.type === 'd')) {
+    return tile
+  }
+}
+
+// TODO handle interactive tiles (map changing)
+function interact () {
+  if (interactionTarget) {
+    emit(interactionTarget.onInteract, interactionTarget)
+  }
+}
+
 function loop () {
   requestAnimationFrame(loop)
   const delta = tick()
 
   TweenManager.update(delta)
-
-  if (state === STATE_TITLE) {
-
-  }
 
   if (state === STATE_PLAY) {
 
@@ -333,31 +356,4 @@ function loop () {
   }
 
   render()
-}
-
-function getInteractionTarget (entities) {
-
-  const interactionDistance = 1
-
-  const entity = entities.find(entity => {
-    if (!entity.onInteract || entity.transformY <= 0 || entity.transformY > interactionDistance) return
-    const cursorX = width / 2
-    const halfWidth = entity.screenWidth / 2
-    return cursorX > entity.screenX - halfWidth && cursorX < entity.screenX + halfWidth
-  })
-
-  if (entity) return entity
-
-  const [tile,rayLength] = raycast(rayFromPlayer(160))
-
-  if (rayLength < interactionDistance && (tile.type === 'D' || tile.type === 'd')) {
-    return tile
-  }
-}
-
-// TODO handle interactive tiles (map changing)
-function interact () {
-  if (interactionTarget) {
-    emit(interactionTarget.onInteract, interactionTarget)
-  }
 }
