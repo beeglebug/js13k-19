@@ -11,8 +11,6 @@ const mouseMove = { x: 0, y: 0 }
 const downButtons = {}
 const downKeys = {}
 
-let mouseTimeout
-
 function handleKeydown (e) {
   const key = e.which
   // TODO better way to do single key strokes
@@ -53,23 +51,21 @@ function bindInput (target) {
   target.addEventListener('mouseup', handleMouseUp)
 }
 
+let mouseSensitivity = 0.001
+
 const handleMouseMove = event => {
-  clearTimeout(mouseTimeout)
-  const { movementX, movementY, clientX, clientY } = event
+  const { movementX, clientX, clientY } = event
   mousePosition.x = clientX
   mousePosition.y = clientY
-  mouseMove.x = movementX || 0
-  mouseMove.y = movementY || 0
-  mouseTimeout = setTimeout(clearMouseMove, 50)
+
+  const rotation = movementX * mouseSensitivity
+
+  if (movementX !== 0) {
+    rotate(player.direction, rotation)
+  }
 }
 
-const clearMouseMove = () => {
-  mouseMove.x = 0
-  mouseMove.y = 0
-}
-
-
-function handleInput (delta) {
+function handleInput () {
 
   if (state !== STATE_PLAY) return
 
@@ -89,13 +85,6 @@ function handleInput (delta) {
   if (keyDown(KEY_S)) {
     player.velocity.x -= player.direction.x
     player.velocity.y -= player.direction.y
-  }
-
-  const mouseSensitivity = 0.5
-  const rotation = mouseMove.x * delta * mouseSensitivity
-
-  if (mouseMove.x !== 0) {
-    rotate(player.direction, rotation)
   }
 
   // strafe to the left

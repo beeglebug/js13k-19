@@ -1,13 +1,11 @@
 // https://github.com/foumart/JS.13kGames/blob/master/lib/SoundFX.js
 
-let audioContext
-
-const oscillatorTypes = ['square', 'sawtooth', 'triangle', 'sine']
-
 // start frequency HZ, frequency change, delay between changes, number of changes, volume, type
 function playSound (frequency, increment, delay, times, volume, type = 0) {
 
   if (!audioContext) return
+
+  const oscillatorTypes = ['square', 'sawtooth', 'triangle', 'sine']
 
   const oscillator = audioContext.createOscillator()
   oscillator.frequency.value = frequency

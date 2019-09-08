@@ -22,9 +22,6 @@ function shouldBeWall (map, x, y) {
   return near.filter(tile => tile && tile.type === FLOOR_TILE).length > 0
 }
 
-let miniMapWidth = 0
-let miniMapHeight = 0
-
 function generateFromMaze (rng) {
 
   const width = 5

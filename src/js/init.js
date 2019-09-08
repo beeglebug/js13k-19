@@ -47,6 +47,11 @@ let fps = 0
 const width = 320
 const height = 180
 
+let audioContext
+
+let miniMapWidth = 0
+let miniMapHeight = 0
+
 const [canvas, ctx] = createCanvas(width, height)
 const [lightingCanvas, lightingCtx] = createCanvas(width, height)
 const [fogCanvas, fogCtx] = createCanvas(width, height)
@@ -72,8 +77,15 @@ let booted = false
 let textureImageData
 let floorImageData = new ImageData(width, height)
 
+let imgToLoad = 3
+const imgLoaded = () => {
+  imgToLoad--
+  if (imgToLoad <= 0) boot()
+}
+
 imgTextures.addEventListener('load', () => {
   textureImageData = getImageData(imgTextures)
+  imgLoaded()
 })
 
 imgSprites.addEventListener('load', () => {
@@ -85,39 +97,43 @@ imgSprites.addEventListener('load', () => {
     whiteSprites.push(tint(canvas, '#FFFFFF'))
     redSprites.push(tint(canvas, '#FF0000'))
   }
+  imgLoaded()
 })
+
+whiteFont.addEventListener('load', imgLoaded)
 
 outputCanvas.addEventListener('mousedown', e => {
 
   if (state !== STATE_PLAY) e.stopPropagation()
 
+  if (!hasPointerLock()) outputCanvas.requestPointerLock()
+
   if (state === STATE_PAUSE) {
     state = STATE_PLAY
+    return
   }
 
   if (state === STATE_DEAD) {
     state = STATE_TITLE
+    return
+  }
+
+  if (state === STATE_TITLE) {
     reset()
+    state = STATE_PLAY
+    return
   }
-
-  if (!hasPointerLock()) {
-    outputCanvas.requestPointerLock()
-  }
-
-  if (!booted) boot()
 })
 
 function reset () {
-
+  audioContext = new window.AudioContext()
+  // loadMap(overworld, 5.5, 5.5, 0, -1)
+  loadMap(createTestMap())
+  // loadMap(generateDungeon(new RNG()), 6, 8, 0, -1)
 }
 
 function boot () {
-  audioContext = new window.AudioContext()
-  // loadMap(overworld, 5.5, 5.5, 0, -1)
-  // loadMap(createTestMap(), 5.5, 13.5, 0, -1)
-  loadMap(generateDungeon(new RNG()), 6, 8, 0, -1)
-  state = STATE_PLAY
-  booted = true
+  requestAnimationFrame(loop)
 }
 
 const hasPointerLock = () => document.pointerLockElement === outputCanvas
@@ -135,6 +151,4 @@ document.addEventListener('pointerlockchange', () => {
 bindInput(document)
 
 const overworld = generateOverworld()
-
-requestAnimationFrame(loop)
 

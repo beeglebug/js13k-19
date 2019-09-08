@@ -60,15 +60,18 @@ const createTestMap = () => ({
     '-.........-',
     '---~--~~---',
   ]),
+  spawn: [5.5, 17.5, 0, -1],
   fog: [46,40,39],
   fogDistance: 20,
   entities: [
-    new Bat(5.5, 6)
+    new Bat(3.5, 8.5),
+    new Bat(7.5, 8.5),
   ]
 })
 
-function loadMap (newMap, x, y, dx, dy) {
+function loadMap (newMap) {
   map = newMap
+  const [x, y, dx, dy] = map.spawn
   player.x = x
   player.y = y
   player.direction.x = dx
