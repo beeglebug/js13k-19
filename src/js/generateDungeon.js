@@ -208,6 +208,8 @@ function generateFromMaze (rng) {
 
     } else if (room.preSecret) {
 
+      enemyCount = rng.randomIntBetween(2, 3)
+
       if (secretRoom.top === false) {
         let tile = data[room.mapY + room.height][centerX]
         tile.type = 'X'
