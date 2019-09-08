@@ -22,7 +22,7 @@ function render () {
 
   outputCtx.drawImage(canvas, 0, 0, width * upscale, height * upscale)
 
-  renderDebugText(outputCtx)
+  // renderDebugText(outputCtx)
 }
 
 function renderAiDebug (ctx) {
@@ -86,7 +86,11 @@ function drawCircle (ctx, x, y, radius, color) {
 function renderDead () {
   ctx.fillStyle = '#000000'
   ctx.fillRect(0, 0, width, height)
-  renderCenteredText(ctx, redFont, 'YOU DIED', 80)
+  ctx.save()
+  ctx.scale(2, 2)
+  ctx.translate(-width/4, -height/4)
+  renderCenteredText(ctx, redFont, 'YOU DIED', (height / 2) - 5)
+  ctx.restore()
 }
 
 function renderPause () {

@@ -6,7 +6,6 @@ const KEY_D = 68
 const KEY_M = 77
 const MOUSE_LEFT = 1
 
-const mousePosition = { x: 0, y: 0 }
 const downButtons = {}
 const downKeys = {}
 
@@ -53,9 +52,10 @@ function bindInput (target) {
 let mouseSensitivity = 0.001
 
 const handleMouseMove = event => {
-  const { movementX, clientX, clientY } = event
-  mousePosition.x = clientX
-  mousePosition.y = clientY
+
+  if (!hasPointerLock()) return
+
+  const { movementX } = event
 
   const rotation = movementX * mouseSensitivity
 

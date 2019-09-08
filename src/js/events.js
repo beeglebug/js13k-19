@@ -11,6 +11,12 @@ on('collide_player_collectible', entity => {
   entity.collect(player)
 })
 
+on('player_dead', () => {
+  setState(STATE_DEAD)
+  setTimeout(() => {
+    setState(STATE_TITLE)
+  }, 2000)
+})
 
 on('collide_projectile_entity', (projectile, entity, collision) => {
 

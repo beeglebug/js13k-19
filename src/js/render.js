@@ -9,11 +9,11 @@ function renderMiniMap (ctx) {
 
   miniMapCtx.clearRect(0, 0, miniMapWidth, miniMapHeight)
 
-  miniMapCtx.globalCompositeOperation = 'source-over'
-  miniMapCtx.drawImage(fowCanvas, 0, 0)
-  miniMapCtx.globalCompositeOperation = 'source-in'
+  // miniMapCtx.globalCompositeOperation = 'source-over'
+  // miniMapCtx.drawImage(fowCanvas, 0, 0)
+  // miniMapCtx.globalCompositeOperation = 'source-in'
   miniMapCtx.drawImage(mapCanvas, 0, 0)
-  miniMapCtx.globalCompositeOperation = 'source-over'
+  // miniMapCtx.globalCompositeOperation = 'source-over'
 
   const px = Math.floor(player.x) * MINI_MAP_TILE_SIZE
   const py = Math.floor(player.y) * MINI_MAP_TILE_SIZE
@@ -35,12 +35,14 @@ function renderMiniMap (ctx) {
 
   // renderInfluenceMap(miniMapCtx, influenceMap)
 
+  renderGraph(miniMapCtx, map)
+
   ctx.save()
   ctx.translate(
     (width / 2) - miniMapWidth / 2,
     (height / 2) - miniMapHeight / 2
   )
-  ctx.globalAlpha = 0.3
+  ctx.globalAlpha = 0.5
   ctx.fillStyle = '#000000'
   ctx.fillRect(0, 0, miniMapWidth, miniMapHeight)
   ctx.drawImage(miniMapCanvas, 0, 0)
@@ -211,44 +213,44 @@ function renderWeapon (ctx) {
   // TODO muzzle flash
 }
 
-function renderGraph (ctx, graph) {
+function renderGraph (ctx, map) {
 
-  const size = 20
-
+  const size = map.cellSize * MINI_MAP_TILE_SIZE
 
   ctx.save()
-  ctx.translate(100, 100)
 
   ctx.strokeStyle = '#ffffff'
   ctx.strokeWidth = 2
   ctx.lineCap = 'square'
 
-  for (let y = 0; y < graph.height; y++) {
+  for (let y = 0; y < map.maze.height; y++) {
 
-    for (let x = 0; x < graph.width; x++) {
+    for (let x = 0; x < map.maze.width; x++) {
 
-      const node = graph.data[y][x]
+      const node = map.maze.data[y][x]
 
       const xs = x * size
       const ys = y * size
 
       if (node.entrance) {
-        ctx.fillStyle = '#20495a'
+        ctx.fillStyle = 'rgba(32,73,90,0.5)'
+        ctx.fillRect(x * size, y * size, size, size)
       } else if (node.exit) {
-        ctx.fillStyle = '#81560f'
-      } else {
-        ctx.fillStyle = '#3e3e3e'
+        ctx.fillStyle = 'rgba(129,22,23,0.5)'
+        ctx.fillRect(x * size, y * size, size, size)
+      } else if (node.key) {
+        ctx.fillStyle = 'rgba(129,86,15,0.5)'
+        ctx.fillRect(x * size, y * size, size, size)
       }
-      ctx.fillRect(x * size, y * size, size, size)
 
-      ctx.translate(0.5, 0.5)
-
-      if (node.top) drawLine(ctx, xs, ys, xs + size, ys)
-      if (node.left) drawLine(ctx, xs, ys, xs, ys + size)
-      if (node.bottom) drawLine(ctx, xs, ys + size, xs + size, ys + size)
-      if (node.right) drawLine(ctx, xs + size, ys, xs + size, ys + size)
-
-      ctx.translate(-0.5, -0.5)
+      // ctx.translate(0.5, 0.5)
+      //
+      // if (node.top) drawLine(ctx, xs, ys, xs + size, ys)
+      // if (node.left) drawLine(ctx, xs, ys, xs, ys + size)
+      // if (node.bottom) drawLine(ctx, xs, ys + size, xs + size, ys + size)
+      // if (node.right) drawLine(ctx, xs + size, ys, xs + size, ys + size)
+      //
+      // ctx.translate(-0.5, -0.5)
 
       ctx.fillStyle = '#FFFFFF'
       ctx.textBaseline = 'middle'

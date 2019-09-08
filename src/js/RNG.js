@@ -37,4 +37,18 @@ class RNG {
   randomChance (percent) {
     return this.random() < percent / 100
   }
+
+  // Fisher–Yates Shuffle
+  // https://bost.ocks.org/mike/shuffle/
+  shuffle (array) {
+    let len = array.length
+    while (len) {
+      let i = Math.floor(this.random() * len--)
+      let swap = array[len]
+      array[len] = array[i]
+      array[i] = swap
+    }
+
+    return array
+  }
 }

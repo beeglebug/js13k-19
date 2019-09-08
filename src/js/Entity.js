@@ -124,7 +124,7 @@ class Player extends Entity {
   damage (value) {
     this.health -= value
     if (this.health <= 0) {
-      setState(STATE_DEAD)
+      emit('player_dead')
     }
   }
 
@@ -214,7 +214,7 @@ class Bat extends Mob {
     this.radius = 0.3
     this.health = 30
     this.z = 0
-    this.attackDistance = 2
+    this.attackDistance = 1.5
   }
   // always attacks player
   attack () {

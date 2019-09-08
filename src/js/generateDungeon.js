@@ -28,16 +28,6 @@ function generateFromMaze (rng) {
   const height = 5
   const cellSize = 15
 
-  miniMapWidth = cellSize * width * MINI_MAP_TILE_SIZE
-  miniMapHeight = cellSize * height * MINI_MAP_TILE_SIZE
-
-  miniMapCanvas.width = miniMapWidth
-  miniMapCanvas.height = miniMapHeight
-  mapCanvas.width = miniMapWidth
-  mapCanvas.height = miniMapHeight
-  fowCanvas.width = miniMapWidth
-  fowCanvas.height = miniMapHeight
-
   const data = []
   for (let y = 0; y < height * cellSize; y++) {
     data[y] = Array.from(new Array(width * cellSize), () => null)
@@ -49,8 +39,10 @@ function generateFromMaze (rng) {
 
   const map = {
     name: 'floor 3',
+    maze,
     width: width * cellSize,
     height: height * cellSize,
+    cellSize,
     data,
     floor: '#2e2827',
     ceiling: '#2e2827',

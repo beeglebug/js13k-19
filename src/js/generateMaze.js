@@ -6,6 +6,8 @@ function generateMaze (rng, width, height, x, y) {
   start.open = false
   start.entrance = true
   graph.entrance = start
+  graph.width = width
+  graph.height = height
 
   const frontier = getNeighbours(graph, start.x, start.y)
 
@@ -54,10 +56,16 @@ function generateMaze (rng, width, height, x, y) {
   // pick exit
   const all = flat(graph.data)
   const ends = all.filter(isEnd)
-  const longest = ends.sort(byWeight)[ends.length - 1]
-  const possible = ends.filter(e => e.weight === longest.weight)
-  const exitNode = rng.randomItem(possible)
+
+  rng.shuffle(ends)
+  ends.sort(byWeight)
+
+  let exitNode = ends[ends.length - 1]
+  let keyNode = ends[ends.length - 2]
+
   exitNode.exit = true
+  keyNode.key = true
+
   graph.exit = exitNode
 
   return graph

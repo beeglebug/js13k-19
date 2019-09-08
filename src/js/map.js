@@ -78,6 +78,17 @@ function loadMap (newMap) {
   player.y = y
   player.direction.x = dx
   player.direction.y = dy
+
+  miniMapWidth = map.width * MINI_MAP_TILE_SIZE
+  miniMapHeight = map.height * MINI_MAP_TILE_SIZE
+
+  miniMapCanvas.width = miniMapWidth
+  miniMapCanvas.height = miniMapHeight
+  mapCanvas.width = miniMapWidth
+  mapCanvas.height = miniMapHeight
+  fowCanvas.width = miniMapWidth
+  fowCanvas.height = miniMapHeight
+
   fowCtx.clearRect(0, 0, miniMapWidth, miniMapHeight)
   mapCtx.clearRect(0, 0, miniMapWidth, miniMapHeight)
   renderMap(mapCtx)
