@@ -187,10 +187,10 @@ function generateFromMaze (rng, width, height, cellSize) {
 
       let oppositeX = centerX
       let oppositeY = centerY
-      if (room.top === false) oppositeY += 4
-      if (room.bottom === false) oppositeY -= 4
-      if (room.left === false) oppositeX += 4
-      if (room.right === false) oppositeX -= 4
+      if (room.top === false) oppositeY += 2
+      if (room.bottom === false) oppositeY -= 2
+      if (room.left === false) oppositeX += 2
+      if (room.right === false) oppositeX -= 2
 
       entities.push(new Ladder(oppositeX + 0.5, oppositeY + 0.5))
 

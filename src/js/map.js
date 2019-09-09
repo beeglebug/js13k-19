@@ -181,13 +181,19 @@ const isDoor = tile => isHorizontalDoor(tile) || isVerticalDoor(tile)
 const isLockedDoor = tile => (tile.type === 'L' || tile.type === 'l')
 
 function warpToBoss () {
-  const exit = flat(map.maze.data).find(room => room.key)
-  player.x = exit.mapX + 1
-  player.y = exit.mapY + 1
+  const room = flat(map.maze.data).find(room => room.key)
+  player.x = room.mapX + 1
+  player.y = room.mapY + 1
 }
 
 function warpToPreSecret () {
-  const exit = flat(map.maze.data).find(room => room.preSecret)
-  player.x = exit.mapX + 1
-  player.y = exit.mapY + 1
+  const room = flat(map.maze.data).find(room => room.preSecret)
+  player.x = room.mapX + 1
+  player.y = room.mapY + 1
+}
+
+function warpToExit () {
+  const room = flat(map.maze.data).find(room => room.exit)
+  player.x = room.mapX + 3
+  player.y = room.mapY + 3
 }

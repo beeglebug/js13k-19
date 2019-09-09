@@ -47,7 +47,7 @@ on('collide_entity_wall', (entity, wall, collision) => {
 
 on('exit_level', () => {
   level++
-  if (level === 2) {
+  if (level === 3) {
     // TODO you win text
     loadMap(overworld)
   } else {

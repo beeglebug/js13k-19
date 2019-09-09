@@ -195,8 +195,6 @@ function renderDebugText (ctx) {
 
 }
 
-const hudHeight = 13
-
 // TODO full overlay at of bottom screen
 function renderHUD (ctx) {
 
