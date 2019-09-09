@@ -3,7 +3,9 @@ function renderSky (ctx, fill) {
   ctx.fillRect(0, 0, width, height / 2)
 }
 
-const MINI_MAP_TILE_SIZE = 2
+const MINI_MAP_TILE_SIZE = 3
+
+const roundAwayFromZero = num => Math.sign(num) * Math.round(Math.abs(num))
 
 function renderMiniMap (ctx) {
 
@@ -15,35 +17,41 @@ function renderMiniMap (ctx) {
   miniMapCtx.drawImage(mapCanvas, 0, 0)
   // miniMapCtx.globalCompositeOperation = 'source-over'
 
-  const px = Math.floor(player.x) * MINI_MAP_TILE_SIZE
-  const py = Math.floor(player.y) * MINI_MAP_TILE_SIZE
+  const px = Math.floor(player.x * MINI_MAP_TILE_SIZE)
+  const py = Math.floor(player.y * MINI_MAP_TILE_SIZE)
 
   miniMapCtx.fillStyle = '#ff0011'
   miniMapCtx.fillRect(
-    px, py,
-    MINI_MAP_TILE_SIZE,
-    MINI_MAP_TILE_SIZE)
+    px - 1,
+    py - 1,
+    3,
+    3
+  )
 
-  // miniMapCtx.strokeStyle = '#ff0011'
-  // drawLine(
-  //   miniMapCtx,
-  //   px,
-  //   py,
-  //   (player.x + player.direction.x * 2) * MINI_MAP_TILE_SIZE,
-  //   (player.y + player.direction.y * 2) * MINI_MAP_TILE_SIZE
-  // )
+  miniMapCtx.fillRect(
+    px + roundAwayFromZero(player.direction.x * 2),
+    py + roundAwayFromZero(player.direction.y * 2),
+    1, 1
+  )
+
+  miniMapCtx.fillRect(
+    px + roundAwayFromZero(player.direction.x * 3),
+    py + roundAwayFromZero(player.direction.y * 3),
+    1, 1
+  )
 
   // renderInfluenceMap(miniMapCtx, influenceMap)
   // renderGraph(miniMapCtx, map)
 
   ctx.save()
+  ctx.globalAlpha = 0.3
+  ctx.fillStyle = '#000000'
+  ctx.fillRect(0, 0, width, height)
   ctx.translate(
-    (width / 2) - miniMapWidth / 2,
-    (height / 2) - miniMapHeight / 2
+    Math.floor((width / 2) - miniMapWidth / 2),
+    Math.floor((height / 2) - (miniMapHeight / 2) - (hudHeight / 2))
   )
   ctx.globalAlpha = 0.5
-  ctx.fillStyle = '#000000'
-  ctx.fillRect(0, 0, miniMapWidth, miniMapHeight)
   ctx.drawImage(miniMapCanvas, 0, 0)
   ctx.restore()
 }
