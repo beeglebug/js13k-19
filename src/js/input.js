@@ -4,6 +4,10 @@ const KEY_A = 65
 const KEY_S = 83
 const KEY_D = 68
 const KEY_M = 77
+const KEY_LEFT = 37
+const KEY_UP = 38
+const KEY_RIGHT = 39
+const KEY_DOWN = 40
 const MOUSE_LEFT = 1
 
 const downButtons = {}
@@ -76,24 +80,24 @@ function handleInput () {
   player.velocity.x = 0
   player.velocity.y = 0
 
-  if (keyDown(KEY_W)) {
+  if (keyDown(KEY_W) || keyDown(KEY_UP)) {
     player.velocity.x += player.direction.x
     player.velocity.y += player.direction.y
   }
 
-  if (keyDown(KEY_S)) {
+  if (keyDown(KEY_S) || keyDown(KEY_DOWN)) {
     player.velocity.x -= player.direction.x
     player.velocity.y -= player.direction.y
   }
 
   // strafe to the left
-  if (keyDown(KEY_A)) {
+  if (keyDown(KEY_A) || keyDown(KEY_LEFT)) {
     player.velocity.x -= dirPerp.x
     player.velocity.y -= dirPerp.y
   }
 
   // strafe to the right
-  if (keyDown(KEY_D)) {
+  if (keyDown(KEY_D) || keyDown(KEY_RIGHT)) {
     player.velocity.x += dirPerp.x
     player.velocity.y += dirPerp.y
   }

@@ -63,6 +63,8 @@ let audioContext
 let miniMapWidth = 0
 let miniMapHeight = 0
 
+let level = 1
+
 const [canvas, ctx] = createCanvas(width, height)
 const [lightingCanvas, lightingCtx] = createCanvas(width, height)
 const [fogCanvas, fogCtx] = createCanvas(width, height)
@@ -131,6 +133,7 @@ function reset () {
   audioContext = new window.AudioContext()
   player.health = player.maxHealth
   player.mana = player.maxMana
+  level = 1
   // loadMap(overworld, 5.5, 5.5, 0, -1)
   // loadMap(createTestMap())
   loadMap(generateDungeon(new RNG()))
