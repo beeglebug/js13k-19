@@ -72,6 +72,47 @@ function renderMap (ctx) {
       ctx.fillRect(x * MINI_MAP_TILE_SIZE, y * MINI_MAP_TILE_SIZE, MINI_MAP_TILE_SIZE, MINI_MAP_TILE_SIZE)
     }
   }
+
+  if (!map.hasOpenedSecret) {
+
+    const flatData = flat(map.maze.data)
+    const secretRoom = flatData.find(room => room.secret)
+    const preSecretRoom = flatData.find(room => room.preSecret)
+
+    // cover up the secret room
+    ctx.clearRect(
+      secretRoom.x * map.cellSize * MINI_MAP_TILE_SIZE,
+      secretRoom.y * map.cellSize * MINI_MAP_TILE_SIZE,
+      map.cellSize * MINI_MAP_TILE_SIZE,
+      map.cellSize * MINI_MAP_TILE_SIZE
+    )
+
+    let x = preSecretRoom.x * map.cellSize
+    let y = preSecretRoom.y * map.cellSize
+    let width = map.cellSize
+    let height = map.cellSize
+
+    // and the connection stub if there is one
+    if (secretRoom.right === false) {
+      width = (map.cellSize - (preSecretRoom.width + 2)) / 2
+    } else if (secretRoom.left === false) {
+      width = (map.cellSize - (preSecretRoom.width + 2)) / 2
+      x += preSecretRoom.width + 2 + width
+    } else if (secretRoom.top === false) {
+      height = (map.cellSize - (preSecretRoom.height + 2)) / 2
+      y += preSecretRoom.height + 2 + height
+    } else if (secretRoom.bottom === false) {
+      height = (map.cellSize - (preSecretRoom.height + 2)) / 2
+    }
+
+    ctx.clearRect(
+      x * MINI_MAP_TILE_SIZE,
+      y * MINI_MAP_TILE_SIZE,
+      width * MINI_MAP_TILE_SIZE,
+      height * MINI_MAP_TILE_SIZE
+    )
+  }
+
 }
 
 function renderEntity (ctx, entity) {

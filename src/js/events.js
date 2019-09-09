@@ -28,14 +28,16 @@ on('collide_projectile_wall', (projectile, tile) => {
   if (tile.type === 'X') {
     tile.damage += 1
     if (tile.damage >= 3) {
+      // open secret room!
+      map.hasOpenedSecret = true
       tile.type = FLOOR_TILE
+      renderMap(mapCtx)
     } else {
       tile.flashing = true
       setTimeout(() => {
         tile.flashing = false
       }, 50)
     }
-    console.log(tile)
   }
 })
 
@@ -56,6 +58,8 @@ on('open_door', door => {
   soundDoor()
   TweenManager.create(door, 'offset', 1, 2000, () => {
     door.type = '.'
+    // redraw mini map minus the door
+    renderMap(mapCtx)
   })
 })
 
