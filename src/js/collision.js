@@ -28,12 +28,12 @@ function getRect (tile) {
   let { x, y } = tile
   let width = 1
   let height = 1
-  if (tile.type === 'd') {
+  if (isVerticalDoor(tile)) {
     x += 0.35
     y += tile.offset
     width = 0.3
   }
-  if (tile.type === 'D') {
+  if (isHorizontalDoor(tile)) {
     x += tile.offset
     y += 0.35
     height = 0.3

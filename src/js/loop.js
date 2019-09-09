@@ -212,8 +212,8 @@ function renderPlay () {
     // TODO maybe improve?
     let offsetX = 0
     let offsetY = 0
-    if (tile.type === 'd') offsetX = 0.5
-    if (tile.type === 'D') offsetY = 0.5
+    if (isVerticalDoor(tile)) offsetX = 0.5
+    if (isHorizontalDoor(tile)) offsetY = 0.5
 
     // 4 different wall directions possible
     if (side === 0) {
@@ -313,7 +313,7 @@ function getInteractionTarget (entities) {
 
   const [tile,rayLength] = raycast(rayFromPlayer(160))
 
-  if (rayLength < interactionDistance && (tile.type === 'D' || tile.type === 'd')) {
+  if (rayLength < interactionDistance && (isDoor(tile))) {
     return tile
   }
 }

@@ -40,7 +40,7 @@ const createTestMap = () => ({
     '~.........-',
     '~.........-',
     '~.........-',
-    '~-~--D--~~-',
+    '~-~--L--~~-',
     '~.........-',
     '~.........-',
     '~..-...-..~',
@@ -101,9 +101,14 @@ function parseMap (arr) {
   const width = arr[0].length
   const data = arr.map((row, y) => row.split('').map((type, x) => {
     const tile = { x, y, type, offset: 0 }
-    if (type === 'D') {
-      tile.tooltip = 'E: open'
+    if (isDoor(tile)) {
       tile.onInteract = 'open_door'
+      if (isLockedDoor(tile)) {
+        tile.locked = true
+        tile.tooltip = 'Locked'
+      } else {
+        tile.tooltip = 'E: open'
+      }
     }
     return tile
   }))
@@ -118,10 +123,11 @@ function parseMap (arr) {
 const textureIndexByTileType = {
   '-': 0,
   '=': 1,
-  '#': 2,
   '~': 4,
   'D': 3,
   'd': 3,
+  'L': 2,
+  'l': 2,
   'X': 6,
 }
 
@@ -168,6 +174,11 @@ function getNeighbours (map, x, y, diagonal = false) {
 
   return neighbours
 }
+
+const isHorizontalDoor = tile => (tile.type === 'D' || tile.type === 'L')
+const isVerticalDoor = tile => (tile.type === 'd' || tile.type === 'l')
+const isDoor = tile => isHorizontalDoor(tile) || isVerticalDoor(tile)
+const isLockedDoor = tile => (tile.type === 'L' || tile.type === 'l')
 
 function warpToBoss () {
   const exit = flat(map.maze.data).find(room => room.exit)

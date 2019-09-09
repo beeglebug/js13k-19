@@ -135,8 +135,8 @@ function reset () {
   player.mana = player.maxMana
   level = 1
   // loadMap(overworld, 5.5, 5.5, 0, -1)
-  // loadMap(createTestMap())
-  loadMap(generateDungeon(new RNG()))
+  loadMap(createTestMap())
+  // loadMap(generateDungeon(new RNG()))
 }
 
 function boot () {

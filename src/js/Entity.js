@@ -172,6 +172,7 @@ class Key extends Entity {
     soundCollect(this)
     this.kill()
     player.hasKey = true
+    flat(map.data).filter(tile => tile.locked).forEach(tile => tile.tooltip = 'E: Open')
   }
 }
 

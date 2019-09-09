@@ -72,7 +72,7 @@ function raycast (ray) {
     tile = getMap(map, mapX, mapY)
 
     // thin walls
-    if (tile.type === 'D') {
+    if (isHorizontalDoor(tile)) {
       // half way down the block
       const start = {
         x: mapX + tile.offset,
@@ -89,7 +89,7 @@ function raycast (ray) {
       side = 1
       collision = true
       break
-    } else if (tile.type === 'd') {
+    } else if (isVerticalDoor(tile)) {
       // half way down the block
       const start = {
         x: mapX + 0.5,

@@ -60,6 +60,8 @@ function renderMap (ctx) {
     '#': '#33cec2',
     'D': '#07080c',
     'd': '#07080c',
+    'L': '#07080c',
+    'l': '#07080c',
   }
 
   for (let y = 0; y < map.height; y++) {

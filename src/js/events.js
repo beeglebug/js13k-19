@@ -49,6 +49,10 @@ on('exit_level', ladder => {
 })
 
 on('open_door', door => {
+  if (door.locked && !player.hasKey) {
+    // TODO no no sound?
+    return
+  }
   soundDoor()
   TweenManager.create(door, 'offset', 1, 2000, () => {
     door.type = '.'
