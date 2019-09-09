@@ -33,6 +33,8 @@ whiteFont.addEventListener('load', () => {
   redFont = tint(whiteFont, '#FF0000')
 })
 
+const hudHeight = 13
+
 const player = new Player()
 let map
 
@@ -76,14 +78,6 @@ const [miniMapCanvas, miniMapCtx] = createCanvas(width, height)
 const [outputCanvas, outputCtx] = createCanvas(width * upscale, height * upscale)
 
 document.getElementById('container').appendChild(outputCanvas)
-
-// outputCanvas.after(lightingCanvas)
-// outputCanvas.after(fogCanvas)
-// outputCanvas.after(floorCanvas)
-// outputCanvas.after(mapCanvas)
-// outputCanvas.after(fowCanvas)
-// outputCanvas.after(miniMapCanvas)
-// outputCanvas.after(whiteSprites)
 
 let zBuffer = []
 let textureImageData

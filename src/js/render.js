@@ -11,11 +11,11 @@ function renderMiniMap (ctx) {
 
   miniMapCtx.clearRect(0, 0, miniMapWidth, miniMapHeight)
 
-  // miniMapCtx.globalCompositeOperation = 'source-over'
-  // miniMapCtx.drawImage(fowCanvas, 0, 0)
-  // miniMapCtx.globalCompositeOperation = 'source-in'
+  miniMapCtx.globalCompositeOperation = 'source-over'
+  miniMapCtx.drawImage(fowCanvas, 0, 0)
+  miniMapCtx.globalCompositeOperation = 'source-in'
   miniMapCtx.drawImage(mapCanvas, 0, 0)
-  // miniMapCtx.globalCompositeOperation = 'source-over'
+  miniMapCtx.globalCompositeOperation = 'source-over'
 
   const px = Math.floor(player.x * MINI_MAP_TILE_SIZE)
   const py = Math.floor(player.y * MINI_MAP_TILE_SIZE)

@@ -83,7 +83,7 @@ class Mob extends Entity {
     this.health -= value
     if (this.health <= 0) {
       this.kill()
-      dropLoot(this)
+      this.dropLoot()
     } else {
       this.flash(50)
     }
@@ -172,7 +172,8 @@ class Key extends Entity {
     soundCollect(this)
     this.kill()
     player.hasKey = true
-    flat(map.data).filter(tile => tile.locked).forEach(tile => tile.tooltip = 'E: Open')
+    // hack to swap locked door tooltip
+    flat(map.data).filter(Boolean).filter(tile => tile.locked).forEach(tile => tile.tooltip = 'E: Open')
   }
 }
 
@@ -193,22 +194,37 @@ class Cobweb extends Entity {
 }
 
 class Ghost extends Mob {
+
   constructor (x, y) {
     super(x, y, 0, 0.8)
     this.radius = 0.3
     this.health = 200
     this.flashSprite = redSprites[0]
-    this.attackDistance = 3
+    this.attackDistance = 4
   }
+
   // always attacks player
   attack () {
-    const direction = normalize(sub(player, this))
     soundBatAttack(this)
-    spawnProjectile(this, direction, EnemyProjectile, 5, 1000)
+    const center = normalize(sub(player, this))
+    const left = rotate(copy(center), -0.2)
+    const right = rotate(copy(center), 0.2)
+    spawnProjectile(this, left, EnemyProjectile, 3, 1000)
+    spawnProjectile(this, center, EnemyProjectile, 3, 1000)
+    spawnProjectile(this, right, EnemyProjectile, 3, 1000)
+  }
+
+  dropLoot () {
+    const drop = new Key(this.x, this.y)
+    const targetZ = drop.z
+    drop.z = 0.2
+    TweenManager.create(drop, 'z', targetZ, 200)
+    map.entities.push(drop)
   }
 }
 
 class Bat extends Mob {
+
   constructor (x, y) {
     super (x, y, 5, 0.5)
     this.radius = 0.3
@@ -216,11 +232,23 @@ class Bat extends Mob {
     this.z = 0
     this.attackDistance = 1.5
   }
+
   // always attacks player
   attack () {
     const direction = normalize(sub(player, this))
     soundBatAttack(this)
     spawnProjectile(this, direction, EnemyProjectile, 5, 1000)
+  }
+
+  dropLoot () {
+    // TODO fake drops based on health?
+    if (!sharedRng.randomChance(50)) return
+    const dropType = sharedRng.randomItem([ManaPotion, HealthPotion])
+    const drop = new dropType(this.x, this.y)
+    const targetZ = drop.z
+    drop.z = 0.2
+    TweenManager.create(drop, 'z', targetZ, 200)
+    map.entities.push(drop)
   }
 }
 
@@ -270,16 +298,6 @@ class Grave extends Entity {
     this.onInteract = 'enter_tomb'
     this.tooltip = generateEpitaph(seed) + '\n\nE: Enter Tomb'
   }
-}
-
-function dropLoot (entity) {
-  if (!sharedRng.randomChance(50)) return
-  const dropType = sharedRng.randomItem([ManaPotion, HealthPotion])
-  const drop = new dropType(entity.x, entity.y)
-  const targetZ = drop.z
-  drop.z = 0.2
-  TweenManager.create(drop, 'z', targetZ, 200)
-  map.entities.push(drop)
 }
 
 function handleCooldown (entity, delta) {

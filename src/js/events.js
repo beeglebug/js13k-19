@@ -45,9 +45,14 @@ on('collide_entity_wall', (entity, wall, collision) => {
   handleDisplace(entity, collision)
 })
 
-on('exit_level', ladder => {
-  const level = generateDungeon(map.rng)
-  loadMap(level)
+on('exit_level', () => {
+  level++
+  if (level === 2) {
+    // TODO you win text
+    loadMap(overworld)
+  } else {
+    loadMap(generateDungeon(map.rng))
+  }
 })
 
 on('open_door', door => {

@@ -3,10 +3,11 @@ const distanceSq = (v1, v2) => {
   return (v1.x - v2.x) * (v1.x - v2.x) + (v1.y - v2.y) * (v1.y - v2.y)
 }
 
-function rotate(v, delta) {
+function rotate(v, radians) {
   let x = v.x
-  v.x = v.x * Math.cos(delta) - v.y * Math.sin(delta)
-  v.y = x * Math.sin(delta) + v.y * Math.cos(delta)
+  v.x = v.x * Math.cos(radians) - v.y * Math.sin(radians)
+  v.y = x * Math.sin(radians) + v.y * Math.cos(radians)
+  return v
 }
 
 function perp (v1, v2) {
@@ -16,17 +17,8 @@ function perp (v1, v2) {
   return out
 }
 
-function vToStr (v) {
-  return v.x + ',' + v.y
-}
-
 function isZero (v) {
   return v.x === 0 && v.y === 0
-}
-
-function zero (v) {
-  v.x = 0
-  v.y = 0
 }
 
 function magnitude (v) {

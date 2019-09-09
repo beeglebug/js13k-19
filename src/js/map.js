@@ -181,7 +181,7 @@ const isDoor = tile => isHorizontalDoor(tile) || isVerticalDoor(tile)
 const isLockedDoor = tile => (tile.type === 'L' || tile.type === 'l')
 
 function warpToBoss () {
-  const exit = flat(map.maze.data).find(room => room.exit)
+  const exit = flat(map.maze.data).find(room => room.key)
   player.x = exit.mapX + 1
   player.y = exit.mapY + 1
 }

@@ -22,7 +22,7 @@ function render () {
 
   outputCtx.drawImage(canvas, 0, 0, width * upscale, height * upscale)
 
-  renderDebugText(outputCtx)
+  // renderDebugText(outputCtx)
 }
 
 function renderAiDebug (ctx) {

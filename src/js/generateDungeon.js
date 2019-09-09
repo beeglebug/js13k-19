@@ -59,7 +59,8 @@ function generateFromMaze (rng, width, height, cellSize) {
 
     // fixed room sizes
     if (room.entrance) room.size = 5
-    if (room.exit) room.size = 9
+    if (room.exit) room.size = 7
+    if (room.key) room.size = 9
     if (room.secret) room.size = 7
 
     room.width = room.size
@@ -178,9 +179,9 @@ function generateFromMaze (rng, width, height, cellSize) {
 
     } else if (room.key) {
 
-      enemyCount = rng.randomIntBetween(3, 5)
+      enemyCount = rng.randomIntBetween(2, 3)
 
-      entities.push(new Key(centerX + 0.5, centerY + 0.5))
+      entities.push(new Ghost(centerX + 0.5, centerY + 0.5))
 
     } else if (room.exit) {
 
@@ -192,7 +193,6 @@ function generateFromMaze (rng, width, height, cellSize) {
       if (room.right === false) oppositeX -= 4
 
       entities.push(new Ladder(oppositeX + 0.5, oppositeY + 0.5))
-      entities.push(new Ghost(centerX + 0.5, centerY + 0.5))
 
       enemyCount = rng.randomIntBetween(2, 3)
 
