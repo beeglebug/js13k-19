@@ -1,6 +1,6 @@
 function generateDungeon (rng) {
 
-  const map = generateFromMaze(rng)
+  const map = generateFromMaze(rng, 5, 5, 11)
 
   // add walls
   for (let y = 0; y < map.height; y++) {
@@ -24,11 +24,8 @@ function shouldBeWall (map, x, y) {
   return near.filter(tile => tile && tile.type === FLOOR_TILE).length > 0
 }
 
-function generateFromMaze (rng) {
+function generateFromMaze (rng, width, height, cellSize) {
 
-  const width = 5
-  const height = 5
-  const cellSize = 11
   const halfSize = Math.floor(cellSize / 2)
 
   const data = []
@@ -232,21 +229,13 @@ function generateFromMaze (rng) {
 
     } else {
 
-      // center pillar
-      if (!room.corridoor && (room.size === 5 || room.size === 7) && rng.randomChance(20)) {
-        data[centerY][centerX].type = '-'
+      decorateRoom(room, data, rng, centerX, centerY)
+
+      if (room.corridoor) {
+        enemyCount = rng.randomIntBetween(0, 2)
+      } else {
+        enemyCount = rng.randomIntBetween(0, 3)
       }
-
-      // 4 corner pillars
-      if (!room.corridoor && room.size === 9 && rng.randomChance(50)) {
-        data[centerY - 2][centerX - 2].type = '-'
-        data[centerY + 2][centerX + 2].type = '-'
-        data[centerY - 2][centerX + 2].type = '-'
-        data[centerY + 2][centerX - 2].type = '-'
-      }
-
-      enemyCount = rng.randomIntBetween(0, 3)
-
     }
 
     if (enemyCount) {
@@ -265,6 +254,50 @@ function generateFromMaze (rng) {
   })
 
   return map
+}
+
+function decorateRoom(room, data, rng, centerX, centerY) {
+
+  if (room.corridoor) return
+
+  // center pillar
+  if ((room.size === 5 || room.size === 7) && rng.randomChance(20)) {
+    data[centerY][centerX].type = '-'
+    return
+  }
+
+  if (room.size === 7 || room.size === 9) {
+
+    switch (rng.randomIntBetween(0, 5)) {
+      case 0:
+        // 4 corner pillars
+        data[centerY - 2][centerX - 2].type = '-'
+        data[centerY + 2][centerX + 2].type = '-'
+        data[centerY - 2][centerX + 2].type = '-'
+        data[centerY + 2][centerX - 2].type = '-'
+        break
+      case 1:
+        // center cross
+        data[centerY][centerX].type = '-'
+        data[centerY - 1][centerX].type = '-'
+        data[centerY + 1][centerX].type = '-'
+        data[centerY][centerX + 1].type = '-'
+        data[centerY][centerX - 1].type = '-'
+        break
+      case 2:
+        // horizontal center line
+        data[centerY][centerX - 1].type = '-'
+        data[centerY][centerX].type = '-'
+        data[centerY][centerX + 1].type = '-'
+        break
+      case 3:
+        // vertical center line
+        data[centerY - 1][centerX].type = '-'
+        data[centerY][centerX].type = '-'
+        data[centerY + 1][centerX].type = '-'
+        break
+    }
+  }
 }
 
 function getOpenRoomTiles (room, data) {
