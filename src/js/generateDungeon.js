@@ -41,7 +41,7 @@ function generateFromMaze (rng) {
   const entities = []
 
   const map = {
-    name: 'floor 3',
+    name: `Floor ${levelCount - level}`,
     maze,
     width: width * cellSize,
     height: height * cellSize,
@@ -173,8 +173,8 @@ function generateFromMaze (rng) {
       map.spawn = [
         room.mapX + 0.5,
         room.mapY + 0.5,
-        0.7071067811865475,
-        0.7071067811865475
+        0.705691154353887,
+        0.708519579593018
       ]
 
       enemyCount = 0
