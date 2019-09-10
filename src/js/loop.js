@@ -7,10 +7,21 @@ available savings:
 */
 
 function render () {
-  if (state === STATE_TITLE) renderTitle()
+  if (state === STATE_TITLE) {
+    renderPlay()
+    renderTitle()
+  }
   if (state === STATE_PAUSE) renderPause()
   if (state === STATE_DEAD) renderDead()
-  if (state === STATE_PLAY) renderPlay()
+  if (state === STATE_PLAY) {
+    renderPlay()
+    renderWeapon(ctx)
+    renderHUD(ctx)
+
+    if (interactionTarget && interactionTarget.tooltip) {
+      renderTextBox(ctx, interactionTarget.tooltip, '#222423')
+    }
+  }
 
   if (state === STATE_PLAY) {
     // renderAiDebug(outputCtx)
@@ -101,16 +112,16 @@ function renderPause () {
 }
 
 function renderTitle () {
-  ctx.fillStyle = '#000000'
-  ctx.fillRect(0, 0, width, height)
+  // ctx.fillStyle = 'rgba(0,0,0,0.5)'
+  // ctx.fillRect(0, 0, width, height)
   renderCenteredText(ctx, redFont, 'TITLE GOES HERE', 50)
-  renderCenteredText(ctx, whiteFont, 'click to start', 85)
-  renderCenteredText(ctx, whiteFont, 'Controls', 120)
+  renderCenteredText(ctx, whiteFont, 'click to start', 80)
+  renderCenteredText(ctx, whiteFont, 'Controls', 110)
   // padded to center the colon
-  renderCenteredText(ctx, whiteFont, '   WASD : move    ', 130)
-  renderCenteredText(ctx, whiteFont, '      E : interact', 140)
-  renderCenteredText(ctx, whiteFont, '  CLICK : shoot   ', 150)
-  renderCenteredText(ctx, whiteFont, '      M : map     ', 160)
+  renderCenteredText(ctx, whiteFont, 'ARROWS / WASD : move', 130)
+  renderCenteredText(ctx, whiteFont, 'E : interact', 140)
+  renderCenteredText(ctx, whiteFont, 'CLICK : shoot', 150)
+  renderCenteredText(ctx, whiteFont, 'M : map', 160)
 }
 
 let debug = false
@@ -282,13 +293,6 @@ function renderPlay () {
   map.entities.forEach(entity => {
     renderEntity(ctx, entity)
   })
-
-  renderWeapon(ctx)
-  renderHUD(ctx)
-
-  if (interactionTarget && interactionTarget.tooltip) {
-    renderTextBox(ctx, interactionTarget.tooltip, '#222423')
-  }
 }
 
 function copyPixel (sourceData, sourceIndex, destData, destIndex) {
@@ -330,6 +334,10 @@ function loop () {
   const delta = tick()
 
   TweenManager.update(delta)
+
+  if (state === STATE_TITLE) {
+    rotate(player.direction, 0.002)
+  }
 
   if (state === STATE_PLAY) {
 

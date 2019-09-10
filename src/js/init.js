@@ -39,6 +39,8 @@ whiteFont.addEventListener('load', () => {
 const hudHeight = 13
 
 const player = new Player()
+const titleMap = createTitleMap()
+
 let map
 
 // entity under the cursor and close to the player
@@ -119,7 +121,11 @@ outputCanvas.addEventListener('mousedown', e => {
   if (!hasPointerLock()) outputCanvas.requestPointerLock()
 
   if (state === STATE_PAUSE) return setState(prevState)
-  if (state === STATE_DEAD) return setState(STATE_TITLE)
+  if (state === STATE_DEAD) {
+    map = titleMap
+    setState(STATE_TITLE)
+    return
+  }
 
   if (state === STATE_TITLE) {
     reset()
@@ -137,6 +143,7 @@ function reset () {
 }
 
 function boot () {
+  loadMap(titleMap)
   requestAnimationFrame(loop)
 }
 
@@ -146,7 +153,7 @@ document.addEventListener('pointerlockchange', () => {
   if (hasPointerLock()) {
     outputCanvas.classList.add('active')
   } else {
-    // setState(STATE_PAUSE)
+    setState(STATE_PAUSE)
     outputCanvas.classList.remove('active')
   }
 })

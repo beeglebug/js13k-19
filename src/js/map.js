@@ -33,6 +33,28 @@ function generateOverworld () {
   return map
 }
 
+const createTitleMap = () => ({
+  ...parseMap([
+    '--~-~L--~--',
+    '~.........-',
+    '-.........-',
+    '~..-...-..~',
+    '-.........-',
+    'd.........d',
+    '~.........~',
+    '-..-...-..-',
+    '-.........~',
+    '-.........-',
+    '---~-D-----',
+  ]),
+  name: 'test map',
+  spawn: [5.5, 5.5, 0, -1],
+  fog: [46,40,39],
+  fogDistance: 20,
+  entities: [],
+  graph: { data: [] },
+})
+
 const createTestMap = () => ({
   ...parseMap([
     '--~-----~~~',
