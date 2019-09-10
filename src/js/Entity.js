@@ -44,17 +44,29 @@ class Entity {
   }
 
   collide () {}
-  damage () {}
+  dropLoot () {}
+
+  damage (value) {
+    if (!this.health) return
+    this.health -= value
+    this.flash(50, () => {
+      if (this.health <= 0) {
+        this.kill()
+        this.dropLoot()
+      }
+    })
+  }
 
   kill () {
     this.alive = false
   }
 
-  flash (time) {
+  flash (time, callback) {
     const sprite = this.sprite
     this.sprite = this.flashSprite
     setTimeout(() => {
       this.sprite = sprite
+      callback()
     }, time)
   }
 }
@@ -77,16 +89,6 @@ class Mob extends Entity {
   collide (other, collision) {
     if (other instanceof Projectile) return
     handleDisplace(this, collision)
-  }
-
-  damage (value) {
-    this.health -= value
-    if (this.health <= 0) {
-      this.kill()
-      this.dropLoot()
-    } else {
-      this.flash(50)
-    }
   }
 }
 
@@ -144,7 +146,7 @@ class ManaPotion extends Entity {
     if (entity.mana === entity.maxMana) return
     soundCollect(this)
     this.kill()
-    entity.mana = Math.min(entity.mana + 20, entity.maxMana)
+    entity.mana = Math.min(entity.mana + 30, entity.maxMana)
   }
 }
 
@@ -158,7 +160,7 @@ class HealthPotion extends Entity {
     if (entity.health === entity.maxHealth) return
     soundCollect(this)
     this.kill()
-    entity.health = Math.min(entity.health + 20, entity.maxHealth)
+    entity.health = Math.min(entity.health + 30, entity.maxHealth)
   }
 }
 
@@ -215,11 +217,7 @@ class Ghost extends Mob {
   }
 
   dropLoot () {
-    const drop = new Key(this.x, this.y)
-    const targetZ = drop.z
-    drop.z = 0.2
-    TweenManager.create(drop, 'z', targetZ, 200)
-    map.entities.push(drop)
+    dropItem(new Key(this.x, this.y))
   }
 }
 
@@ -241,18 +239,10 @@ class Bat extends Mob {
   }
 
   dropLoot () {
-    // TODO fake drops based on health?
-    if (!sharedRng.randomChance(50)) return
-    const dropType = sharedRng.randomItem([ManaPotion, HealthPotion])
-    const drop = new dropType(this.x, this.y)
-    const targetZ = drop.z
-    drop.z = 0.2
-    TweenManager.create(drop, 'z', targetZ, 200)
-    map.entities.push(drop)
+    dropItem(biasedDrop(this))
   }
 }
 
-// TODO enemy projectiles
 class Projectile extends Entity {
   constructor (x, y, index, speed, direction) {
     super(x, y, index, 0.3)
@@ -274,18 +264,21 @@ class Projectile extends Entity {
 class PlayerProjectile extends Projectile {
   constructor (x, y, speed, direction) {
     super(x, y, 2, speed, direction)
+    this.strength = 10
   }
 }
 
 class BatProjectile extends Projectile {
   constructor (x, y, speed, direction) {
     super(x, y, 10, speed, direction)
+    this.strength = 5
   }
 }
 
 class GhostProjectile extends Projectile {
   constructor (x, y, speed, direction) {
     super(x, y, 12, speed, direction)
+    this.strength = 10
   }
 }
 
@@ -303,9 +296,38 @@ class Grave extends Entity {
   }
 }
 
+class Urn extends Entity {
+  constructor (x, y) {
+    super(x, y, 13, 0.7)
+    this.radius = 0.3
+    this.health = 15
+  }
+  dropLoot () {
+    dropItem(biasedDrop(this))
+  }
+}
+
 function handleCooldown (entity, delta) {
   if (entity.attackCooldown > 0) {
     entity.attackCooldown -= delta * 1000
     if (entity.attackCooldown < 0) entity.attackCooldown = 0
   }
+}
+
+function biasedDrop (entity) {
+  // base 50 / 50 chance
+  const pool = [null, null, ManaPotion, HealthPotion]
+  if (player.health <= 20) pool.push(HealthPotion)
+  if (player.mana <= 20) pool.push(ManaPotion)
+  const dropType = sharedRng.randomItem(pool)
+  return dropType ? new dropType(entity.x, entity.y) : null
+}
+
+function dropItem (drop) {
+  if (!drop) return
+  console.log(drop)
+  const targetZ = drop.z
+  drop.z = 0.2
+  TweenManager.create(drop, 'z', targetZ, 200)
+  map.entities.push(drop)
 }

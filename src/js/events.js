@@ -17,8 +17,7 @@ on('player_dead', () => {
 
 on('collide_projectile_entity', (projectile, entity) => {
   handleImpact(projectile)
-  // TODO damage from projectile
-  entity.damage(10)
+  entity.damage(projectile.strength)
 })
 
 on('collide_projectile_wall', (projectile, tile) => {

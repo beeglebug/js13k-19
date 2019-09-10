@@ -257,7 +257,6 @@ function renderPlay () {
       let currentFloorX = (weight * floorXWall + (1 - weight) * ray.x)
       let currentFloorY = (weight * floorYWall + (1 - weight) * ray.y)
 
-      // TODO get from map
       const textureIndex = map.floor
       let floorTexX = Math.floor(currentFloorX * textureSize) % textureSize + (textureSize * textureIndex)
       let floorTexY = Math.floor(currentFloorY * textureSize) % textureSize

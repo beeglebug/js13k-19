@@ -92,9 +92,10 @@ const createTestMap = () => ({
   spawn: [5.5, 17.5, 0, -1],
   fog: [46,40,39],
   fogDistance: 20,
+  floor: 5,
   entities: [
-    // new Bat(3.5, 8.5),
-    new Key(5.5, 8.5),
+    new Bat(5.5, 6.5),
+    new Urn(5.5, 8.5),
     // new Bat(7.5, 8.5),
   ],
   graph: { data: [] },
