@@ -129,6 +129,8 @@ function renderEntity (ctx, entity) {
 
   const { sprite, z, transformY, screenX, screenWidth, screenHeight } = entity
 
+  if (!sprite) return
+
   // not in front of the camera
   if (transformY <= 0) return
 

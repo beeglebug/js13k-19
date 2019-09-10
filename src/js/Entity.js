@@ -5,8 +5,10 @@ class Entity {
     this.velocity = { x: 0, y: 0 }
     this.direction = { x: 0, y: 0 }
 
-    this.sprite = sprites[index]
-    this.flashSprite = whiteSprites[index]
+    if (index !== null) {
+      this.sprite = sprites[index]
+      this.flashSprite = whiteSprites[index]
+    }
 
     this.scale = scale
     this.z = zPos(scale)
@@ -265,6 +267,15 @@ class PlayerProjectile extends Projectile {
   constructor (x, y, speed, direction) {
     super(x, y, 2, speed, direction)
     this.strength = 10
+  }
+}
+
+class MeleeProjectile extends Projectile {
+  constructor (x, y, speed, direction) {
+    super(x, y, null, speed, direction)
+    this.strength = 10
+    // TODO maybe better way to do this?
+    setTimeout(() => this.kill(), 50)
   }
 }
 

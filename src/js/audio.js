@@ -60,6 +60,13 @@ function soundDoor () {
   playSound(20, 3, 75, 30, 0.05, 1)
 }
 
+function soundMeleeAttack () {
+  playSound(40, -3, 15, 10, 0.1, 0)
+}
+function soundMeleeImpact () {
+  playSound(120, -24, 10, 8, 0.3, 2)
+}
+
 function calcVolume (base, pos) {
   const d2 = distanceSq(player, pos)
   const max = 10 * 10
