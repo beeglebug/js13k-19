@@ -15,6 +15,10 @@ function handleAI (entity, delta) {
 
   if (entity.target) {
 
+    if (!isEmpty(getMap(map, Math.floor(entity.target.x), Math.floor(entity.target.y)))) {
+      entity.target = pathfind(entity)
+    }
+
     const canSeeTarget = hasLineOfSight(entity, entity.target)
 
     if (canSeeTarget) {
@@ -25,9 +29,7 @@ function handleAI (entity, delta) {
         entity.attack()
       }
 
-      if (atTarget(entity)) {
-        entity.x = entity.target.x
-        entity.y = entity.target.y
+      if (closeEnoughToTarget(entity)) {
         entity.target = null
       }
 
@@ -35,6 +37,8 @@ function handleAI (entity, delta) {
       entity.target = pathfind(entity)
     }
 
+  } else {
+    entity.target = pathfind(entity)
   }
 }
 
@@ -60,9 +64,9 @@ function pathfind (entity) {
   }
 }
 
-function atTarget (entity) {
+function closeEnoughToTarget (entity) {
 
-  const threshold = 0.01
+  const threshold = entity.radius
 
   const dx = Math.abs(entity.target.x - entity.x)
   const dy = Math.abs(entity.target.y - entity.y)
