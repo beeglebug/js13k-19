@@ -297,12 +297,9 @@ class ProjectileImpact extends Entity {
 }
 
 class Grave extends Entity {
-  constructor (x, y, seed) {
-    super(x, y, 4, 0.8)
-    this.radius = 0.1
-    this.seed = seed
-    this.onInteract = 'enter_tomb'
-    this.tooltip = generateEpitaph(seed) + '\n\nE: Enter Tomb'
+  constructor (x, y) {
+    super(x, y, 4, 0.7)
+    this.radius = 0
   }
 }
 

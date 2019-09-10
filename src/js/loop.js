@@ -197,7 +197,7 @@ function renderPlay () {
     // LIGHTING ========================================================================================================
 
     // give horizontal and vertical sides different brightness
-    if (side === 1) {
+    if (!map.sky && side === 1) {
       lightingCtx.fillStyle = 'rgba(0, 0, 0, 0.3)'
       lightingCtx.fillRect(x, drawStart, 1, sliceHeight)
     }
@@ -258,7 +258,7 @@ function renderPlay () {
       let currentFloorY = (weight * floorYWall + (1 - weight) * ray.y)
 
       // TODO get from map
-      const textureIndex = 5
+      const textureIndex = map.floor
       let floorTexX = Math.floor(currentFloorX * textureSize) % textureSize + (textureSize * textureIndex)
       let floorTexY = Math.floor(currentFloorY * textureSize) % textureSize
 

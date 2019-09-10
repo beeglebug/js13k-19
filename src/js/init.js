@@ -39,7 +39,7 @@ whiteFont.addEventListener('load', () => {
 const hudHeight = 13
 
 const player = new Player()
-const titleMap = createTitleMap()
+const titleMap = generateTitleMap()
 
 let map
 
@@ -139,7 +139,8 @@ function reset () {
   player.mana = player.maxMana
   level = 0
   // loadMap(createTestMap())
-  loadMap(generateDungeon(new RNG()))
+  loadMap(generateOverworld())
+  // loadMap(generateDungeon(new RNG()))
 }
 
 function boot () {
