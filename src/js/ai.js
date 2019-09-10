@@ -53,6 +53,7 @@ function idle (entity) {
 
 function pathfind (entity) {
   const current = getMapWorld(influenceMap, entity)
+  if (!current) return null
   const near = getNeighbours(influenceMap, current.x, current.y).filter(Boolean)
   const lowest = near.sort(byWeight)[0]
   const others = near.filter(cell => cell.weight === lowest.weight)

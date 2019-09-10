@@ -123,7 +123,7 @@ function renderTitle () {
   renderCenteredText(ctx, whiteFont, 'ARROWS / WASD : move', 130)
   renderCenteredText(ctx, whiteFont, 'E : interact', 140)
   renderCenteredText(ctx, whiteFont, 'CLICK : shoot', 150)
-  renderCenteredText(ctx, whiteFont, 'M : map', 160)
+  renderCenteredText(ctx, whiteFont, 'M : show map', 160)
 }
 
 let debug = false
