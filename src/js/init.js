@@ -132,7 +132,6 @@ function reset () {
   player.health = player.maxHealth
   player.mana = player.maxMana
   level = 0
-  // loadMap(overworld, 5.5, 5.5, 0, -1)
   // loadMap(createTestMap())
   loadMap(generateDungeon(new RNG()))
 }
@@ -153,6 +152,4 @@ document.addEventListener('pointerlockchange', () => {
 })
 
 bindInput(document)
-
-const overworld = generateOverworld()
 

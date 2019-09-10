@@ -15,10 +15,8 @@ on('player_dead', () => {
   }, 2000)
 })
 
-on('collide_projectile_entity', (projectile, entity, collision) => {
-
+on('collide_projectile_entity', (projectile, entity) => {
   handleImpact(projectile)
-
   // TODO damage from projectile
   entity.damage(10)
 })
@@ -48,8 +46,8 @@ on('collide_entity_wall', (entity, wall, collision) => {
 on('exit_level', () => {
   level++
   if (level === 3) {
-    // TODO you win text
-    loadMap(overworld)
+    // TODO "you win" text
+    loadMap(generateOverworld())
   } else {
     loadMap(generateDungeon(map.rng))
   }
@@ -62,6 +60,7 @@ on('open_door', door => {
   }
   soundDoor()
   TweenManager.create(door, 'offset', 1, 2000, () => {
+    player.hasKey = false
     door.type = '.'
     // redraw mini map minus the door
     renderMap(mapCtx)

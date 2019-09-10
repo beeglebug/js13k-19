@@ -113,7 +113,8 @@ function generateFromMaze (rng, width, height, cellSize) {
       for (let y = room.centerY; y <= originY + cellSize; y++) {
         data[y][x] = createTile(x, y, FLOOR_TILE)
       }
-      if (!room.preSecret && rng.randomChance(50)) {
+      // add a door to a random selection of rooms
+      if (shouldHaveDoor(room, rng)) {
         const tile = data[originY + cellSize - 1][x]
         if (room.secret) {
           tile.type = FLOOR_TILE
@@ -138,7 +139,8 @@ function generateFromMaze (rng, width, height, cellSize) {
       for (let x = room.centerX; x <= originX + cellSize; x++) {
         data[y][x] = createTile(x, y, FLOOR_TILE)
       }
-      if (!room.preSecret && rng.randomChance(50)) {
+      // add a door to a random selection of rooms
+      if (shouldHaveDoor(room, rng)) {
         const tile = data[y][originX + cellSize - 1]
         if (room.secret) {
           tile.type = FLOOR_TILE
@@ -153,6 +155,7 @@ function generateFromMaze (rng, width, height, cellSize) {
   })
 
   const secretRoom = flatData.find(room => room.secret)
+  const exitRoom = flatData.find(room => room.exit)
 
   // loop again so the structure is all done
   flatData.forEach(room => {
@@ -211,15 +214,11 @@ function generateFromMaze (rng, width, height, cellSize) {
     } else if (room.preExit) {
 
       // add the locked door
-      const [tile, axis] = getDoorPoint(room, secretRoom, map, room.centerX, room.centerY)
-      if (tile) {
-        tile.type = axis === HORIZONTAL ? 'L' : 'l'
-        tile.locked = true
-        tile.tooltip = 'Locked'
-        tile.onInteract = 'open_door'
-      } else {
-
-      }
+      const [tile, axis] = getDoorPoint(room, exitRoom, map)
+      tile.type = axis === HORIZONTAL ? 'L' : 'l'
+      tile.locked = true
+      tile.tooltip = 'Locked'
+      tile.onInteract = 'open_door'
 
     } else {
 
@@ -250,6 +249,11 @@ function generateFromMaze (rng, width, height, cellSize) {
   })
 
   return map
+}
+
+function shouldHaveDoor (room, rng) {
+  if (room.preSecret || room.exit || room.preExit) return false
+  return rng.randomChance(50)
 }
 
 function getDoorPoint (room, target, data) {
