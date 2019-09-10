@@ -209,9 +209,9 @@ class Ghost extends Mob {
     const center = normalize(sub(player, this))
     const left = rotate(copy(center), -0.2)
     const right = rotate(copy(center), 0.2)
-    spawnProjectile(this, left, EnemyProjectile, 3, 1000)
-    spawnProjectile(this, center, EnemyProjectile, 3, 1000)
-    spawnProjectile(this, right, EnemyProjectile, 3, 1000)
+    spawnProjectile(this, left, GhostProjectile, 3, 1000)
+    spawnProjectile(this, center, GhostProjectile, 3, 1000)
+    spawnProjectile(this, right, GhostProjectile, 3, 1000)
   }
 
   dropLoot () {
@@ -237,7 +237,7 @@ class Bat extends Mob {
   attack () {
     const direction = normalize(sub(player, this))
     soundBatAttack(this)
-    spawnProjectile(this, direction, EnemyProjectile, 5, 1000)
+    spawnProjectile(this, direction, BatProjectile, 5, 1000)
   }
 
   dropLoot () {
@@ -277,9 +277,15 @@ class PlayerProjectile extends Projectile {
   }
 }
 
-class EnemyProjectile extends Projectile {
+class BatProjectile extends Projectile {
   constructor (x, y, speed, direction) {
     super(x, y, 10, speed, direction)
+  }
+}
+
+class GhostProjectile extends Projectile {
+  constructor (x, y, speed, direction) {
+    super(x, y, 12, speed, direction)
   }
 }
 
