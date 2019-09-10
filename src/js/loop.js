@@ -112,8 +112,10 @@ function renderPause () {
 }
 
 function renderTitle () {
-  // ctx.fillStyle = 'rgba(0,0,0,0.5)'
-  // ctx.fillRect(0, 0, width, height)
+  ctx.fillStyle = 'rgba(0,0,0,0.2)'
+  ctx.fillRect(0, 0, width, height)
+  ctx.fillStyle = 'rgba(0,0,0,0.3)'
+  ctx.fillRect(100, 35, 120, 140)
   renderCenteredText(ctx, redFont, 'TITLE GOES HERE', 50)
   renderCenteredText(ctx, whiteFont, 'click to start', 80)
   renderCenteredText(ctx, whiteFont, 'Controls', 110)

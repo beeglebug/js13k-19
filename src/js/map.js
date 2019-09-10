@@ -49,8 +49,8 @@ const createTitleMap = () => ({
   ]),
   name: 'test map',
   spawn: [5.5, 5.5, 0, -1],
-  fog: [46,40,39],
-  fogDistance: 20,
+  fog: [100,100,100],
+  fogDistance: 10,
   entities: [],
   graph: { data: [] },
 })
