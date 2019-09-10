@@ -6,6 +6,9 @@ const STATE_PAUSE = 1
 const STATE_PLAY = 2
 const STATE_DEAD = 3
 
+const HORIZONTAL = 0
+const VERTICAL = 1
+
 let prevState = null
 let state = STATE_TITLE
 

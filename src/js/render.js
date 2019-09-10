@@ -7,15 +7,17 @@ const MINI_MAP_TILE_SIZE = 3
 
 const roundAwayFromZero = num => Math.sign(num) * Math.round(Math.abs(num))
 
+let debugMap = false
+
 function renderMiniMap (ctx) {
 
   miniMapCtx.clearRect(0, 0, miniMapWidth, miniMapHeight)
 
-  miniMapCtx.globalCompositeOperation = 'source-over'
-  miniMapCtx.drawImage(fowCanvas, 0, 0)
-  miniMapCtx.globalCompositeOperation = 'source-in'
+  if (!debugMap) miniMapCtx.globalCompositeOperation = 'source-over'
+  if (!debugMap) miniMapCtx.drawImage(fowCanvas, 0, 0)
+  if (!debugMap) miniMapCtx.globalCompositeOperation = 'source-in'
   miniMapCtx.drawImage(mapCanvas, 0, 0)
-  miniMapCtx.globalCompositeOperation = 'source-over'
+  if (!debugMap) miniMapCtx.globalCompositeOperation = 'source-over'
 
   const px = Math.floor(player.x * MINI_MAP_TILE_SIZE)
   const py = Math.floor(player.y * MINI_MAP_TILE_SIZE)
@@ -41,7 +43,7 @@ function renderMiniMap (ctx) {
   )
 
   // renderInfluenceMap(miniMapCtx, influenceMap)
-  // renderGraph(miniMapCtx, map)
+  if (debugMap) renderGraph(miniMapCtx, map)
 
   ctx.save()
   ctx.globalAlpha = 0.3

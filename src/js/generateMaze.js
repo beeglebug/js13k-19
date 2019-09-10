@@ -64,20 +64,12 @@ function generateMaze (rng, width, height, x, y) {
   let keyNode = ends[ends.length - 2]
   let secretNode = ends[Math.floor(ends.length / 2)]
 
-  // pre-secret room
-  if (secretNode.top === false) {
-    let connected = getMap(graph, secretNode.x, secretNode.y - 1)
-    connected.preSecret = true
-  } else if (secretNode.bottom === false) {
-    let connected = getMap(graph, secretNode.x, secretNode.y + 1)
-    connected.preSecret = true
-  } else if (secretNode.left === false) {
-    let connected = getMap(graph, secretNode.x - 1, secretNode.y)
-    connected.preSecret = true
-  } else if (secretNode.right === false) {
-    let connected = getMap(graph, secretNode.x + 1, secretNode.y)
-    connected.preSecret = true
-  }
+  // pre rooms
+  const preSecret = getConnected(secretNode, graph)
+  preSecret.preSecret = true
+
+  const preExit = getConnected(exitNode, graph)
+  preExit.preExit = true
 
   exitNode.exit = true
   keyNode.key = true
@@ -88,6 +80,13 @@ function generateMaze (rng, width, height, x, y) {
   return graph
 }
 
+// get the room connected to this single exit room
+const getConnected = (node, graph) => {
+  if (node.top === false) return getMap(graph, node.x, node.y - 1)
+  if (node.bottom === false) return getMap(graph, node.x, node.y + 1)
+  if (node.left === false) return getMap(graph, node.x - 1, node.y)
+  if (node.right === false) return getMap(graph, node.x + 1, node.y)
+}
 
 // has exactly 3 walls
 const isEnd = node => [node.top, node.left, node.bottom, node.right].filter(n => n).length === 3

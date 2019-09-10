@@ -180,20 +180,23 @@ const isVerticalDoor = tile => (tile.type === 'd' || tile.type === 'l')
 const isDoor = tile => isHorizontalDoor(tile) || isVerticalDoor(tile)
 const isLockedDoor = tile => (tile.type === 'L' || tile.type === 'l')
 
+function warpToRoom (room) {
+  player.x = room.centerX
+  player.y = room.centerY
+}
+
+function warpToRoomAt (x, y) {
+  warpToRoom(map.graph.data[y][x])
+}
+
 function warpToBoss () {
-  const room = flat(map.graph.data).find(room => room.key)
-  player.x = room.mapX + 1
-  player.y = room.mapY + 1
+  warpToRoom(flat(map.graph.data).find(room => room.key))
 }
 
 function warpToPreSecret () {
-  const room = flat(map.graph.data).find(room => room.preSecret)
-  player.x = room.mapX + 1
-  player.y = room.mapY + 1
+  warpToRoom(flat(map.graph.data).find(room => room.preSecret))
 }
 
 function warpToExit () {
-  const room = flat(map.graph.data).find(room => room.exit)
-  player.x = room.mapX + 3
-  player.y = room.mapY + 3
+  warpToRoom(flat(map.graph.data).find(room => room.exit))
 }

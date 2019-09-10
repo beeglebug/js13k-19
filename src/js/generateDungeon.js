@@ -82,8 +82,8 @@ function generateFromMaze (rng, width, height, cellSize) {
     const originX = room.x * cellSize
     const originY = room.y * cellSize
 
-    const centerX = originX + halfSize
-    const centerY = originY + halfSize
+    room.centerX = originX + halfSize
+    room.centerY = originY + halfSize
 
     let offsetX = Math.floor((cellSize - room.width) / 2)
     let offsetY = Math.floor((cellSize - room.height) / 2)
@@ -102,15 +102,15 @@ function generateFromMaze (rng, width, height, cellSize) {
     // add some doors
 
     if (room.top === false) {
-      const x = centerX
+      const x = room.centerX
       for (let y = originY; y <= originY + halfSize; y++) {
         data[y][x] = createTile(x, y, FLOOR_TILE)
       }
     }
 
     if (room.bottom === false) {
-      const x = centerX
-      for (let y = centerY; y <= originY + cellSize; y++) {
+      const x = room.centerX
+      for (let y = room.centerY; y <= originY + cellSize; y++) {
         data[y][x] = createTile(x, y, FLOOR_TILE)
       }
       if (!room.preSecret && rng.randomChance(50)) {
@@ -127,15 +127,15 @@ function generateFromMaze (rng, width, height, cellSize) {
     }
 
     if (room.left === false) {
-      const y = centerY
+      const y = room.centerY
       for (let x = originX; x <= originX + halfSize; x++) {
         data[y][x] = createTile(x, y, FLOOR_TILE)
       }
     }
 
     if (room.right === false) {
-      const y = centerY
-      for (let x = centerX; x <= originX + cellSize; x++) {
+      const y = room.centerY
+      for (let x = room.centerX; x <= originX + cellSize; x++) {
         data[y][x] = createTile(x, y, FLOOR_TILE)
       }
       if (!room.preSecret && rng.randomChance(50)) {
@@ -157,12 +157,6 @@ function generateFromMaze (rng, width, height, cellSize) {
   // loop again so the structure is all done
   flatData.forEach(room => {
 
-    const originX = room.x * cellSize
-    const originY = room.y * cellSize
-
-    const centerX = originX + halfSize
-    const centerY = originY + halfSize
-
     let enemyCount
 
     // seed entities etc
@@ -181,12 +175,12 @@ function generateFromMaze (rng, width, height, cellSize) {
 
       enemyCount = rng.randomIntBetween(2, 3)
 
-      entities.push(new Ghost(centerX + 0.5, centerY + 0.5))
+      entities.push(new Ghost(room.centerX + 0.5, room.centerY + 0.5))
 
     } else if (room.exit) {
 
-      let oppositeX = centerX
-      let oppositeY = centerY
+      let oppositeX = room.centerX
+      let oppositeY = room.centerY
       if (room.top === false) oppositeY += 2
       if (room.bottom === false) oppositeY -= 2
       if (room.left === false) oppositeX += 2
@@ -196,10 +190,10 @@ function generateFromMaze (rng, width, height, cellSize) {
 
       enemyCount = rng.randomIntBetween(2, 3)
 
-      data[centerY - 2][centerX - 2].type = '-'
-      data[centerY + 2][centerX + 2].type = '-'
-      data[centerY - 2][centerX + 2].type = '-'
-      data[centerY + 2][centerX - 2].type = '-'
+      data[room.centerY - 2][room.centerX - 2].type = '-'
+      data[room.centerY + 2][room.centerX + 2].type = '-'
+      data[room.centerY - 2][room.centerX + 2].type = '-'
+      data[room.centerY + 2][room.centerX - 2].type = '-'
 
     } else if (room.secret) {
 
@@ -209,27 +203,27 @@ function generateFromMaze (rng, width, height, cellSize) {
 
       enemyCount = rng.randomIntBetween(2, 3)
 
-      if (secretRoom.top === false) {
-        let tile = data[room.mapY + room.height][centerX]
-        tile.type = 'X'
-        tile.damage = 0
-      } else if (secretRoom.bottom === false) {
-        let tile = data[room.mapY - 1][centerX]
-        tile.type = 'X'
-        tile.damage = 0
-      } else if (secretRoom.left === false) {
-        let tile = data[centerY][room.mapX + room.width]
-        tile.type = 'X'
-        tile.damage = 0
-      } else if (secretRoom.right === false) {
-        let tile = data[centerY][room.mapX - 1]
-        tile.type = 'X'
-        tile.damage = 0
+      // add the damaged wall
+      const [tile] = getDoorPoint(room, secretRoom, map)
+      tile.type = 'X'
+      tile.damage = 0
+
+    } else if (room.preExit) {
+
+      // add the locked door
+      const [tile, axis] = getDoorPoint(room, secretRoom, map, room.centerX, room.centerY)
+      if (tile) {
+        tile.type = axis === HORIZONTAL ? 'L' : 'l'
+        tile.locked = true
+        tile.tooltip = 'Locked'
+        tile.onInteract = 'open_door'
+      } else {
+
       }
 
     } else {
 
-      decorateRoom(room, data, rng, centerX, centerY)
+      decorateRoom(room, data, rng, room.centerX, room.centerY)
 
       if (room.corridoor) {
         enemyCount = rng.randomIntBetween(0, 2)
@@ -246,6 +240,8 @@ function generateFromMaze (rng, width, height, cellSize) {
       })
     }
 
+    // add some random cobwebs
+
     rng.randomChance(30) && entities.push(new Cobweb(room.mapX + .2, room.mapY + room.height - .2))
     rng.randomChance(30) && entities.push(new Cobweb(room.mapX + .2, room.mapY + .2))
     rng.randomChance(30) && entities.push(new Cobweb(room.mapX + room.width - .2, room.mapY + .2))
@@ -256,13 +252,20 @@ function generateFromMaze (rng, width, height, cellSize) {
   return map
 }
 
-function decorateRoom(room, data, rng, centerX, centerY) {
+function getDoorPoint (room, target, data) {
+  if (target.top === false) return [getMap(data, room.centerX, room.mapY + room.height), HORIZONTAL]
+  if (target.bottom === false) return [getMap(data, room.centerX, room.mapY - 1), HORIZONTAL]
+  if (target.left === false) return [getMap(data, room.mapX + room.width, room.centerY), VERTICAL]
+  if (target.right === false) return [getMap(data,room.mapX - 1, room.centerY), VERTICAL]
+}
+
+function decorateRoom(room, data, rng) {
 
   if (room.corridoor) return
 
   // center pillar
   if ((room.size === 5 || room.size === 7) && rng.randomChance(20)) {
-    data[centerY][centerX].type = '-'
+    data[room.centerY][room.centerX].type = '-'
     return
   }
 
@@ -271,30 +274,30 @@ function decorateRoom(room, data, rng, centerX, centerY) {
     switch (rng.randomIntBetween(0, 5)) {
       case 0:
         // 4 corner pillars
-        data[centerY - 2][centerX - 2].type = '-'
-        data[centerY + 2][centerX + 2].type = '-'
-        data[centerY - 2][centerX + 2].type = '-'
-        data[centerY + 2][centerX - 2].type = '-'
+        data[room.centerY - 2][room.centerX - 2].type = '-'
+        data[room.centerY + 2][room.centerX + 2].type = '-'
+        data[room.centerY - 2][room.centerX + 2].type = '-'
+        data[room.centerY + 2][room.centerX - 2].type = '-'
         break
       case 1:
         // center cross
-        data[centerY][centerX].type = '-'
-        data[centerY - 1][centerX].type = '-'
-        data[centerY + 1][centerX].type = '-'
-        data[centerY][centerX + 1].type = '-'
-        data[centerY][centerX - 1].type = '-'
+        data[room.centerY][room.centerX].type = '-'
+        data[room.centerY - 1][room.centerX].type = '-'
+        data[room.centerY + 1][room.centerX].type = '-'
+        data[room.centerY][room.centerX + 1].type = '-'
+        data[room.centerY][room.centerX - 1].type = '-'
         break
       case 2:
         // horizontal center line
-        data[centerY][centerX - 1].type = '-'
-        data[centerY][centerX].type = '-'
-        data[centerY][centerX + 1].type = '-'
+        data[room.centerY][room.centerX - 1].type = '-'
+        data[room.centerY][room.centerX].type = '-'
+        data[room.centerY][room.centerX + 1].type = '-'
         break
       case 3:
         // vertical center line
-        data[centerY - 1][centerX].type = '-'
-        data[centerY][centerX].type = '-'
-        data[centerY + 1][centerX].type = '-'
+        data[room.centerY - 1][room.centerX].type = '-'
+        data[room.centerY][room.centerX].type = '-'
+        data[room.centerY + 1][room.centerX].type = '-'
         break
     }
   }
