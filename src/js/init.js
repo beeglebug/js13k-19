@@ -138,9 +138,9 @@ function reset () {
   player.health = player.maxHealth
   player.mana = player.maxMana
   level = 0
-  loadMap(createTestMap())
+  // loadMap(createTestMap())
   // loadMap(generateOverworld())
-  // loadMap(generateDungeon(new RNG()))
+  loadMap(generateDungeon(new RNG()))
 }
 
 function boot () {

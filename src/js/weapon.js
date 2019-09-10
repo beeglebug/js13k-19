@@ -9,7 +9,7 @@ let onScreenWeapon = {
 }
 
 const SHOOT_DELAY = 200
-const SHOOT_COST = 2
+const SHOOT_COST = 5
 
 function handleWeaponSway (time) {
 

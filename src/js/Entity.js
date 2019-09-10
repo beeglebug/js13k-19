@@ -316,7 +316,7 @@ function handleCooldown (entity, delta) {
 
 function biasedDrop (entity) {
   // base 50 / 50 chance
-  const pool = [null, null, ManaPotion, HealthPotion]
+  const pool = [null, null, null, ManaPotion, ManaPotion, HealthPotion]
   if (player.health <= 20) pool.push(HealthPotion)
   if (player.mana <= 20) pool.push(ManaPotion)
   const dropType = sharedRng.randomItem(pool)
@@ -325,7 +325,6 @@ function biasedDrop (entity) {
 
 function dropItem (drop) {
   if (!drop) return
-  console.log(drop)
   const targetZ = drop.z
   drop.z = 0.2
   TweenManager.create(drop, 'z', targetZ, 200)

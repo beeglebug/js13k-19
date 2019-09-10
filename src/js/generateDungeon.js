@@ -160,6 +160,7 @@ function generateFromMaze (rng, width, height, cellSize) {
   flatData.forEach(room => {
 
     let enemyCount
+    let urnCount
 
     // seed entities etc
     if (room.entrance) {
@@ -176,6 +177,7 @@ function generateFromMaze (rng, width, height, cellSize) {
     } else if (room.key) {
 
       enemyCount = rng.randomIntBetween(2, 3)
+      urnCount = rng.randomIntBetween(2, 3)
 
       entities.push(new Ghost(room.centerX + 0.5, room.centerY + 0.5))
 
@@ -200,6 +202,7 @@ function generateFromMaze (rng, width, height, cellSize) {
     } else if (room.secret) {
 
       enemyCount = 0
+      urnCount = rng.randomIntBetween(4, 7)
 
     } else if (room.preSecret) {
 
@@ -227,6 +230,7 @@ function generateFromMaze (rng, width, height, cellSize) {
         enemyCount = rng.randomIntBetween(0, 2)
       } else {
         enemyCount = rng.randomIntBetween(0, 3)
+        urnCount = rng.randomItem([0, 0, 1, 2])
       }
     }
 
@@ -235,6 +239,14 @@ function generateFromMaze (rng, width, height, cellSize) {
       times(enemyCount, () => {
         const spot = rng.randomItem(open)
         entities.push(new Bat(spot.x + 0.5, spot.y + 0.5))
+      })
+    }
+
+    if (urnCount) {
+      const outer = getOuterRoomTiles(room, data)
+      times(urnCount, () => {
+        const spot = rng.randomItem(outer)
+        entities.push(new Urn(spot.x + 0.5, spot.y + 0.5))
       })
     }
 
@@ -318,6 +330,23 @@ function getOpenRoomTiles (room, data) {
     }
   }
   return open
+}
+
+function getOuterRoomTiles (room, data) {
+  const outer = []
+  // top and bottom edges
+  for (let x = 0; x < room.width; x++) {
+    if (x + room.mapX === room.centerX) continue // avoid blocking doors
+    outer.push(data[room.mapY][x + room.mapX])
+    outer.push(data[room.mapY + room.height - 1][x + room.mapX])
+  }
+  // left and right edges (excluding corners already covered above)
+  for (let y = 1; y < room.height - 1; y++) {
+    if (y + room.mapY === room.centerY) continue // avoid blocking doors
+    outer.push(data[y + room.mapY][room.mapX])
+    outer.push(data[y + room.mapY][room.mapX + room.width - 1])
+  }
+  return outer
 }
 
 function createTile (x, y, type) { return { x, y, type, offset: 0 } }

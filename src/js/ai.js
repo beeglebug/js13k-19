@@ -11,6 +11,7 @@ function handleAI (entity, delta) {
     // stay a bit away from player
     const offset = multiply(normalize(sub(player, entity)), entity.attackDistance)
     entity.target = sub(player, offset)
+    entity.hasSeenPlayer = true
   }
 
   if (entity.target) {
@@ -38,7 +39,7 @@ function handleAI (entity, delta) {
     }
 
   } else {
-    entity.target = pathfind(entity)
+    if (entity.hasSeenPlayer) entity.target = pathfind(entity)
   }
 }
 
