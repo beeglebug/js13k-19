@@ -5,6 +5,7 @@ let onScreenWeapon = {
   originY: 70,
   offsetX: 0,
   offsetY: 0,
+  flash: false,
 }
 
 const SHOOT_DELAY = 200
@@ -42,6 +43,8 @@ function shoot () {
   if (player.mana < SHOOT_COST) return
   player.mana -= SHOOT_COST
   spawnProjectile(player, player.direction, PlayerProjectile, 10, SHOOT_DELAY)
+  onScreenWeapon.flash = true
+  setTimeout(() => (onScreenWeapon.flash = false), 20)
   soundPlayerAttack()
 }
 

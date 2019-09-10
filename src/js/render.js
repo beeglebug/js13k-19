@@ -261,8 +261,10 @@ function renderHUD (ctx) {
 }
 
 function renderWeapon (ctx) {
+  // weapon
   ctx.drawImage(imgSprites, 96, 0, 16, 16, Math.floor(onScreenWeapon.x), Math.floor(onScreenWeapon.y), 16 * 8, 16 * 8)
-  // TODO muzzle flash
+  // muzzle flash
+  if (onScreenWeapon.flash) ctx.drawImage(imgSprites, 32, 0, 16, 16, Math.floor(onScreenWeapon.x) - 32, Math.floor(onScreenWeapon.y) - 12, 16 * 8, 16 * 8)
 }
 
 function renderGraph (ctx, map) {
