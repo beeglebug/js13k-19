@@ -81,11 +81,11 @@ function renderMap (ctx) {
     }
   }
 
-  if (!map.hasOpenedSecret) {
+  const flatData = flat(map.graph.data)
+  const secretRoom = flatData.find(room => room.secret)
+  const preSecretRoom = flatData.find(room => room.preSecret)
 
-    const flatData = flat(map.maze.data)
-    const secretRoom = flatData.find(room => room.secret)
-    const preSecretRoom = flatData.find(room => room.preSecret)
+  if (secretRoom && !map.hasOpenedSecret) {
 
     // cover up the secret room
     ctx.clearRect(
@@ -273,11 +273,11 @@ function renderGraph (ctx, map) {
   ctx.strokeWidth = 2
   ctx.lineCap = 'square'
 
-  for (let y = 0; y < map.maze.height; y++) {
+  for (let y = 0; y < map.graph.height; y++) {
 
-    for (let x = 0; x < map.maze.width; x++) {
+    for (let x = 0; x < map.graph.width; x++) {
 
-      const node = map.maze.data[y][x]
+      const node = map.graph.data[y][x]
 
       const xs = x * size
       const ys = y * size

@@ -39,7 +39,7 @@ function generateFromMaze (rng, width, height, cellSize) {
 
   const map = {
     name: `Floor ${levelCount - level}`,
-    maze,
+    graph: maze,
     width: width * cellSize,
     height: height * cellSize,
     cellSize,

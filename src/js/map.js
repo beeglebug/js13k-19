@@ -4,31 +4,30 @@ function generateOverworld () {
   sky.addColorStop(0, '#7c9dbd')
   sky.addColorStop(1, '#a3b1bd')
 
+  // TODO procgen this and drop the parse function
   const map = {
     ...parseMap([
-      '--~----~~~',
-      '~........-',
-      '~........~',
-      '~........~',
-      '~........~',
-      '~........~',
-      '~........~',
-      '-........-',
-      '---~-~~---',
+      '--~----------------~~~',
+      '~....................-',
+      '-....................~',
+      '~....................-',
+      '-....................-',
+      '-....................-',
+      '-....................-',
+      '-....................-',
+      '-....................-',
+      '-....................-',
+      '~....................-',
+      '-....................-',
+      '---~-------------~~---',
     ]),
-    fog: '#A3B1BD',
+    name: 'surface',
+    spawn: [7,7, 0, 1],
+    fog: [156,174,189],
+    fogDistance: 40,
+    entities: [],
     sky,
-    entities: []
-  }
-
-  const rng = new RNG(250581)
-
-  for (let y = 0; y < 3; y++) {
-    for (let x = 0; x < 3; x++) {
-      let seed = rng.randomInt()
-      rng.setSeed(seed)
-      map.entities.push(new Grave(2.5 + 2 * x, 2.5 + 2 * y, seed))
-    }
+    graph: { data: [] },
   }
 
   return map
@@ -68,7 +67,8 @@ const createTestMap = () => ({
     // new Bat(3.5, 8.5),
     new Key(5.5, 8.5),
     // new Bat(7.5, 8.5),
-  ]
+  ],
+  graph: { data: [] },
 })
 
 function loadMap (newMap) {
@@ -181,19 +181,19 @@ const isDoor = tile => isHorizontalDoor(tile) || isVerticalDoor(tile)
 const isLockedDoor = tile => (tile.type === 'L' || tile.type === 'l')
 
 function warpToBoss () {
-  const room = flat(map.maze.data).find(room => room.key)
+  const room = flat(map.graph.data).find(room => room.key)
   player.x = room.mapX + 1
   player.y = room.mapY + 1
 }
 
 function warpToPreSecret () {
-  const room = flat(map.maze.data).find(room => room.preSecret)
+  const room = flat(map.graph.data).find(room => room.preSecret)
   player.x = room.mapX + 1
   player.y = room.mapY + 1
 }
 
 function warpToExit () {
-  const room = flat(map.maze.data).find(room => room.exit)
+  const room = flat(map.graph.data).find(room => room.exit)
   player.x = room.mapX + 3
   player.y = room.mapY + 3
 }
