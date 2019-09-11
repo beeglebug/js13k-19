@@ -40,18 +40,21 @@ function shoot () {
   onScreenWeapon.offsetX = -50
   onScreenWeapon.offsetY = -50
   if (player.attackCooldown > 0) return
-  if (player.mana < SHOOT_COST) {
-    // melee
-    spawnProjectile(player, player.direction, MeleeProjectile, 10, SHOOT_DELAY)
-    soundMeleeAttack()
-  } else {
-    // ranged
-    player.mana -= SHOOT_COST
-    spawnProjectile(player, player.direction, PlayerProjectile, 10, SHOOT_DELAY)
-    onScreenWeapon.flash = true
-    setTimeout(() => (onScreenWeapon.flash = false), 20)
-    soundPlayerAttack()
-  }
+  // ranged
+  player.mana -= SHOOT_COST
+  spawnProjectile(player, player.direction, PlayerProjectile, 10, SHOOT_DELAY)
+  onScreenWeapon.flash = true
+  setTimeout(() => (onScreenWeapon.flash = false), 20)
+  soundPlayerAttack()
+}
+
+function melee () {
+  onScreenWeapon.offsetX = -50
+  onScreenWeapon.offsetY = -50
+  if (player.attackCooldown > 0) return
+  // melee
+  spawnProjectile(player, player.direction, MeleeProjectile, 10, SHOOT_DELAY)
+  soundMeleeAttack()
 }
 
 function spawnProjectile (entity, direction, ProjectileClass, speed, delay) {

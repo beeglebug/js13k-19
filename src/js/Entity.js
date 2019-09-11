@@ -311,7 +311,7 @@ class Urn extends Entity {
   constructor (x, y) {
     super(x, y, 13, 0.7)
     this.radius = 0.3
-    this.health = 15
+    this.health = 10
   }
   dropLoot () {
     dropItem(biasedDrop(this))
