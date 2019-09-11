@@ -14,7 +14,7 @@ function renderTextBox (ctx, text, background = '#000000') {
   renderCenteredText(ctx, whiteFont, text, boxY + 4)
 }
 
-function renderMultiLineText (lines, x, y) {
+function renderMultiLineText (ctx, lines, x, y) {
   lines.forEach((line, ix) => {
     renderText(ctx, whiteFont, line, x, y + ix * 10)
   })
@@ -45,9 +45,9 @@ function renderText (ctx, font, text, x, y) {
 // font currently handles chars 0-9 A-Z -,.:?
 function getX (c) {
   const cc = c.charCodeAt(0)
-  if (cc >= 44 && cc < 59) return (cc - 44) * 3
+  if (cc >= 43 && cc < 59) return (cc - 43) * 3
   if (cc === 39) return 126 // '
   if (cc === 63) return 123 // ?
-  if (cc >= 65 && cc < 91) return ((cc - 65) * 3) + 45
+  if (cc >= 65 && cc < 91) return ((cc - 64) * 3) + 45
   return null
 }

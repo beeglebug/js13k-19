@@ -72,16 +72,20 @@ function renderPause () {
 
 function renderTitle () {
   ctx.fillStyle = 'rgba(0,0,0,0.3)'
-  ctx.fillRect(60, 30, 200, 140)
+  ctx.fillRect(60, 20, 200, 160)
   ctx.save()
   ctx.scale(5, 5)
-  renderText(ctx, titleFont, 'ENTOMBED', 17, 9)
+  renderText(ctx, titleFont, 'ENTOMBED', 17, 7)
   ctx.restore()
-  renderCenteredText(ctx, whiteFont, 'click to start', 95)
-  renderCenteredText(ctx, whiteFont, 'ARROWS / WASD : move', 125)
-  renderCenteredText(ctx, whiteFont, 'E : interact', 135)
-  renderCenteredText(ctx, whiteFont, 'CLICK : shoot', 145)
-  renderCenteredText(ctx, whiteFont, 'M : show map', 155)
+  renderCenteredText(ctx, whiteFont, 'click to start', 85)
+  renderMultiLineText(ctx, [
+    'ARROWS / WASD : move',
+    'E : interact',
+    'left mouse : shoot',
+    'right mouse : melee',
+    'M : show map',
+    '+/- : adjust mouse sensitivity'
+  ], 85, 115)
 }
 
 function renderWin () {
@@ -93,12 +97,12 @@ function renderWin () {
   ctx.restore()
 
   renderText(ctx, whiteFont, 'stats', 56, 72)
-  renderMultiLineText(Object.entries(stats).map(([key, value]) => `${key.split(/(?=[A-Z])/).join(' ')} - ${value}`), 56, 86)
+  renderMultiLineText(ctx, Object.entries(stats).map(([key, value]) => `${key.split(/(?=[A-Z])/).join(' ')} - ${value}`), 56, 86)
 
   const doneAchievements = Object.entries(achievements).filter(([,done]) => done)
 
   renderText(ctx, whiteFont, 'achievements', 146, 72)
-  renderMultiLineText(doneAchievements.map(([key]) => `${key} - ${achievementDescriptions[key]}`), 146, 86)
+  renderMultiLineText(ctx, doneAchievements.map(([key]) => `${key} - ${achievementDescriptions[key]}`), 146, 86)
 
   renderCenteredText(ctx, whiteFont, 'click to restart', 162)
 }
