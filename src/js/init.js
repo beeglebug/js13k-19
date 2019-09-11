@@ -5,6 +5,7 @@ const STATE_TITLE = 0
 const STATE_PAUSE = 1
 const STATE_PLAY = 2
 const STATE_DEAD = 3
+const STATE_WIN = 4
 
 const HORIZONTAL = 0
 const VERTICAL = 1
@@ -72,9 +73,6 @@ let audioContext
 let miniMapWidth = 0
 let miniMapHeight = 0
 
-let levelCount = 3
-let level = 0
-
 const [canvas, ctx] = createCanvas(width, height)
 const [lightingCanvas, lightingCtx] = createCanvas(width, height)
 const [fogCanvas, fogCtx] = createCanvas(width, height)
@@ -89,6 +87,7 @@ document.getElementById('container').appendChild(outputCanvas)
 let zBuffer = []
 let textureImageData
 let floorImageData = new ImageData(width, height)
+
 
 let imgToLoad = 3
 const imgLoaded = () => {
@@ -129,6 +128,11 @@ outputCanvas.addEventListener('mousedown', e => {
     return
   }
 
+  if (state === STATE_WIN) {
+    map = titleMap
+    return setState(STATE_TITLE)
+  }
+
   if (state === STATE_TITLE) {
     reset()
     return setState(STATE_PLAY)
@@ -139,7 +143,6 @@ function reset () {
   audioContext = new window.AudioContext()
   player.health = player.maxHealth
   player.mana = player.maxMana
-  level = 0
   // loadMap(createTestMap())
   // loadMap(generateOverworld())
   loadMap(generateDungeon(new RNG()))

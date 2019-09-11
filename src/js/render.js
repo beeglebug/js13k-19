@@ -255,9 +255,9 @@ function renderHUD (ctx) {
     ctx.drawImage(sprites[11], 298, -6)
   }
 
-  ctx.fillStyle = '#5c5c5c'
-  ctx.fillRect(176, 2, 114, 9)
-  renderText(ctx, whiteFont, map.name, 180, 4)
+  // TODO time?
+  // ctx.fillStyle = '#5c5c5c'
+  // ctx.fillRect(176, 2, 114, 9)
 
   ctx.restore()
 }

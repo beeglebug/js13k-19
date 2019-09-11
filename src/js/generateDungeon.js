@@ -38,7 +38,6 @@ function generateFromMaze (rng, width, height, cellSize) {
   const entities = []
 
   const map = {
-    name: `Floor ${levelCount - level}`,
     graph: maze,
     width: width * cellSize,
     height: height * cellSize,

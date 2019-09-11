@@ -2,7 +2,6 @@
 available savings:
  - remove heatmap code
  - rename const -> let
- - 800b of epitaph code
  - fix terser properties
 */
 
@@ -11,6 +10,12 @@ function render () {
     renderPlay()
     renderTitle()
   }
+
+  if (state === STATE_WIN) {
+    renderPlay()
+    renderWin()
+  }
+
   if (state === STATE_PAUSE) renderPause()
   if (state === STATE_DEAD) renderDead()
   if (state === STATE_PLAY) {
@@ -36,54 +41,8 @@ function render () {
   // renderDebugText(outputCtx)
 }
 
-function renderAiDebug (ctx) {
-
-  miniMapCtx.clearRect(0, 0, width, height)
-  miniMapCtx.drawImage(mapCanvas, 0, 0)
-
-  drawCircle(miniMapCtx, player.x * MINI_MAP_TILE_SIZE, player.y * MINI_MAP_TILE_SIZE, 1.5, '#ff0011')
-
-  miniMapCtx.strokeStyle = '#ff0011'
-  drawLine(
-    miniMapCtx,
-    player.x * MINI_MAP_TILE_SIZE,
-    player.y * MINI_MAP_TILE_SIZE,
-    (player.x + player.direction.x * 2) * MINI_MAP_TILE_SIZE,
-    (player.y + player.direction.y * 2) * MINI_MAP_TILE_SIZE
-  )
-
-  map.entities.forEach(entity => {
-    drawCircle(miniMapCtx, entity.x, entity.y, 1.5, '#ff9f00')
-    miniMapCtx.strokeStyle = '#ff9f00'
-    drawLine(
-      miniMapCtx,
-      entity.x * MINI_MAP_TILE_SIZE,
-      entity.y * MINI_MAP_TILE_SIZE,
-      (entity.x + entity.direction.x * 2) * MINI_MAP_TILE_SIZE,
-      (entity.y + entity.direction.y * 2) * MINI_MAP_TILE_SIZE
-    )
-    if (entity.target) {
-      drawCircle(miniMapCtx, entity.target.x * MINI_MAP_TILE_SIZE, entity.target.y * MINI_MAP_TILE_SIZE, 1.5, '#baffad')
-    }
-  })
-
-  miniMapCtx.restore()
-
-  const ox = Math.floor(width - map.width / 2)
-  const oy = Math.floor(height - map.height / 2)
-
-  ctx.drawImage(miniMapCanvas, ox, oy)
-}
-
 function renderFogOfWar (ctx) {
   drawCircle(ctx, player.x * MINI_MAP_TILE_SIZE, player.y * MINI_MAP_TILE_SIZE, 20, '#ffffff')
-}
-
-function drawLine (ctx, fromX, fromY, toX, toY) {
-  ctx.beginPath()
-  ctx.moveTo(fromX, fromY)
-  ctx.lineTo(toX, toY)
-  ctx.stroke()
 }
 
 function drawCircle (ctx, x, y, radius, color) {
@@ -127,7 +86,17 @@ function renderTitle () {
   renderCenteredText(ctx, whiteFont, 'M : show map', 155)
 }
 
-let debug = false
+function renderWin () {
+  ctx.fillStyle = 'rgba(0,0,0,0.2)'
+  ctx.fillRect(0, 0, width, height)
+  ctx.fillStyle = 'rgba(0,0,0,0.3)'
+  ctx.fillRect(40, 30, 240, 140)
+  ctx.save()
+  ctx.scale(5, 5)
+  renderText(ctx, titleFont, 'YOU ESCAPED', 11, 9)
+  ctx.restore()
+  renderCenteredText(ctx, whiteFont, 'click to restart', 95)
+}
 
 function renderPlay () {
 
@@ -337,7 +306,12 @@ function loop () {
 
   TweenManager.update(delta)
 
-  if (state === STATE_TITLE) {
+  map.entities.forEach(entity => {
+    entity.update(delta)
+    entity.project()
+  })
+
+  if (state === STATE_TITLE || state === STATE_WIN) {
     rotate(player.direction, 0.002)
   }
 
@@ -362,11 +336,6 @@ function loop () {
 
     // sort from far to close
     map.entities.sort(byDistanceToPlayer).reverse()
-
-    map.entities.forEach(entity => {
-      entity.update(delta)
-      entity.project()
-    })
 
     collideEntities(map.entities)
 

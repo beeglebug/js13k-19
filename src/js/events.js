@@ -43,13 +43,8 @@ const collide_entity_wall = (entity, wall, collision) => {
 }
 
 const exit_level = () => {
-  level++
-  if (level === 3) {
-    // TODO "you win" text
-    loadMap(generateOverworld())
-  } else {
-    loadMap(generateDungeon(map.rng))
-  }
+  loadMap(generateOverworld())
+  setState(STATE_WIN)
 }
 
 const open_door = door => {
