@@ -1,26 +1,26 @@
-on('collide_player_entity', (entity, collision) => {
+const collide_player_entity = (entity, collision) => {
   if (entity.static) {
     handleDisplace(player, collision)
   }
-})
+}
 
-on('collide_player_collectible', entity => {
+const collide_player_collectible = entity => {
   entity.collect(player)
-})
+}
 
-on('player_dead', () => {
+const player_dead = () => {
   setState(STATE_DEAD)
   setTimeout(() => {
     setState(STATE_TITLE)
   }, 2000)
-})
+}
 
-on('collide_projectile_entity', (projectile, entity) => {
+const collide_projectile_entity = (projectile, entity) => {
   handleImpact(projectile)
   entity.damage(projectile.strength)
-})
+}
 
-on('collide_projectile_wall', (projectile, tile) => {
+const collide_projectile_wall = (projectile, tile) => {
   handleImpact(projectile)
   if (tile.type === 'X') {
     tile.damage += 1
@@ -36,13 +36,13 @@ on('collide_projectile_wall', (projectile, tile) => {
       }, 50)
     }
   }
-})
+}
 
-on('collide_entity_wall', (entity, wall, collision) => {
+const collide_entity_wall = (entity, wall, collision) => {
   handleDisplace(entity, collision)
-})
+}
 
-on('exit_level', () => {
+const exit_level = () => {
   level++
   if (level === 3) {
     // TODO "you win" text
@@ -50,9 +50,9 @@ on('exit_level', () => {
   } else {
     loadMap(generateDungeon(map.rng))
   }
-})
+}
 
-on('open_door', door => {
+const open_door = door => {
   if (door.locked && !player.hasKey) {
     // TODO no no sound?
     return
@@ -64,9 +64,7 @@ on('open_door', door => {
     // redraw mini map minus the door
     renderMap(mapCtx)
   })
-})
-
-
+}
 
 // misc handlers to save dupe code
 

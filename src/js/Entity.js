@@ -128,13 +128,13 @@ class Player extends Entity {
   damage (value) {
     this.health -= value
     if (this.health <= 0) {
-      emit('player_dead')
+      player_dead()
     }
   }
 
   collide (other, collision) {
-    if (other.collectible) return emit('collide_player_collectible', other)
-    return emit('collide_player_entity', other, collision)
+    if (other.collectible) return collide_player_collectible(other)
+    return collide_player_entity(other, collision)
   }
 }
 
@@ -185,7 +185,7 @@ class Ladder extends Entity {
   constructor (x, y) {
     super(x, y, 7)
     this.tooltip = 'E: climb'
-    this.onInteract = 'exit_level'
+    this.onInteract = exit_level
   }
 }
 
@@ -259,7 +259,7 @@ class Projectile extends Entity {
     }
   }
   collide (other, collision) {
-    return emit('collide_projectile_entity', this, other, collision)
+    return collide_projectile_entity(this, other, collision)
   }
 }
 

@@ -326,7 +326,7 @@ function getInteractionTarget (entities) {
 // TODO handle interactive tiles (map changing)
 function interact () {
   if (interactionTarget) {
-    emit(interactionTarget.onInteract, interactionTarget)
+    interactionTarget.onInteract(interactionTarget)
   }
 }
 

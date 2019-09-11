@@ -18,8 +18,8 @@ function collideWorld (entity) {
     if (isEmpty(tile)) return
     const collision = collideCircleRect(entity, getRect(tile))
     if (collision) {
-      if (entity instanceof Projectile) return emit('collide_projectile_wall', entity, tile, collision)
-      emit('collide_entity_wall', entity, tile, collision)
+      if (entity instanceof Projectile) return collide_projectile_wall(entity, tile, collision)
+      collide_entity_wall(entity, tile, collision)
     }
   })
 }

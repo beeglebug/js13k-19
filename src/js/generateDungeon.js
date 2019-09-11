@@ -120,7 +120,7 @@ function generateFromMaze (rng, width, height, cellSize) {
         } else {
           tile.type = 'D'
           tile.tooltip = 'E: Open'
-          tile.onInteract = 'open_door'
+          tile.onInteract = open_door
           room.bottomDoor = tile
         }
       }
@@ -146,7 +146,7 @@ function generateFromMaze (rng, width, height, cellSize) {
         } else {
           tile.type = 'd'
           tile.tooltip = 'E: Open'
-          tile.onInteract = 'open_door'
+          tile.onInteract = open_door
           room.rightDoor = tile
         }
       }
@@ -220,7 +220,7 @@ function generateFromMaze (rng, width, height, cellSize) {
       tile.type = axis === HORIZONTAL ? 'L' : 'l'
       tile.locked = true
       tile.tooltip = 'Locked'
-      tile.onInteract = 'open_door'
+      tile.onInteract = open_door
 
     } else {
 

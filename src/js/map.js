@@ -127,29 +127,13 @@ function loadMap (newMap) {
 }
 
 function parseMap (arr) {
-  const height = arr.length
-  const width = arr[0].length
-  const data = arr.map((row, y) => row.split('').map((type, x) => {
-    const tile = { x, y, type, offset: 0 }
-    if (isDoor(tile)) {
-      tile.onInteract = 'open_door'
-      if (isLockedDoor(tile)) {
-        tile.locked = true
-        tile.tooltip = 'Locked'
-      } else {
-        tile.tooltip = 'E: open'
-      }
-    }
-    return tile
-  }))
   return {
-    height,
-    width,
-    data
+    height: arr.length,
+    width: arr[0].length,
+    data: arr.map((row, y) => row.split('').map((type, x) => ({ x, y, type, offset: 0 })))
   }
 }
 
-// TODO refactor into parse map
 const textureIndexByTileType = {
   '-': 0,
   '=': 1,
@@ -167,13 +151,11 @@ function getMap (map, x, y) {
 
 const getMapWorld = (map, { x, y }) => getMap(map, Math.floor(x), Math.floor(y))
 
-// TODO needs improving
 function isEmpty (tile) {
   if (!tile) return true
   return (tile.type === FLOOR_TILE || tile.type === EMPTY_TILE)
 }
 
-// TODO don't return null?
 function getNeighbours (map, x, y, diagonal = false) {
 
   const neighbours = []
