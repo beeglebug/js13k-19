@@ -73,7 +73,7 @@ function renderPause () {
 }
 
 function renderTitle () {
-  ctx.fillStyle = 'rgba(0,0,0,0.3)'
+  ctx.fillStyle = 'rgba(0,0,0,0.5)'
   ctx.fillRect(60, 20, 200, 160)
   ctx.save()
   ctx.scale(5, 5)
@@ -92,7 +92,7 @@ function renderTitle () {
 
 function renderWin () {
   ctx.fillStyle = 'rgba(0,0,0,0.5)'
-  ctx.fillRect(40, 20, 240, 160)
+  ctx.fillRect(30, 20, 260, 160)
   ctx.save()
   ctx.scale(5, 5)
   renderText(ctx, titleFont, 'YOU ESCAPED', 11, 7)
@@ -102,9 +102,10 @@ function renderWin () {
   renderMultiLineText(ctx, Object.entries(stats).map(([key, value]) => `${key.split(/(?=[A-Z])/).join(' ')} - ${value}`), 56, 86)
 
   const doneAchievements = Object.entries(achievements).filter(([,done]) => done)
+  const cheevoText = doneAchievements.length ? doneAchievements.map(([key]) => `${key} - ${achievementDescriptions[key]}`) : ['none']
 
   renderText(ctx, whiteFont, 'achievements', 146, 72)
-  renderMultiLineText(ctx, doneAchievements.map(([key]) => `${key} - ${achievementDescriptions[key]}`), 146, 86)
+  renderMultiLineText(ctx, cheevoText, 146, 86)
 
   renderCenteredText(ctx, whiteFont, 'click to restart', 162)
 }

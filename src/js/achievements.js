@@ -1,7 +1,9 @@
 const resetAchievements = () => ({
+  murderer: false,
+  pacifist: true,
   pugilist: true,
+  explorer: false,
   untouchable: true,
-  discovery: false
 })
 
 const resetStats = () => ({
@@ -13,9 +15,11 @@ const resetStats = () => ({
 })
 
 const achievementDescriptions = {
-  pugilist: 'only use melee',
-  untouchable: 'never get hit',
-  discovery: 'found the secret room'
+  murderer: 'killed everything',
+  pacifist: 'killed nothing',
+  pugilist: 'only used melee',
+  explorer: 'found the secret room',
+  untouchable: 'never got hit',
 }
 
 let achievements = resetAchievements()

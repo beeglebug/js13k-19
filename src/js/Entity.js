@@ -90,6 +90,7 @@ class Mob extends Entity {
   kill () {
     this.alive = false
     stats.mobsKilled++
+    achievements.pacifist = false
   }
 
   collide (other, collision) {
