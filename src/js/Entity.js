@@ -340,9 +340,8 @@ function handleCooldown (entity, delta) {
 
 function biasedDrop (entity) {
   // base 50 / 50 chance
-  const pool = [null, null, null, ManaPotion, ManaPotion, ManaPotion, HealthPotion]
+  const pool = [null, null, null, null, ManaPotion, ManaPotion, HealthPotion]
   if (player.health <= 20) pool.push(HealthPotion)
-  if (player.mana <= 20) pool.push(ManaPotion)
   const dropType = sharedRng.randomItem(pool)
   return dropType ? new dropType(entity.x, entity.y) : null
 }
