@@ -78,15 +78,12 @@ function handleImpact (projectile) {
   const x = projectile.x - (player.direction.x * 0.1)
   const y = projectile.y - (player.direction.y * 0.1)
 
-
-  if (projectile instanceof MeleeProjectile) {
-    soundMeleeImpact()
-  } else {
-    const impact = new ProjectileImpact(x, y)
-    soundImpact(impact)
-    map.entities.push(impact)
-    setTimeout(() => {
-      impact.kill()
-    }, 100)
-  }
+  const impact = new ProjectileImpact(x, y)
+  soundImpact(impact)
+  if (projectile instanceof MeleeProjectile) return
+  soundImpact(impact)
+  map.entities.push(impact)
+  setTimeout(() => {
+    impact.kill()
+  }, 100)
 }

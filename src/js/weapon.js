@@ -39,6 +39,7 @@ function handleWeaponSway (time) {
 function shoot () {
   onScreenWeapon.offsetX = -50
   onScreenWeapon.offsetY = -50
+  if (player.mana <= 0) return
   if (player.attackCooldown > 0) return
   // ranged
   player.mana -= SHOOT_COST

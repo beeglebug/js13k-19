@@ -43,7 +43,7 @@ function soundPlayerAttack () {
 }
 
 function soundImpact (pos) {
-  const volume = calcVolume(0.1, pos)
+  const volume = calcVolume(0.05, pos)
   playSound(220, -10, 10, 35, volume)
 }
 
@@ -62,9 +62,6 @@ function soundDoor () {
 
 function soundMeleeAttack () {
   playSound(40, -3, 15, 10, 0.1, 0)
-}
-function soundMeleeImpact () {
-  playSound(120, -24, 10, 8, 0.3, 2)
 }
 
 function calcVolume (base, pos) {
