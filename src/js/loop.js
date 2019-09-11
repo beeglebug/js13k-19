@@ -100,7 +100,7 @@ function renderDead () {
   ctx.save()
   ctx.scale(2, 2)
   ctx.translate(-width/4, -height/4)
-  renderCenteredText(ctx, redFont, 'YOU DIED', (height / 2) - 5)
+  renderCenteredText(ctx, deadFont, 'YOU DIED', (height / 2) - 5)
   ctx.restore()
 }
 
@@ -115,15 +115,16 @@ function renderTitle () {
   ctx.fillStyle = 'rgba(0,0,0,0.2)'
   ctx.fillRect(0, 0, width, height)
   ctx.fillStyle = 'rgba(0,0,0,0.3)'
-  ctx.fillRect(100, 35, 120, 140)
-  renderCenteredText(ctx, redFont, 'TITLE GOES HERE', 50)
-  renderCenteredText(ctx, whiteFont, 'click to start', 80)
-  renderCenteredText(ctx, whiteFont, 'Controls', 110)
-  // padded to center the colon
-  renderCenteredText(ctx, whiteFont, 'ARROWS / WASD : move', 130)
-  renderCenteredText(ctx, whiteFont, 'E : interact', 140)
-  renderCenteredText(ctx, whiteFont, 'CLICK : shoot', 150)
-  renderCenteredText(ctx, whiteFont, 'M : show map', 160)
+  ctx.fillRect(60, 30, 200, 140)
+  ctx.save()
+  ctx.scale(5, 5)
+  renderText(ctx, titleFont, 'ENTOMBED', 17, 9)
+  ctx.restore()
+  renderCenteredText(ctx, whiteFont, 'click to start', 95)
+  renderCenteredText(ctx, whiteFont, 'ARROWS / WASD : move', 125)
+  renderCenteredText(ctx, whiteFont, 'E : interact', 135)
+  renderCenteredText(ctx, whiteFont, 'CLICK : shoot', 145)
+  renderCenteredText(ctx, whiteFont, 'M : show map', 155)
 }
 
 let debug = false

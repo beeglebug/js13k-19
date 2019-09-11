@@ -30,10 +30,12 @@ let sprites = []
 let whiteSprites = []
 let redSprites = []
 let greySprites = []
-let redFont
+let deadFont
+let titleFont
 
 whiteFont.addEventListener('load', () => {
-  redFont = tint(whiteFont, '#FF0000')
+  deadFont = tint(whiteFont, '#FF0000')
+  titleFont = tint(whiteFont, '#ffa200')
 })
 
 const hudHeight = 13
