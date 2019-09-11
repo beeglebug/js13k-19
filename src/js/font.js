@@ -1,25 +1,22 @@
-const padding = 4
-const lineHeight = 8
 
 function renderTextBox (ctx, text, background = '#000000') {
-  const lines = text.split('\n').map(str => str.trim())
-  const max = [...lines].sort((a, b) => (b.length - a.length))[0].length
 
   // background box
-  let boxWidth = (max * 4) + (padding * 2)
-  if (boxWidth %2 !== 0) boxWidth += 1
-
-  let boxHeight = (lines.length * lineHeight) + (padding * 2) - 2
-  if (boxHeight %2 !== 0) boxHeight += 1
+  let boxWidth = (text.length * 4) + 8
+  let boxHeight = 14
 
   const boxX = (width - boxWidth) / 2
   const boxY = (height - boxHeight) / 2
+
   ctx.fillStyle = background
   ctx.fillRect(boxX, boxY, boxWidth, boxHeight)
 
-  lines.forEach((line, i) => {
-    const lineY = (i * lineHeight) + padding
-    renderCenteredText(ctx, whiteFont, line, boxY + lineY)
+  renderCenteredText(ctx, whiteFont, text, boxY + 4)
+}
+
+function renderMultiLineText (lines, x, y) {
+  lines.forEach((line, ix) => {
+    renderText(ctx, whiteFont, line, x, y + ix * 10)
   })
 }
 

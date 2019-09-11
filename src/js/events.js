@@ -28,6 +28,7 @@ const collide_projectile_wall = (projectile, tile) => {
     if (tile.damage >= 3) {
       // open secret room!
       map.hasOpenedSecret = true
+      achievements.discovery = true
       tile.type = FLOOR_TILE
       renderMap(mapCtx)
     } else {

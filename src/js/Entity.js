@@ -78,7 +78,6 @@ class Mob extends Entity {
     super(x, y, index, scale)
     this.health = 50
     this.static = false
-    this.speed = 2
     this.attackCooldown = 1000
   }
 
@@ -86,6 +85,11 @@ class Mob extends Entity {
     handleCooldown(this, delta)
     handleAI(this, delta)
     collideWorld(this)
+  }
+
+  kill () {
+    this.alive = false
+    stats.mobsKilled++
   }
 
   collide (other, collision) {
@@ -126,6 +130,7 @@ class Player extends Entity {
   }
 
   damage (value) {
+    achievements.untouchable = false
     this.health -= value
     if (this.health <= 0) {
       player_dead()
@@ -201,6 +206,7 @@ class Ghost extends Mob {
 
   constructor (x, y) {
     super(x, y, 0, 0.8)
+    this.speed = 1
     this.radius = 0.3
     this.health = 200
     this.flashSprite = redSprites[0]
@@ -209,13 +215,13 @@ class Ghost extends Mob {
 
   // always attacks player
   attack () {
-    soundBatAttack(this)
+    soundGhostAttack(this)
     const center = normalize(sub(player, this))
     const left = rotate(copy(center), -0.2)
     const right = rotate(copy(center), 0.2)
-    spawnProjectile(this, left, GhostProjectile, 3, 1000)
-    spawnProjectile(this, center, GhostProjectile, 3, 1000)
-    spawnProjectile(this, right, GhostProjectile, 3, 1000)
+    spawnProjectile(this, left, GhostProjectile, 3, 500)
+    spawnProjectile(this, center, GhostProjectile, 3, 500)
+    spawnProjectile(this, right, GhostProjectile, 3, 500)
   }
 
   dropLoot () {
@@ -227,6 +233,7 @@ class Bat extends Mob {
 
   constructor (x, y) {
     super (x, y, 5, 0.5)
+    this.speed = 2
     this.radius = 0.3
     this.health = 30
     this.z = 0

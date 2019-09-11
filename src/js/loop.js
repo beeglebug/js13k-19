@@ -71,8 +71,6 @@ function renderPause () {
 }
 
 function renderTitle () {
-  ctx.fillStyle = 'rgba(0,0,0,0.2)'
-  ctx.fillRect(0, 0, width, height)
   ctx.fillStyle = 'rgba(0,0,0,0.3)'
   ctx.fillRect(60, 30, 200, 140)
   ctx.save()
@@ -87,15 +85,22 @@ function renderTitle () {
 }
 
 function renderWin () {
-  ctx.fillStyle = 'rgba(0,0,0,0.2)'
-  ctx.fillRect(0, 0, width, height)
-  ctx.fillStyle = 'rgba(0,0,0,0.3)'
-  ctx.fillRect(40, 30, 240, 140)
+  ctx.fillStyle = 'rgba(0,0,0,0.5)'
+  ctx.fillRect(40, 20, 240, 160)
   ctx.save()
   ctx.scale(5, 5)
-  renderText(ctx, titleFont, 'YOU ESCAPED', 11, 9)
+  renderText(ctx, titleFont, 'YOU ESCAPED', 11, 7)
   ctx.restore()
-  renderCenteredText(ctx, whiteFont, 'click to restart', 95)
+
+  renderText(ctx, whiteFont, 'stats', 56, 72)
+  renderMultiLineText(Object.entries(stats).map(([key, value]) => `${key.split(/(?=[A-Z])/).join(' ')} - ${value}`), 56, 86)
+
+  const doneAchievements = Object.entries(achievements).filter(([,done]) => done)
+
+  renderText(ctx, whiteFont, 'achievements', 146, 72)
+  renderMultiLineText(doneAchievements.map(([key]) => `${key} - ${achievementDescriptions[key]}`), 146, 86)
+
+  renderCenteredText(ctx, whiteFont, 'click to restart', 162)
 }
 
 function renderPlay () {

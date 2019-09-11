@@ -41,7 +41,8 @@ function shoot () {
   onScreenWeapon.offsetY = -50
   if (player.mana <= 0) return
   if (player.attackCooldown > 0) return
-  // ranged
+  achievements.pugilist = false
+  stats.shotsFired++
   player.mana -= SHOOT_COST
   spawnProjectile(player, player.direction, PlayerProjectile, 10, SHOOT_DELAY)
   onScreenWeapon.flash = true

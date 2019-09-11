@@ -52,6 +52,11 @@ function soundBatAttack (pos) {
   playSound(1426, -87, 17, 8, volume, 1)
 }
 
+function soundGhostAttack (pos) {
+  const volume = calcVolume(0.4, pos)
+  playSound(100, 3, 29, 15, volume, 1)
+}
+
 function soundCollect () {
   playSound(222, -198, 5, 11, 0.3, 2)
 }
