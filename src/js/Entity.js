@@ -148,7 +148,7 @@ class ManaPotion extends Entity {
     if (entity.mana === entity.maxMana) return
     soundCollect(this)
     this.kill()
-    entity.mana = Math.min(entity.mana + 30, entity.maxMana)
+    entity.mana = Math.min(entity.mana + 50, entity.maxMana)
   }
 }
 
@@ -327,7 +327,7 @@ function handleCooldown (entity, delta) {
 
 function biasedDrop (entity) {
   // base 50 / 50 chance
-  const pool = [null, null, null, ManaPotion, ManaPotion, HealthPotion]
+  const pool = [null, null, null, ManaPotion, ManaPotion, ManaPotion, HealthPotion]
   if (player.health <= 20) pool.push(HealthPotion)
   if (player.mana <= 20) pool.push(ManaPotion)
   const dropType = sharedRng.randomItem(pool)

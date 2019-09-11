@@ -30,6 +30,7 @@ function populateInfluenceMap (map, target) {
   let queue = []
 
   const current = map.data[target.y][target.x]
+  if (!current) return
   current.weight = initialWeight
 
   queue.push(current)
