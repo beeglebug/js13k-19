@@ -159,7 +159,9 @@ document.addEventListener('pointerlockchange', () => {
   if (hasPointerLock()) {
     outputCanvas.classList.add('active')
   } else {
-    setState(STATE_PAUSE)
+    if (state === STATE_PLAY) {
+      setState(STATE_PAUSE)
+    }
     outputCanvas.classList.remove('active')
   }
 })

@@ -74,14 +74,6 @@ function calcVolume (base, pos) {
   return base * falloff
 }
 
-/**
- interesting noises
-
- playSound(1426, -87, 17, 8, 0.5, 1)
-
-*/
-
-
 function soundRandom () {
   const audioRng = new RNG()
   const frequency = audioRng.randomIntBetween(20, 1500)

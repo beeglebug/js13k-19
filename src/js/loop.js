@@ -307,7 +307,7 @@ function loop () {
   TweenManager.update(delta)
 
   map.entities.forEach(entity => {
-    entity.update(delta)
+    if (state === STATE_PLAY) entity.update(delta)
     entity.project()
   })
 

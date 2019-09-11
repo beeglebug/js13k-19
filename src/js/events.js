@@ -11,6 +11,7 @@ const collide_player_collectible = entity => {
 const player_dead = () => {
   setState(STATE_DEAD)
   setTimeout(() => {
+    loadMap(titleMap)
     setState(STATE_TITLE)
   }, 2000)
 }

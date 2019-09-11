@@ -59,6 +59,7 @@ let mouseSensitivity = 0.001
 const handleMouseMove = event => {
 
   if (!hasPointerLock()) return
+  if (state !== STATE_PLAY) return
 
   const { movementX } = event
 

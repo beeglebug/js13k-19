@@ -30,9 +30,9 @@ const compile = () => src('src/index.html')
   .pipe(terser({
     mangle: {
       // TODO work out the word which needs reserving to fix textures
-      // properties: {
-      //   reserved: ['movementX', 'movementY', 'imageSmoothingEnabled']
-      // }
+      properties: {
+        reserved: ['movementX', 'movementY', 'imageSmoothingEnabled']
+      }
     },
     toplevel: true,
   }))
@@ -54,7 +54,7 @@ task('html', () =>
 
 task('zip', () => src('dist/*')
   .pipe(zip('archive.zip'))
-  .pipe(advzip())
+  .pipe(advzip({ optimizationLevel: 4 }))
   .pipe(dest('./')),
 )
 
