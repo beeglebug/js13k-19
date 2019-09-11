@@ -18,15 +18,6 @@ const setState = newState => {
   state = newState
 }
 
-const imgTextures = new Image()
-imgTextures.src = 'textures.png'
-
-const whiteFont = new Image()
-whiteFont.src = 'font.png'
-
-const imgSprites = new Image()
-imgSprites.src = 'sprites.png'
-
 let sprites = []
 let whiteSprites = []
 let redSprites = []
@@ -34,9 +25,42 @@ let greySprites = []
 let deadFont
 let titleFont
 
-whiteFont.addEventListener('load', () => {
+const img = new Image()
+img.src = 'assets.png'
+
+let whiteFont
+let imgSprites
+let imgTextures
+
+img.addEventListener('load', () => {
+
+  let [whiteFontCanvas, whiteFontCtx] = createCanvas(132, 5)
+  let [imgSpritesCanvas, imgSpritesCtx] = createCanvas(224, 16)
+  let [imgTexturesCanvas, imgTexturesCtx] = createCanvas(128, 16)
+
+  whiteFontCtx.drawImage(img, 0, 32, 132, 5, 0, 0, 132, 5)
+  imgSpritesCtx.drawImage(img, 0, 0, 224, 16, 0, 0, 224, 16)
+  imgTexturesCtx.drawImage(img, 0, 16, 128, 16, 0, 0, 128, 16)
+
+  whiteFont = whiteFontCanvas
+  imgSprites = imgSpritesCanvas
+  imgTextures = imgTexturesCanvas
+
   deadFont = tint(whiteFont, '#FF0000')
   titleFont = tint(whiteFont, '#ffa200')
+
+  textureImageData = getImageData(imgTextures)
+
+  for (let x = 0; x < imgSprites.width; x += 16) {
+    const [canvas, ctx] = createCanvas(16, 16)
+    ctx.drawImage(imgSprites, x, 0, 16, 16, 0, 0, 16, 16)
+    sprites.push(canvas)
+    whiteSprites.push(tint(canvas, '#FFFFFF'))
+    redSprites.push(tint(canvas, '#FF0000'))
+    greySprites.push(tint(canvas, '#4a4a4a'))
+  }
+
+  boot()
 })
 
 const hudHeight = 13
@@ -69,7 +93,6 @@ const height = 200
 const upscale = 3
 
 let audioContext
-
 let startTime
 
 const [canvas, ctx] = createCanvas(width, height)
@@ -86,33 +109,6 @@ document.getElementById('container').appendChild(outputCanvas)
 let zBuffer = []
 let textureImageData
 let floorImageData = new ImageData(width, height)
-
-
-let imgToLoad = 3
-const imgLoaded = () => {
-  imgToLoad--
-  if (imgToLoad <= 0) boot()
-}
-
-imgTextures.addEventListener('load', () => {
-  textureImageData = getImageData(imgTextures)
-  imgLoaded()
-})
-
-imgSprites.addEventListener('load', () => {
-  // TODO smaller than 16px sprites
-  for (let x = 0; x < imgSprites.width; x += 16) {
-    const [canvas, ctx] = createCanvas(16, 16)
-    ctx.drawImage(imgSprites, x, 0, 16, 16, 0, 0, 16, 16)
-    sprites.push(canvas)
-    whiteSprites.push(tint(canvas, '#FFFFFF'))
-    redSprites.push(tint(canvas, '#FF0000'))
-    greySprites.push(tint(canvas, '#4a4a4a'))
-  }
-  imgLoaded()
-})
-
-whiteFont.addEventListener('load', imgLoaded)
 
 outputCanvas.addEventListener('mousedown', e => {
 
