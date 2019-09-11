@@ -45,6 +45,8 @@ const collide_entity_wall = (entity, wall, collision) => {
 }
 
 const exit_level = () => {
+  const seconds = ((+new Date - startTime) / 1000).toFixed(0)
+  stats.timeTaken = seconds + ' sec'
   loadMap(generateOverworld())
   setState(STATE_WIN)
 }

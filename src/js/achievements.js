@@ -6,8 +6,9 @@ const resetAchievements = () => ({
 
 const resetStats = () => ({
   mobsKilled: 0,
+  urnsSmashed: 0,
   shotsFired: 0,
-  healthLost: 0,
+  damageTaken: 0,
   timeTaken: 0,
 })
 

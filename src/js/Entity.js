@@ -131,7 +131,7 @@ class Player extends Entity {
 
   damage (value) {
     achievements.untouchable = false
-    stats.damage += value
+    stats.damageTaken += value
     this.health -= value
     if (this.health <= 0) {
       player_dead()
@@ -320,6 +320,10 @@ class Urn extends Entity {
     super(x, y, 13, 0.7)
     this.radius = 0.3
     this.health = 10
+  }
+  kill () {
+    super.kill()
+    stats.urnsSmashed++
   }
   dropLoot () {
     dropItem(biasedDrop(this))
