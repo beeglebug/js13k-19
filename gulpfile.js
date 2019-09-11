@@ -30,9 +30,9 @@ const compile = () => src('src/index.html')
   .pipe(terser({
     mangle: {
       // TODO work out the word which needs reserving to fix textures
-      properties: {
-        reserved: ['movementX', 'movementY', 'imageSmoothingEnabled']
-      }
+      // properties: {
+      //   reserved: ['movementX', 'movementY', 'imageSmoothingEnabled']
+      // }
     },
     toplevel: true,
   }))
