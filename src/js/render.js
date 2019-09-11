@@ -11,7 +11,7 @@ let debugMap = false
 
 function renderMiniMap (ctx) {
 
-  miniMapCtx.clearRect(0, 0, miniMapWidth, miniMapHeight)
+  miniMapCtx.clearRect(0, 0, width, height)
 
   if (!debugMap) miniMapCtx.globalCompositeOperation = 'source-over'
   if (!debugMap) miniMapCtx.drawImage(fowCanvas, 0, 0)
@@ -49,6 +49,8 @@ function renderMiniMap (ctx) {
   ctx.globalAlpha = 0.3
   ctx.fillStyle = '#000000'
   ctx.fillRect(0, 0, width, height)
+  let miniMapWidth = map.width * MINI_MAP_TILE_SIZE
+  let miniMapHeight = map.height * MINI_MAP_TILE_SIZE
   ctx.translate(
     Math.floor((width / 2) - miniMapWidth / 2),
     Math.floor((height / 2) - (miniMapHeight / 2) - (hudHeight / 2))
@@ -67,18 +69,17 @@ function renderMap (ctx) {
     '~': '#ffffff',
     'X': '#ffffff',
     '=': '#555555',
-    '#': '#33cec2',
-    'D': '#07080c',
-    'd': '#07080c',
-    'L': '#aa8315',
-    'l': '#aa8315',
+    'D': '#2c2420',
+    'd': '#2c2420',
+    'L': '#c3a200',
+    'l': '#c3a200',
   }
 
   for (let y = 0; y < map.height; y++) {
     for (let x = 0; x < map.width; x++) {
       const tile = getMap(map, x, y)
       if (tile === null) continue
-      ctx.fillStyle = colorsByTileType[tile.type] || '#FF00FF'
+      ctx.fillStyle = colorsByTileType[tile.type]
       ctx.fillRect(x * MINI_MAP_TILE_SIZE, y * MINI_MAP_TILE_SIZE, MINI_MAP_TILE_SIZE, MINI_MAP_TILE_SIZE)
     }
   }

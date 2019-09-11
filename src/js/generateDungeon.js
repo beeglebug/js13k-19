@@ -167,8 +167,8 @@ function generateFromMaze (rng, width, height, cellSize) {
       map.spawn = [
         room.mapX + 0.5,
         room.mapY + 0.5,
-        0.705691154353887,
-        0.708519579593018
+        0.7,
+        0.7
       ]
 
       enemyCount = 0

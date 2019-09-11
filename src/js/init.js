@@ -70,8 +70,7 @@ const upscale = 3
 
 let audioContext
 
-let miniMapWidth = 0
-let miniMapHeight = 0
+let startTime
 
 const [canvas, ctx] = createCanvas(width, height)
 const [lightingCanvas, lightingCtx] = createCanvas(width, height)
@@ -134,17 +133,18 @@ outputCanvas.addEventListener('mousedown', e => {
   }
 
   if (state === STATE_TITLE) {
-    reset()
+    start()
     return setState(STATE_PLAY)
   }
 })
 
-function reset () {
+function start () {
   audioContext = new window.AudioContext()
   player.health = player.maxHealth
   player.mana = player.maxMana
-  // loadMap(createTestMap())
-  // loadMap(generateOverworld())
+  resetAchievements()
+  resetStats()
+  startTime = +new Date
   loadMap(generateDungeon(new RNG()))
 }
 
