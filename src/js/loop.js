@@ -36,6 +36,8 @@ function render () {
     }
   }
 
+  mouseSensitivityAdjusted && renderText(ctx, whiteFont, `mouse sensitivity: ${16 - mouseSensitivity} / 15`, 4, 4)
+
   outputCtx.drawImage(canvas, 0, 0, width * upscale, height * upscale)
 
   // renderDebugText(outputCtx)
@@ -84,7 +86,7 @@ function renderTitle () {
     'left mouse : shoot',
     'right mouse : melee',
     'M : show map',
-    '+/- : adjust mouse sensitivity'
+    '-/+ : adjust mouse sensitivity'
   ], 85, 115)
 }
 

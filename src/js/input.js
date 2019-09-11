@@ -8,20 +8,33 @@ const KEY_LEFT = 37
 const KEY_UP = 38
 const KEY_RIGHT = 39
 const KEY_DOWN = 40
+const KEY_MINUS = 189
+const KEY_PLUS = 187
 const MOUSE_LEFT = 1
 const MOUSE_RIGHT = 3
 
 const downButtons = {}
 const downKeys = {}
 
+let mouseSensitivity = 4
+let mouseSensitivityAdjusted = false
+let mouseSensitivityTimer
+
+function adjustMouseSensitivity (value) {
+  mouseSensitivity = clamp(mouseSensitivity + value, 1, 15)
+  mouseSensitivityAdjusted = true
+  clearTimeout(mouseSensitivityTimer)
+  mouseSensitivityTimer = setTimeout(() => (mouseSensitivityAdjusted = false), 800)
+}
+
 function handleKeydown (e) {
   const key = e.which
-  // TODO better way to do single key strokes
-  if (key === KEY_E && !downKeys[key]) {
-    interact()
-  }
-  if (key === KEY_M && !downKeys[key]) {
-    showMiniMap = !showMiniMap
+
+  if (!downKeys[key]) {
+    if (key === KEY_E) interact()
+    if (key === KEY_M) showMiniMap = !showMiniMap
+    if (key === KEY_MINUS) adjustMouseSensitivity(+1)
+    if (key === KEY_PLUS) adjustMouseSensitivity(-1)
   }
   downKeys[key] = true
 }
@@ -54,8 +67,6 @@ function bindInput (target) {
   target.addEventListener('mouseup', handleMouseUp)
 }
 
-let mouseSensitivity = 0.001
-
 const handleMouseMove = event => {
 
   if (!hasPointerLock()) return
@@ -63,7 +74,8 @@ const handleMouseMove = event => {
 
   const { movementX } = event
 
-  const rotation = movementX * mouseSensitivity
+  // some major magic numbers here
+  const rotation = movementX / (mouseSensitivity * 1000)
 
   if (movementX !== 0) {
     rotate(player.direction, rotation)
