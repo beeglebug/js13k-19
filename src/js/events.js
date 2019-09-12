@@ -9,6 +9,7 @@ const collide_player_collectible = entity => {
 }
 
 const player_dead = () => {
+  calculateAchievements()
   setState(STATE_DEAD)
   setTimeout(() => {
     loadMap(titleMap)
@@ -44,9 +45,13 @@ const collide_entity_wall = (entity, wall, collision) => {
   handleDisplace(entity, collision)
 }
 
-const exit_level = () => {
+const calculateAchievements  = () => {
   const seconds = ((+new Date - startTime) / 1000).toFixed(0)
   stats.timeTaken = seconds + ' sec'
+}
+
+const exit_level = () => {
+  calculateAchievements()
   loadMap(generateOverworld())
   setState(STATE_WIN)
 }

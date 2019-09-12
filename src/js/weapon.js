@@ -51,6 +51,7 @@ function shoot () {
 }
 
 function melee () {
+  achievements.marksman = false
   onScreenWeapon.offsetX = -50
   onScreenWeapon.offsetY = -50
   if (player.attackCooldown > 0) return

@@ -59,10 +59,10 @@ function renderDead () {
   ctx.fillStyle = '#000000'
   ctx.fillRect(0, 0, width, height)
   ctx.save()
-  ctx.scale(2, 2)
-  ctx.translate(-width/4, -height/4)
-  renderCenteredText(ctx, deadFont, 'YOU DIED', (height / 2) - 5)
+  ctx.scale(5, 5)
+  renderText(ctx, deadFont, 'YOU DIED', 15, 7)
   ctx.restore()
+  renderStatsAndAchievements(ctx, 100)
 }
 
 function renderPause () {
@@ -97,17 +97,19 @@ function renderWin () {
   ctx.scale(5, 5)
   renderText(ctx, titleFont, 'YOU ESCAPED', 11, 7)
   ctx.restore()
+  renderStatsAndAchievements(ctx, 72)
+  renderCenteredText(ctx, whiteFont, 'click to restart', 162)
+}
 
-  renderText(ctx, whiteFont, 'stats', 56, 72)
-  renderMultiLineText(ctx, Object.entries(stats).map(([key, value]) => `${key.split(/(?=[A-Z])/).join(' ')} - ${value}`), 56, 86)
+function renderStatsAndAchievements(ctx, y) {
+  renderText(ctx, whiteFont, 'stats', 56, y)
+  renderMultiLineText(ctx, Object.entries(stats).map(([key, value]) => `${key.split(/(?=[A-Z])/).join(' ')} - ${value}`), 56, y + 14)
 
   const doneAchievements = Object.entries(achievements).filter(([,done]) => done)
   const cheevoText = doneAchievements.length ? doneAchievements.map(([key]) => `${key} - ${achievementDescriptions[key]}`) : ['none']
 
-  renderText(ctx, whiteFont, 'achievements', 146, 72)
-  renderMultiLineText(ctx, cheevoText, 146, 86)
-
-  renderCenteredText(ctx, whiteFont, 'click to restart', 162)
+  renderText(ctx, whiteFont, 'achievements', 146, y)
+  renderMultiLineText(ctx, cheevoText, 146, y + 14)
 }
 
 function renderPlay () {
