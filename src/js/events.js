@@ -48,6 +48,7 @@ const collide_entity_wall = (entity, wall, collision) => {
 const calculateAchievements  = () => {
   const seconds = ((+new Date - startTime) / 1000).toFixed(0)
   stats.timeTaken = seconds + ' sec'
+  achievements.killer = map.entities.every(e => !(e instanceof Bat || e instanceof Ghost))
 }
 
 const exit_level = () => {
