@@ -178,12 +178,7 @@ function generateFromMaze (rng, width, height, cellSize) {
 
     } else if (room.exit) {
 
-      let oppositeX = room.centerX
-      let oppositeY = room.centerY
-      if (room.top === false) oppositeY += 2
-      if (room.bottom === false) oppositeY -= 2
-      if (room.left === false) oppositeX += 2
-      if (room.right === false) oppositeX -= 2
+      const [oppositeX, oppositeY] = getOpposite(room)
 
       entities.push(new Ladder(oppositeX + 0.5, oppositeY + 0.5))
 
@@ -198,6 +193,9 @@ function generateFromMaze (rng, width, height, cellSize) {
 
       enemyCount = 0
       urnCount = rng.randomIntBetween(4, 7)
+
+      entities.push(new ManaPotion(room.centerX + 0.5, room.centerY + 0.5))
+      entities.push(new HealthPotion(room.centerX + 1.5, room.centerY + 0.5))
 
     } else if (room.preSecret) {
 
@@ -350,4 +348,14 @@ function makeDoor (tile, type) {
   tile.type = type
   tile.tooltip = 'E: Open'
   tile.onInteract = open_door
+}
+
+function getOpposite (room) {
+  let oppositeX = room.centerX
+  let oppositeY = room.centerY
+  if (room.top === false) oppositeY += 2
+  if (room.bottom === false) oppositeY -= 2
+  if (room.left === false) oppositeX += 2
+  if (room.right === false) oppositeX -= 2
+  return [oppositeX, oppositeY]
 }
