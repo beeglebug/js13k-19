@@ -22,7 +22,7 @@ function renderMiniMap (ctx) {
   const px = Math.floor(player.x * MINI_MAP_TILE_SIZE)
   const py = Math.floor(player.y * MINI_MAP_TILE_SIZE)
 
-  miniMapCtx.fillStyle = '#3ca832'
+  miniMapCtx.fillStyle = '#30ca10'
   miniMapCtx.fillRect(
     px - 1,
     py - 1,
@@ -41,23 +41,6 @@ function renderMiniMap (ctx) {
     py + roundAwayFromZero(player.direction.y * 3),
     1, 1
   )
-
-  map.entities.forEach(entity => {
-    if (entity instanceof ManaPotion) {
-      miniMapCtx.fillStyle = '#00a3ff'
-    } else if (entity instanceof HealthPotion) {
-      miniMapCtx.fillStyle = '#ff4d69'
-    } else {
-      return
-    }
-    miniMapCtx.fillRect(
-      Math.floor(entity.x * MINI_MAP_TILE_SIZE),
-      Math.floor(entity.y * MINI_MAP_TILE_SIZE),
-      2, 2
-    )
-
-  })
-
 
   // renderInfluenceMap(miniMapCtx, influenceMap)
   if (debugMap) renderGraph(miniMapCtx, map)
