@@ -1,5 +1,5 @@
 const resetAchievements = () => ({
-  genocide: false,
+  rampage: false,
   pacifist: true,
   pugilist: false,
   explorer: false,
@@ -17,7 +17,7 @@ const resetStats = () => ({
 })
 
 const achievementDescriptions = {
-  genocide: 'killed everything',
+  rampage: 'killed everything',
   pacifist: 'killed nothing',
   pugilist: 'only used melee',
   explorer: 'found the secret room',
