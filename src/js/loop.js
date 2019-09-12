@@ -41,7 +41,7 @@ function render () {
     }
   }
 
-  mouseSensitivityAdjusted && renderText(ctx, whiteFont, `mouse sensitivity: ${mouseSensitivity} / ${mouseSensitivityMax}`, 4, 4)
+  mouseSensitivityAdjusted && renderText(ctx, whiteFont, `mouse sensitivity: ${16 - mouseSensitivity - 1} / 15`, 4, 4)
 
   outputCtx.drawImage(canvas, 0, 0, width * upscale, height * upscale)
 

@@ -16,13 +16,13 @@ const MOUSE_RIGHT = 3
 const downButtons = {}
 const downKeys = {}
 
-let mouseSensitivity = 5
-let mouseSensitivityMax = 10
+let mouseSensitivities = [300,400,500,600,700,800,900,1000,2000,3000,4000,5000,6000,7000,8000]
+let mouseSensitivity = 8
 let mouseSensitivityAdjusted = false
 let mouseSensitivityTimer
 
 function adjustMouseSensitivity (value) {
-  mouseSensitivity = clamp(mouseSensitivity + value, 1, mouseSensitivityMax)
+  mouseSensitivity = clamp(mouseSensitivity + value, 0, 14)
   mouseSensitivityAdjusted = true
   clearTimeout(mouseSensitivityTimer)
   mouseSensitivityTimer = setTimeout(() => (mouseSensitivityAdjusted = false), 800)
@@ -32,8 +32,8 @@ function handleKeydown ({ code }) {
   if (!downKeys[code]) {
     if (code === KEY_E) interact()
     if (code === KEY_M) showMiniMap = !showMiniMap
-    if (code === KEY_MINUS) adjustMouseSensitivity(-1)
-    if (code === KEY_PLUS) adjustMouseSensitivity(+1)
+    if (code === KEY_MINUS) adjustMouseSensitivity(+1)
+    if (code === KEY_PLUS) adjustMouseSensitivity(-1)
   }
   downKeys[code] = true
 }
@@ -74,7 +74,7 @@ const handleMouseMove = event => {
   const { movementX } = event
 
   // some major magic numbers here
-  const rotation = movementX / (1000 / remap(mouseSensitivity, 1, 10, 0.1, 5))
+  let rotation = movementX / (mouseSensitivities[mouseSensitivity])
 
   if (movementX !== 0) {
     rotate(player.direction, rotation)
