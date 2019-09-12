@@ -62,13 +62,13 @@ function drawCircle (ctx, x, y, radius, color) {
 
 function renderDead () {
   ctx.fillStyle = 'rgba(0,0,0,0.5)'
-  ctx.fillRect(30, 20, 260, 160)
+  ctx.fillRect(50, 20, 220, 160)
   ctx.save()
   ctx.scale(5, 5)
-  renderText(ctx, deadFont, 'YOU DIED', 15, 7)
+  renderText(ctx, deadFont, 'YOU DIED', 17, 7)
   ctx.restore()
   mouseEnabled && renderCenteredText(ctx, whiteFont, 'click to return to title', 80)
-  renderStats(100)
+  renderStats(76, 100)
 }
 
 function renderPause () {
@@ -113,13 +113,13 @@ function renderWin () {
   renderText(ctx, titleFont, 'YOU ESCAPED', 11, 5)
   ctx.restore()
   mouseEnabled && renderCenteredText(ctx, whiteFont, 'click to restart', 70)
-  renderStats(90)
+  renderStats(56, 90)
   renderAchievements(160, 90)
 }
 
-function renderStats(y) {
-  renderText(ctx, whiteFont, 'stats', 56, y)
-  renderMultiLineText(ctx, Object.entries(stats).map(([key, value]) => `${key.split(/(?=[A-Z])/).join(' ')} : ${value}`), 56, y + 14)
+function renderStats (x, y) {
+  renderText(ctx, whiteFont, 'stats', x, y)
+  renderMultiLineText(ctx, Object.entries(stats).map(([key, value]) => `${key.split(/(?=[A-Z])/).join(' ')} : ${value}`), x, y + 14)
 }
 
 function renderAchievements(x, y) {

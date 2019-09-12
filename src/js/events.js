@@ -9,7 +9,6 @@ const collide_player_collectible = entity => {
 }
 
 const player_dead = () => {
-  calculateAchievements()
   setState(STATE_DEAD)
   pauseMouse()
 }
