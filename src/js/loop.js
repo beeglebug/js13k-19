@@ -114,8 +114,9 @@ function renderStatsAndAchievements(ctx, y) {
   renderText(ctx, whiteFont, 'stats', 56, y)
   renderMultiLineText(ctx, Object.entries(stats).map(([key, value]) => `${key.split(/(?=[A-Z])/).join(' ')} - ${value}`), 56, y + 14)
 
-  const doneAchievements = Object.entries(achievements).filter(([,done]) => done)
-  const cheevoText = doneAchievements.length ? doneAchievements.map(([key]) => `${key} - ${achievementDescriptions[key]}`) : ['none']
+  const cheevoText = Object.entries(achievements).map(([key, done]) => {
+    return done ? `${key} - ${achievementDescriptions[key]}` : key
+  })
 
   renderText(ctx, whiteFont, 'achievements', 146, y)
   renderMultiLineText(ctx, cheevoText, 146, y + 14)

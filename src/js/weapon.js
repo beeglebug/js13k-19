@@ -41,7 +41,6 @@ function shoot () {
   onScreenWeapon.offsetY = -50
   if (player.mana <= 0) return
   if (player.attackCooldown > 0) return
-  achievements.pugilist = false
   stats.shotsFired++
   player.mana -= SHOOT_COST
   spawnProjectile(player, player.direction, PlayerProjectile, 10, SHOOT_DELAY)
@@ -55,6 +54,7 @@ function melee () {
   onScreenWeapon.offsetX = -50
   onScreenWeapon.offsetY = -50
   if (player.attackCooldown > 0) return
+  stats.punchesThrown++
   // melee
   spawnProjectile(player, player.direction, MeleeProjectile, 10, SHOOT_DELAY)
   soundMeleeAttack()

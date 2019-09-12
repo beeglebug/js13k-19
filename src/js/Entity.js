@@ -210,7 +210,7 @@ class Ghost extends Mob {
     super(x, y, 0, 0.8)
     this.speed = 1
     this.radius = 0.3
-    this.health = 200
+    this.health = 120
     this.flashSprite = redSprites[0]
     this.attackDistance = 4
   }

@@ -45,7 +45,9 @@ const collide_entity_wall = (entity, wall, collision) => {
 const calculateAchievements  = () => {
   const seconds = ((+new Date - startTime) / 1000).toFixed(0)
   stats.timeTaken = seconds + ' sec'
+  achievements.pugilist = stats.shotsFired === 0 && stats.punchesThrown > 0
   achievements.murderer = map.entities.every(e => !(e instanceof Bat || e instanceof Ghost))
+  achievements.almost = (player.health <= 0 && player.hasKey)
 }
 
 const exit_level = () => {
