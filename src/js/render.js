@@ -71,8 +71,8 @@ function renderMap (ctx) {
     '=': '#555555',
     'D': '#2c2420',
     'd': '#2c2420',
-    'L': '#c3a200',
-    'l': '#c3a200',
+    'L': '#e6d800',
+    'l': '#e6d800',
   }
 
   for (let y = 0; y < map.height; y++) {

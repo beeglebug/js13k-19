@@ -114,7 +114,7 @@ function renderWin () {
   ctx.restore()
   mouseEnabled && renderCenteredText(ctx, whiteFont, 'click to restart', 75)
   renderStats(56, 100)
-  renderAchievements(160, 100)
+  renderAchievements(150, 100)
 }
 
 function renderStats (x, y) {
