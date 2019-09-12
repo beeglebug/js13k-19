@@ -64,7 +64,7 @@ const open_door = door => {
   }
   soundDoor()
   TweenManager.create(door, 'offset', 1, 2000, () => {
-    player.hasKey = false
+    if (door.locked) player.hasKey = false
     door.type = '.'
     // redraw mini map minus the door
     renderMap(mapCtx)
