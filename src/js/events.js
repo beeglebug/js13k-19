@@ -16,7 +16,7 @@ const player_dead = () => {
 
 const collide_projectile_entity = (projectile, entity) => {
   handleImpact(projectile)
-  entity.damage(projectile.strength)
+  entity.damage(projectile.strength, projectile.source)
 }
 
 const collide_projectile_wall = (projectile, tile) => {

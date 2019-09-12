@@ -48,12 +48,12 @@ class Entity {
   collide () {}
   dropLoot () {}
 
-  damage (value) {
+  damage (value, source) {
     if (!this.health) return
     this.health -= value
     this.flash(50, () => {
       if (this.health <= 0) {
-        this.kill()
+        this.kill(source)
         this.dropLoot()
       }
     })
@@ -87,10 +87,12 @@ class Mob extends Entity {
     collideWorld(this)
   }
 
-  kill () {
+  kill (source) {
     this.alive = false
-    stats.mobsKilled++
-    achievements.pacifist = false
+    if (source === player) {
+      stats.mobsKilled++
+      achievements.pacifist = false
+    }
   }
 
   collide (other, collision) {
