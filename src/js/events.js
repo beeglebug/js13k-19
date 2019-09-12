@@ -9,6 +9,8 @@ const collide_player_collectible = entity => {
 }
 
 const player_dead = () => {
+  // kill impacts, they mess up the death screen
+  map.entities = map.entities.filter(e => !(e instanceof ProjectileImpact))
   setState(STATE_DEAD)
   pauseMouse()
 }
@@ -57,10 +59,8 @@ const exit_level = () => {
 }
 
 const open_door = door => {
-  if (door.locked && !player.hasKey) {
-    // TODO no no sound?
-    return
-  }
+  if (door.opening || (door.locked && !player.hasKey)) return
+  door.opening = true
   soundDoor()
   TweenManager.create(door, 'offset', 1, 2000, () => {
     if (door.locked) player.hasKey = false
