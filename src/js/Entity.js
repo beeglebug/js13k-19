@@ -7,6 +7,7 @@ class Entity {
 
     if (index !== null) {
       this.sprite = sprites[index]
+      this.normalSprite = sprites[index]
       this.flashSprite = whiteSprites[index]
     }
 
@@ -49,27 +50,20 @@ class Entity {
   dropLoot () {}
 
   damage (value, source) {
-    if (!this.health) return
+    if (this.health <= 0) return
     this.health -= value
-    this.flash(50, () => {
+    this.sprite = this.flashSprite
+    setTimeout(() => {
+      this.sprite = this.normalSprite
       if (this.health <= 0) {
         this.kill(source)
         this.dropLoot()
       }
-    })
+    }, 50)
   }
 
   kill () {
     this.alive = false
-  }
-
-  flash (time, callback) {
-    const sprite = this.sprite
-    this.sprite = this.flashSprite
-    setTimeout(() => {
-      this.sprite = sprite
-      callback()
-    }, time)
   }
 }
 

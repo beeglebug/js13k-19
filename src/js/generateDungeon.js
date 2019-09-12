@@ -117,7 +117,7 @@ function generateFromMaze (rng, width, height, cellSize) {
         if (room.secret) {
           tile.type = FLOOR_TILE
         } else {
-          makeDoor(tile)
+          makeDoor(tile, 'D')
           room.bottomDoor = tile
         }
       }
@@ -141,7 +141,7 @@ function generateFromMaze (rng, width, height, cellSize) {
         if (room.secret) {
           tile.type = FLOOR_TILE
         } else {
-          makeDoor(tile)
+          makeDoor(tile, 'd')
           room.rightDoor = tile
         }
       }
@@ -346,8 +346,8 @@ function getOuterRoomTiles (room, data) {
 
 function createTile (x, y, type) { return { x, y, type, offset: 0 } }
 
-function makeDoor (tile) {
-  tile.type = 'd'
+function makeDoor (tile, type) {
+  tile.type = type
   tile.tooltip = 'E: Open'
   tile.onInteract = open_door
 }
