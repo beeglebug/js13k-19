@@ -1,15 +1,15 @@
-const KEY_E = 69
-const KEY_W = 87
-const KEY_A = 65
-const KEY_S = 83
-const KEY_D = 68
-const KEY_M = 77
-const KEY_LEFT = 37
-const KEY_UP = 38
-const KEY_RIGHT = 39
-const KEY_DOWN = 40
-const KEY_MINUS = 189
-const KEY_PLUS = 187
+const KEY_E = 'KeyE'
+const KEY_W = 'KeyW'
+const KEY_A = 'KeyA'
+const KEY_S = 'KeyS'
+const KEY_D = 'KeyD'
+const KEY_M = 'KeyM'
+const KEY_LEFT = 'ArrowLeft'
+const KEY_UP = 'ArrowUp'
+const KEY_RIGHT = 'ArrowRight'
+const KEY_DOWN = 'ArrowDown'
+const KEY_MINUS = 'Minus'
+const KEY_PLUS = 'Equal'
 const MOUSE_LEFT = 1
 const MOUSE_RIGHT = 3
 
@@ -27,20 +27,18 @@ function adjustMouseSensitivity (value) {
   mouseSensitivityTimer = setTimeout(() => (mouseSensitivityAdjusted = false), 800)
 }
 
-function handleKeydown (e) {
-  const key = e.which
-
-  if (!downKeys[key]) {
-    if (key === KEY_E) interact()
-    if (key === KEY_M) showMiniMap = !showMiniMap
-    if (key === KEY_MINUS) adjustMouseSensitivity(+1)
-    if (key === KEY_PLUS) adjustMouseSensitivity(-1)
+function handleKeydown ({ code }) {
+  if (!downKeys[code]) {
+    if (code === KEY_E) interact()
+    if (code === KEY_M) showMiniMap = !showMiniMap
+    if (code === KEY_MINUS) adjustMouseSensitivity(+1)
+    if (code === KEY_PLUS) adjustMouseSensitivity(-1)
   }
-  downKeys[key] = true
+  downKeys[code] = true
 }
 
-function handleKeyup (e) {
-  downKeys[e.which] = false
+function handleKeyup ({ code }) {
+  downKeys[code] = false
 }
 
 function handleMouseDown (e) {
