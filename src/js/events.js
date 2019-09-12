@@ -11,10 +11,7 @@ const collide_player_collectible = entity => {
 const player_dead = () => {
   calculateAchievements()
   setState(STATE_DEAD)
-  mouseEnabled = false
-  setTimeout(() => {
-    mouseEnabled = true
-  }, 2000)
+  pauseMouse()
 }
 
 const collide_projectile_entity = (projectile, entity) => {
@@ -54,6 +51,7 @@ const calculateAchievements  = () => {
 const exit_level = () => {
   calculateAchievements()
   loadMap(generateOverworld())
+  pauseMouse()
   setState(STATE_WIN)
 }
 
@@ -95,4 +93,11 @@ function handleImpact (projectile) {
   setTimeout(() => {
     impact.kill()
   }, 100)
+}
+
+function pauseMouse () {
+  mouseEnabled = false
+  setTimeout(() => {
+    mouseEnabled = true
+  }, 1000)
 }

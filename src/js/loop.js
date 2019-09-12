@@ -6,34 +6,34 @@ available savings:
 */
 
 function render () {
+
+  renderPlay()
+
   if (state === STATE_TITLE) {
-    renderPlay()
     renderTitle()
   }
 
   if (state === STATE_WIN) {
-    renderPlay()
     renderWin()
   }
 
   if (state === STATE_DEAD) {
-    renderPlay()
     renderDead()
   }
 
-  if (state === STATE_PAUSE) renderPause()
+  if (state === STATE_PAUSE) {
+    renderPause()
+  }
 
   if (state === STATE_PLAY) {
-    renderPlay()
+
     renderWeapon(ctx)
     renderHUD(ctx)
 
     if (interactionTarget && interactionTarget.tooltip) {
       renderTextBox(ctx, interactionTarget.tooltip, '#222423')
     }
-  }
 
-  if (state === STATE_PLAY) {
     // renderAiDebug(outputCtx)
     renderFogOfWar(fowCtx)
     if (showMiniMap) {
@@ -67,15 +67,18 @@ function renderDead () {
   ctx.scale(5, 5)
   renderText(ctx, deadFont, 'YOU DIED', 15, 7)
   ctx.restore()
-  renderCenteredText(ctx, whiteFont, 'click to return to title', 80)
+  mouseEnabled && renderCenteredText(ctx, whiteFont, 'click to return to title', 80)
   renderStatsAndAchievements(ctx, 100)
 }
 
 function renderPause () {
-  ctx.fillStyle = '#000000'
-  ctx.fillRect(0, 0, width, height)
-  renderCenteredText(ctx, whiteFont, 'paused', 70)
-  renderCenteredText(ctx, whiteFont, 'click to resume', 90)
+  ctx.fillStyle = 'rgba(0,0,0,0.5)'
+  ctx.fillRect(60, 20, 200, 160)
+  ctx.save()
+  ctx.scale(5, 5)
+  renderText(ctx, whiteFont, 'PAUSED', 21, 10)
+  ctx.restore()
+  mouseEnabled && renderCenteredText(ctx, whiteFont, 'click to resume', 100)
 }
 
 function renderTitle () {
@@ -85,7 +88,7 @@ function renderTitle () {
   ctx.scale(5, 5)
   renderText(ctx, titleFont, 'ENTOMBED', 17, 7)
   ctx.restore()
-  renderCenteredText(ctx, whiteFont, 'click to start', 85)
+  mouseEnabled && renderCenteredText(ctx, whiteFont, 'click to start', 80)
   renderMultiLineText(ctx, [
     'ARROWS / WASD : move',
     'E : interact',
@@ -93,7 +96,7 @@ function renderTitle () {
     'right mouse : melee',
     'M : show map',
     '-/+ : adjust mouse sensitivity'
-  ], 85, 115)
+  ], 85, 110)
 }
 
 function renderWin () {
@@ -103,8 +106,8 @@ function renderWin () {
   ctx.scale(5, 5)
   renderText(ctx, titleFont, 'YOU ESCAPED', 11, 7)
   ctx.restore()
-  renderStatsAndAchievements(ctx, 72)
-  renderCenteredText(ctx, whiteFont, 'click to restart', 162)
+  mouseEnabled && renderCenteredText(ctx, whiteFont, 'click to restart', 80)
+  renderStatsAndAchievements(ctx, 100)
 }
 
 function renderStatsAndAchievements(ctx, y) {
