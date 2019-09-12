@@ -107,14 +107,14 @@ function renderControls (x, y) {
 
 function renderWin () {
   ctx.fillStyle = 'rgba(0,0,0,0.5)'
-  ctx.fillRect(30, 10, 260, 180)
+  ctx.fillRect(30, 15, 260, 170)
   ctx.save()
   ctx.scale(5, 5)
-  renderText(ctx, titleFont, 'YOU ESCAPED', 11, 5)
+  renderText(ctx, titleFont, 'YOU ESCAPED', 11, 6)
   ctx.restore()
-  mouseEnabled && renderCenteredText(ctx, whiteFont, 'click to restart', 70)
-  renderStats(56, 90)
-  renderAchievements(160, 90)
+  mouseEnabled && renderCenteredText(ctx, whiteFont, 'click to restart', 75)
+  renderStats(56, 100)
+  renderAchievements(160, 100)
 }
 
 function renderStats (x, y) {
@@ -123,12 +123,13 @@ function renderStats (x, y) {
 }
 
 function renderAchievements(x, y) {
-  const cheevoText = Object.entries(achievements).map(([key, done]) => {
-    return done ? `${key} - ${achievementDescriptions[key]}` : key
-  })
-
   renderText(ctx, whiteFont, 'achievements', x, y)
-  renderMultiLineText(ctx, cheevoText, x, y + 14)
+  Object.entries(achievements).forEach(([key, done], ix) => {
+    const text = done ? `${key} - ${achievementDescriptions[key]}` : `${key} - ???`
+    if (!done) ctx.globalAlpha = 0.4
+    renderText(ctx, whiteFont, text, x, y + 14 + ix * 10)
+    ctx.globalAlpha = 1
+  })
 }
 
 function renderPlay () {

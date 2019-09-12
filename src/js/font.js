@@ -46,8 +46,8 @@ function renderText (ctx, font, text, x, y) {
 function getX (c) {
   const cc = c.charCodeAt(0)
   if (cc >= 43 && cc < 59) return (cc - 43) * 3
-  if (cc === 39) return 126 // '
-  if (cc === 63) return 123 // ?
+  if (cc === 39) return 129 // '
+  if (cc === 63) return 126 // ?
   if (cc >= 65 && cc < 91) return ((cc - 64) * 3) + 45
   return null
 }
