@@ -1,6 +1,6 @@
 body {
     margin: 0;
-    background-color: #222;
+    background: #222;
 }
 div {
     display: flex;
