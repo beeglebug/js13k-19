@@ -8,7 +8,7 @@ let onScreenWeapon = {
   flash: false,
 }
 
-const SHOOT_DELAY = 200
+const SHOOT_DELAY = 350
 const SHOOT_COST = 5
 
 function handleWeaponSway (time) {
@@ -50,10 +50,10 @@ function shoot () {
 }
 
 function melee () {
+  if (player.attackCooldown > 0) return
   achievements.marksman = false
   onScreenWeapon.offsetX = -50
   onScreenWeapon.offsetY = -50
-  if (player.attackCooldown > 0) return
   stats.punchesThrown++
   // melee
   spawnProjectile(player, player.direction, MeleeProjectile, 10, SHOOT_DELAY)
