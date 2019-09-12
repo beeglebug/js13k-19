@@ -8,7 +8,7 @@ let onScreenWeapon = {
   flash: false,
 }
 
-const SHOOT_DELAY = 350
+const SHOOT_DELAY = 300
 const SHOOT_COST = 5
 
 function handleWeaponSway (time) {
