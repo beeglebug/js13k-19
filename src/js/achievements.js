@@ -1,10 +1,10 @@
 const resetAchievements = () => ({
-  rampage: false,
+  almost: false,
+  explorer: false,
   pacifist: true,
   pugilist: false,
-  explorer: false,
-  untouchable: true,
-  almost: false
+  rampage: false,
+  unscathed: true,
 })
 
 const resetStats = () => ({
@@ -21,7 +21,7 @@ const achievementDescriptions = {
   pacifist: 'killed nothing',
   pugilist: 'only used melee',
   explorer: 'found the secret room',
-  untouchable: 'never got hit',
+  unscathed: 'took no damage',
   almost: 'died with the key'
 }
 

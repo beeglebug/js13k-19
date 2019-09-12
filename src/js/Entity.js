@@ -127,7 +127,7 @@ class Player extends Entity {
   }
 
   damage (value) {
-    achievements.untouchable = false
+    achievements.unscathed = false
     stats.damageTaken += value
     this.health -= value
     if (this.health <= 0) {
