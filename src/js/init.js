@@ -104,7 +104,7 @@ const [fowCanvas, fowCtx] = createCanvas(width, height)
 const [miniMapCanvas, miniMapCtx] = createCanvas(width, height)
 const [outputCanvas, outputCtx] = createCanvas(width * upscale, height * upscale)
 
-document.getElementById('container').appendChild(outputCanvas)
+wrap.appendChild(outputCanvas)
 
 let zBuffer = []
 let textureImageData
@@ -154,13 +154,10 @@ function boot () {
 const hasPointerLock = () => document.pointerLockElement === outputCanvas
 
 document.addEventListener('pointerlockchange', () => {
-  if (hasPointerLock()) {
-    outputCanvas.classList.add('active')
-  } else {
+  if (!hasPointerLock()) {
     if (state === STATE_PLAY) {
       setState(STATE_PAUSE)
     }
-    outputCanvas.classList.remove('active')
   }
 })
 

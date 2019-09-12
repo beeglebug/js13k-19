@@ -2,7 +2,7 @@ body {
     margin: 0;
     background-color: #222;
 }
-#container {
+div {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -12,8 +12,4 @@ body {
 
 canvas {
     image-rendering: pixelated;
-}
-
-canvas.active {
-    cursor: none;
 }
