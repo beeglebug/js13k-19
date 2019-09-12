@@ -11,9 +11,9 @@ const collide_player_collectible = entity => {
 const player_dead = () => {
   calculateAchievements()
   setState(STATE_DEAD)
+  mouseEnabled = false
   setTimeout(() => {
-    loadMap(titleMap)
-    setState(STATE_TITLE)
+    mouseEnabled = true
   }, 2000)
 }
 

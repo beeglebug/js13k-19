@@ -16,8 +16,13 @@ function render () {
     renderWin()
   }
 
+  if (state === STATE_DEAD) {
+    renderPlay()
+    renderDead()
+  }
+
   if (state === STATE_PAUSE) renderPause()
-  if (state === STATE_DEAD) renderDead()
+
   if (state === STATE_PLAY) {
     renderPlay()
     renderWeapon(ctx)
@@ -56,12 +61,13 @@ function drawCircle (ctx, x, y, radius, color) {
 }
 
 function renderDead () {
-  ctx.fillStyle = '#000000'
-  ctx.fillRect(0, 0, width, height)
+  ctx.fillStyle = 'rgba(0,0,0,0.5)'
+  ctx.fillRect(30, 20, 260, 160)
   ctx.save()
   ctx.scale(5, 5)
   renderText(ctx, deadFont, 'YOU DIED', 15, 7)
   ctx.restore()
+  renderCenteredText(ctx, whiteFont, 'click to return to title', 80)
   renderStatsAndAchievements(ctx, 100)
 }
 

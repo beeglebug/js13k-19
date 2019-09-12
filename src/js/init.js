@@ -10,6 +10,7 @@ const STATE_WIN = 4
 const HORIZONTAL = 0
 const VERTICAL = 1
 
+let mouseEnabled = false
 let prevState = null
 let state = STATE_TITLE
 
@@ -59,7 +60,6 @@ img.addEventListener('load', () => {
     redSprites.push(tint(canvas, '#FF0000'))
     greySprites.push(tint(canvas, '#4a4a4a'))
   }
-
   boot()
 })
 
@@ -112,19 +112,20 @@ let floorImageData = new ImageData(width, height)
 
 outputCanvas.addEventListener('mousedown', e => {
 
+  if (!mouseEnabled) return
+
   if (state !== STATE_PLAY) e.stopPropagation()
 
   if (!hasPointerLock()) outputCanvas.requestPointerLock()
 
   if (state === STATE_PAUSE) return setState(prevState)
   if (state === STATE_DEAD) {
-    map = titleMap
-    setState(STATE_TITLE)
-    return
+    loadMap(titleMap)
+    return setState(STATE_TITLE)
   }
 
   if (state === STATE_WIN) {
-    map = titleMap
+    loadMap(titleMap)
     return setState(STATE_TITLE)
   }
 
@@ -145,6 +146,7 @@ function start () {
 }
 
 function boot () {
+  mouseEnabled = true
   loadMap(titleMap)
   requestAnimationFrame(loop)
 }
