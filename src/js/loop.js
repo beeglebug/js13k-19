@@ -76,9 +76,10 @@ function renderPause () {
   ctx.fillRect(60, 20, 200, 160)
   ctx.save()
   ctx.scale(5, 5)
-  renderText(ctx, whiteFont, 'PAUSED', 21, 10)
+  renderText(ctx, whiteFont, 'PAUSED', 21, 8)
   ctx.restore()
-  mouseEnabled && renderCenteredText(ctx, whiteFont, 'click to resume', 100)
+  mouseEnabled && renderCenteredText(ctx, whiteFont, 'click to resume', 80)
+  renderControls(85, 100)
 }
 
 function renderTitle () {
@@ -89,14 +90,19 @@ function renderTitle () {
   renderText(ctx, titleFont, 'ENTOMBED', 17, 7)
   ctx.restore()
   mouseEnabled && renderCenteredText(ctx, whiteFont, 'click to start', 80)
+  renderControls(85, 100)
+}
+
+function renderControls (x, y) {
   renderMultiLineText(ctx, [
     'ARROWS / WASD : move',
     'E : interact',
     'left mouse : shoot',
     'right mouse : melee',
     'M : show map',
+    'ESC : pause',
     '-/+ : adjust mouse sensitivity'
-  ], 85, 110)
+  ], x, y)
 }
 
 function renderWin () {
