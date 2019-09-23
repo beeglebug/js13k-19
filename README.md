@@ -7,6 +7,9 @@
 #### summary
 
 raycaster was the plan
+
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">Still no idea what i&#39;m doing for <a href="https://twitter.com/hashtag/js13k?src=hash&amp;ref_src=twsrc%5Etfw">#js13k</a>, but i&#39;ve got my environment all set up and i&#39;ve grabbed some raytracing code I was playing with recently as a starting point. Excited to see where this goes. <a href="https://twitter.com/hashtag/gamedev?src=hash&amp;ref_src=twsrc%5Etfw">#gamedev</a> <a href="https://twitter.com/hashtag/js13kgames?src=hash&amp;ref_src=twsrc%5Etfw">#js13kgames</a> <a href="https://t.co/Pp1Rbs0cfA">pic.twitter.com/Pp1Rbs0cfA</a></p>&mdash; Stuart Lee (@beeglebug) <a href="https://twitter.com/beeglebug/status/1161363436904878080?ref_src=twsrc%5Etfw">August 13, 2019</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
 knew i wanted sound
 dont leave all the content to the end
 use all the space
@@ -37,10 +40,11 @@ stats and achievements (last minute addition)
 
 #### what could have gone better
 
+lighting was basic
 wasted time on dead ends (name gen)
 would have liked more variety
 terser mangle properties
-could compress images more
+could compress images more (color and size)
 animation
 
 #### conclusion
