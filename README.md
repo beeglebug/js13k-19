@@ -12,6 +12,7 @@ Interesting highlights of the code include:
 - pathfinding
 - sound generation with web audio api
 - stateless enemy AI
+- mini map with fog of war
 - achievement tracking
 
 #### resources
